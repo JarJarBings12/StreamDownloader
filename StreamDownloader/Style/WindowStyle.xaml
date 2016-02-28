@@ -1,0 +1,151 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:StreamDownloader">
+    
+    <!-- Window tool bar button -->
+    <Style TargetType="{x:Type Button}" x:Key="default_button">
+        <Setter Property="Width" Value="32"/>
+        <Setter Property="Height" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Grid}}, Path=RowDefinitions[0].ActualHeigh}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border Name="button_border" Background="White">
+                        <Grid>
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" Name="content"/>
+                        </Grid>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="{x:Type Button}" x:Key="close_button" BasedOn="{StaticResource default_button}">
+        <Setter Property="Width" Value="32"/>
+        <Setter Property="Height" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Grid}}, Path=RowDefinitions[0].ActualHeigh}"/>
+
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border Name="button_border" Background="White">
+                        <Grid>
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" Name="content"/>
+                        </Grid>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        
+        <Style.Triggers>
+            <Trigger Property="Button.IsMouseOver" Value="True">
+                <Setter Property="Background" Value="{StaticResource button_cancel_hover}"/>
+            </Trigger>
+            <Trigger Property="IsPressed" Value="True">
+                <Setter Property="Foreground" Value="{StaticResource button_cancel_press}"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+    
+    <!-- Window style -->
+
+    <Style TargetType="{x:Type Window}" x:Key="window_style">
+        
+        <!-- Set background transparent -->
+        <Setter Property="Background" Value="Transparent"/>
+        <!-- Set window style to "none" -->
+        <Setter Property="WindowStyle" Value="None"/>
+        <!-- Remove resize ability -->
+        <Setter Property="ResizeMode" Value="NoResize"/>
+
+        <!-- Overwrite default template -->
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Window">
+                    <!-- Main window border -->
+                    <Border Name="window_border">
+                        <Border.Effect>
+
+                            <DropShadowEffect Color="Brown" Direction="270" BlurRadius="10" ShadowDepth="3"/>
+
+                        </Border.Effect>
+                            <!-- Main grid -->
+                        <Grid>
+                            <!-- Create row's for the main window -->
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="0.5*"/>
+                                <RowDefinition Height="9.5*"/>
+                            </Grid.RowDefinitions>
+
+                            <!-- Create new grid for the title bar -->
+                            <Grid Grid.Row="0" Background="White">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/> <!-- Icon -->
+                                    <ColumnDefinition Width="*"/> <!-- Title -->
+                                    <ColumnDefinition Width="Auto"/> <!-- Minimize / Restore / Close -->
+                                </Grid.ColumnDefinitions>
+
+                                <TextBlock Grid.Column="1"/>
+
+                                <!-- Minimize | Restore | Close -->
+                                <StackPanel Orientation="Horizontal" Grid.Column="2" FlowDirection="LeftToRight">
+                                    <!-- Minimize button -->
+                                    <Button Style="{StaticResource default_button}">
+                                        <Viewbox Width="10" Height="10" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+                                            <Rectangle Width="10" Height="10">
+                                                <Rectangle.Fill>
+                                                    <DrawingBrush>
+                                                        <DrawingBrush.Drawing>
+                                                            <DrawingGroup>
+                                                                <DrawingGroup.Children>
+                                                                    <GeometryDrawing Brush="#00FFFFFF" Geometry="F1M16,16L0,16 0,0 16,0z" />
+                                                                    <GeometryDrawing Brush="#FFF6F6F6" Geometry="F1M15,15L1,15 1,10 15,10z" />
+                                                                    <GeometryDrawing Brush="#FF414141" Geometry="F1M14,11L2,11 2,14 14,14z" />
+                                                                </DrawingGroup.Children>
+                                                            </DrawingGroup>
+                                                        </DrawingBrush.Drawing>
+                                                    </DrawingBrush>
+                                                </Rectangle.Fill>
+                                            </Rectangle>
+                                        </Viewbox>
+                                    </Button>
+
+                                    <!-- Restore button -->
+                                    <Button Style="{StaticResource default_button}">
+                                        
+                                    </Button>
+
+                                    <!-- Close button -->
+                                    <Button Style="{StaticResource close_button}">
+                                        <Path Stroke="Gray" Fill="Black" Data="M4 5h2l2 2 2-2h2l-3 3 3 3h-2l-2-2-2 2h-2l3-3-3-3z" Margin="0 0 0 5"/>
+                                    </Button>
+                                </StackPanel>
+                            </Grid>
+                            
+                            <!-- Create new grid for the user area -->
+                            <Grid Grid.Row="1" Background="White" Margin="0 -1 0 0">
+                                <!-- Use max width for this grid (9.5 percent of the main grid's width-->
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <!-- Use max height  for this grid (100 percent of the main grid's height )-->
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+
+                                <!-- With this border I create a small space between the window border and the user area. This should allow the user to resize the window later. -->
+                                <Border Name="user_area" Margin="1 0 1 1" Background="White">
+                                    
+                                    <!-- The content presenter allows me to place the default controls into the window and move them to around. -->
+                                    <ContentPresenter>
+
+                                    </ContentPresenter>
+                                </Border>
+                            </Grid>
+                        </Grid>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    
+</ResourceDictionary>
