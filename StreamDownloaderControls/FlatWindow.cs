@@ -1,16 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Interop;
 using System.Runtime.InteropServices;
@@ -19,7 +11,7 @@ namespace StreamDownloaderControls
 {
     public class FlatWindow: Window
     {
-        protected Point old_Mouse_Position { get; set; }
+        private double[] NormalPositon = new double[4];
         protected HwndSource hwndSource;
         protected const int WM_SYSCOMMAND = 0x112;
 
@@ -55,7 +47,6 @@ namespace StreamDownloaderControls
                 x = ((Rectangle) GetTemplateChild(direction));
                 x.MouseEnter += new MouseEventHandler(WindowBorderMouseEnterEvent);
                 x.PreviewMouseLeftButtonDown += new MouseButtonEventHandler(WindowBorderMouseLeftDownEvent);
-                x.MouseLeftButtonUp += new MouseButtonEventHandler(WindowBorderMouseLeftUpEvent);
                 x.MouseLeave += new MouseEventHandler(WindowBorderMouseLeaveEvent);
             }
 
@@ -82,9 +73,16 @@ namespace StreamDownloaderControls
         protected void WindowRestoreEvent(object sender, RoutedEventArgs e)
         {
             if (WindowState == WindowState.Normal)
-                WindowState = WindowState.Maximized;
+            {
+                this.NormalPositon[0] = this.Height;
+                this.WindowState = WindowState.Maximized;
+                this.Height = System.Windows.SystemParameters.WorkArea.Height;
+            }
             else
-                WindowState = WindowState.Normal;
+            {
+                this.WindowState = WindowState.Normal;
+                this.Height = NormalPositon[0];
+            }
         }
 
         // Window close handler
@@ -103,10 +101,6 @@ namespace StreamDownloaderControls
         protected void WindowBorderMouseLeftDownEvent(object sender, MouseButtonEventArgs e)
         {
             Resize(sender, e);
-        }
-
-        private void WindowBorderMouseLeftUpEvent(object sender, MouseButtonEventArgs e)
-        {
         }
 
         // Mouse leave border event.

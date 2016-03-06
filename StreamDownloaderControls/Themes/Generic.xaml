@@ -3,7 +3,8 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="clr-namespace:StreamDownloaderControls">
 
-    <!-- Window title bar -->
+    
+    <!--#region Window Style-->
     <Style TargetType="{x:Type Button}" x:Key="default_button">
         <!-- Set width to 32 pixels. -->
         <Setter Property="Width" Value="32"/>
@@ -80,7 +81,7 @@
         <Setter Property="TextAlignment" Value="Left"/>
         <Setter Property="VerticalAlignment" Value="Center"/>
     </Style>
-    
+
     <Style TargetType="{x:Type local:FlatWindow}">
         <!-- Set background transparent -->
         <Setter Property="Background" Value="Transparent"/>
@@ -89,134 +90,208 @@
         <!-- Remove resize ability -->
         <Setter Property="ResizeMode" Value="NoResize"/>
 
+        <Setter Property="AllowsTransparency" Value="True"/>
+
+        <!-- Set effect -->
+        <Setter Property="Effect">
+            <Setter.Value>
+                <DropShadowEffect ShadowDepth="0"/>
+            </Setter.Value>
+        </Setter>
+        
         <!-- Overwrite default template -->
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type local:FlatWindow}">
-                    <!-- Main window border -->
-                    <Border x:Name="window_border">
-                        
-                        <!-- Resize grid -->
-                        <Grid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="4"/>
-                                <RowDefinition Height="*"/>
-                                <RowDefinition Height="4"/>
-                            </Grid.RowDefinitions>
-                            
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="4"/>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="4"/>
-                            </Grid.ColumnDefinitions>
-
-                            <!-- Side definitions for resizing (Positions to grab the window). -->
-                            
-                            <!-- LEFT -->
-                            <Rectangle x:Name="border_left" Grid.Row="1" Grid.Column="0" VerticalAlignment="Stretch" HorizontalAlignment="Left" Fill="White" Height="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Grid}}, Path=RowDefinitions[0].ActualHeigh}" Width="8"/>
-                            <!-- TOP -->
-                            <Rectangle x:Name="border_top" Grid.Row="0" Grid.Column="1" VerticalAlignment="Top" HorizontalAlignment="Stretch" Fill="White" Height="8" Width="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Grid}}, Path=RowDefinitions[0].ActualHeigh}"/>
-                            <!-- TOP LEFT -->
-                            <Rectangle x:Name="border_top_left" Grid.Row="0" Grid.Column="0" VerticalAlignment="Top" HorizontalAlignment="Left" Fill="White" Height="8" Width="8"/>
-                            <!-- TOP RIGHT -->
-                            <Rectangle x:Name="border_top_right" Grid.Row="0" Grid.Column="2" VerticalAlignment="Top" HorizontalAlignment="Right" Fill="White" Height="8" Width="8"/>
-                            <!-- RIGHT -->
-                            <Rectangle x:Name="border_right" Grid.Row="1" Grid.Column="2" VerticalAlignment="Stretch" HorizontalAlignment="Right" Fill="White" Height="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Grid}}, Path=RowDefinitions[0].ActualHeigh}" Width="8"/>
-                            <!-- BOTTOM -->
-                            <Rectangle x:Name="border_bottom" Grid.Row="2" Grid.Column="1" VerticalAlignment="Bottom" HorizontalAlignment="Stretch" Fill="White" Height="8" Width="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Grid}}, Path=RowDefinitions[0].ActualHeigh}"/>
-                            <!-- BOTTOM LEFT -->
-                            <Rectangle x:Name="border_bottom_left" Grid.Row="2" Grid.Column="0" VerticalAlignment="Bottom" HorizontalAlignment="Left" Fill="White" Height="8" Width="8"/>
-                            <!-- BOTTOM RIGHT -->
-                            <Rectangle x:Name="border_bottom_right" Grid.Row="2" Grid.Column="2" VerticalAlignment="Bottom" HorizontalAlignment="Right" Fill="White" Height="8" Width="8"/>
-
-                            <!-- Main grid -->
-                            <Grid x:Name="main_grid" Grid.Row="1" Grid.Column="1">
-                                <!-- Create rows for the main window. -->
+                    <Border x:Name="window_shadow_border" Effect="{TemplateBinding Effect}" Margin="5">
+                        <!-- Main window border -->
+                        <Border x:Name="window_border" Background="White">
+                            <!-- Resize grid -->
+                            <Grid>
                                 <Grid.RowDefinitions>
-                                    <RowDefinition Height="0.4*"/>
-                                    <RowDefinition Height="9.6*"/>
+                                    <RowDefinition Height="4"/>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="4"/>
                                 </Grid.RowDefinitions>
 
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="4"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="4"/>
+                                </Grid.ColumnDefinitions>
 
-                                <!-- Create new grid for the title bar. -->
-                                <Grid Grid.Row="0" Background="White" VerticalAlignment="Stretch">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="Auto"/>
-                                        <!-- Icon -->
-                                        <ColumnDefinition Width="*" MinWidth="1"/>
-                                        <!-- Title -->
-                                        <ColumnDefinition Width="Auto"/>
-                                        <!-- Minimize / Restore / Close -->
-                                    </Grid.ColumnDefinitions>
+                                <!--#region Side definitions for resizing (Positions to grab the window).-->
+                                <!-- LEFT -->
+                                <Rectangle x:Name="border_left" Grid.Row="1" Grid.Column="0" VerticalAlignment="Stretch" HorizontalAlignment="Left" Fill="White" Height="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Grid}}, Path=RowDefinitions[0].ActualHeigh}" Width="8"/>
+                                <!-- TOP -->
+                                <Rectangle x:Name="border_top" Grid.Row="0" Grid.Column="1" VerticalAlignment="Top" HorizontalAlignment="Stretch" Fill="White" Height="8" Width="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Grid}}, Path=RowDefinitions[0].ActualHeigh}"/>
+                                <!-- TOP LEFT -->
+                                <Rectangle x:Name="border_top_left" Grid.Row="0" Grid.Column="0" VerticalAlignment="Top" HorizontalAlignment="Left" Fill="White" Height="8" Width="8"/>
+                                <!-- TOP RIGHT -->
+                                <Rectangle x:Name="border_top_right" Grid.Row="0" Grid.Column="2" VerticalAlignment="Top" HorizontalAlignment="Right" Fill="White" Height="8" Width="8"/>
+                                <!-- RIGHT -->
+                                <Rectangle x:Name="border_right" Grid.Row="1" Grid.Column="2" VerticalAlignment="Stretch" HorizontalAlignment="Right" Fill="White" Height="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Grid}}, Path=RowDefinitions[0].ActualHeigh}" Width="8"/>
+                                <!-- BOTTOM -->
+                                <Rectangle x:Name="border_bottom" Grid.Row="2" Grid.Column="1" VerticalAlignment="Bottom" HorizontalAlignment="Stretch" Fill="White" Height="8" Width="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Grid}}, Path=RowDefinitions[0].ActualHeigh}"/>
+                                <!-- BOTTOM LEFT -->
+                                <Rectangle x:Name="border_bottom_left" Grid.Row="2" Grid.Column="0" VerticalAlignment="Bottom" HorizontalAlignment="Left" Fill="White" Height="8" Width="8"/>
+                                <!-- BOTTOM RIGHT -->
+                                <Rectangle x:Name="border_bottom_right" Grid.Row="2" Grid.Column="2" VerticalAlignment="Bottom" HorizontalAlignment="Right" Fill="White" Height="8" Width="8"/>
+                                <!--#endregion-->
 
-                                    <!-- Icon -->
-                                    <Grid Background="DodgerBlue" Width="30" Height="30" Margin="2"/>
-
-                                    <!-- Title -->
-                                    <TextBlock x:Name="title_bar" Margin="3" Style="{StaticResource Title}" Grid.Column="1" Text="{TemplateBinding Title}"/>
-
-                                    <!-- Minimize | Restore | Close -->
-                                    <StackPanel Orientation="Horizontal" Grid.Column="2" FlowDirection="LeftToRight">
-
-                                        <!-- Minimize button -->
-                                        <Button x:Name="Minimize" Style="{StaticResource default_button}">
-                                            <Viewbox Width="10" Height="10" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
-                                                <Rectangle Width="10" Height="10">
-                                                    <Rectangle.Fill>
-                                                        <DrawingBrush>
-                                                            <DrawingBrush.Drawing>
-                                                                <DrawingGroup>
-                                                                    <DrawingGroup.Children>
-                                                                        <GeometryDrawing Brush="#00FFFFFF" Geometry="F1M16,16L0,16 0,0 16,0z" />
-                                                                        <GeometryDrawing Brush="#FFF6F6F6" Geometry="F1M15,15L1,15 1,10 15,10z" />
-                                                                        <GeometryDrawing Brush="#FF414141" Geometry="F1M14,11L2,11 2,14 14,14z" />
-                                                                    </DrawingGroup.Children>
-                                                                </DrawingGroup>
-                                                            </DrawingBrush.Drawing>
-                                                        </DrawingBrush>
-                                                    </Rectangle.Fill>
-                                                </Rectangle>
-                                            </Viewbox>
-                                        </Button>
-
-                                        <!-- Restore button -->
-                                        <Button x:Name="Restore" Style="{StaticResource default_button}">
-
-                                        </Button>
-
-                                        <!-- Close button -->
-                                        <Button Name="Close" Style="{StaticResource close_button}">
-                                            <Path Fill="{Binding Foreground, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Button}}" Data="M4 5h2l2 2 2-2h2l-3 3 3 3h-2l-2-2-2 2h-2l3-3-3-3z" Margin="0 0 2 8"/>
-                                        </Button>
-                                    </StackPanel>
-                                </Grid>
-
-                                <!-- Create new grid for the user area. -->
-                                <Grid Grid.Row="1" Background="White" Margin="0 -1 0 0" VerticalAlignment="Stretch">
-                                    <!-- Use max width for this grid (9.5 percent of the main grid width). -->
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*"/>
-                                    </Grid.ColumnDefinitions>
-
-                                    <!-- Use max height  for this grid (100 percent of the main grid height). -->
+                                <!-- Main grid -->
+                                <Grid x:Name="main_grid" Grid.Row="1" Grid.Column="1">
+                                    <!-- Create rows for the main window. -->
                                     <Grid.RowDefinitions>
+                                        <RowDefinition Height="35" MinHeight="35"/>
                                         <RowDefinition Height="*"/>
                                     </Grid.RowDefinitions>
 
-                                    <!-- With this border I create a small space between the window border and the user area. -->
-                                    <Border Name="user_area" Margin="1 0 1 1" Background="White">
 
-                                        <!-- The content presenter allows me to place the default controls into the window and move them to around. -->
-                                        <ContentPresenter>
+                                    <!-- Create new grid for the title bar. -->
+                                    <Grid Margin="0, 0, 2, 0" Grid.Row="0" Background="Transparent" VerticalAlignment="Stretch">
+                                        <Grid.ColumnDefinitions>
+                                            <!-- Icon -->
+                                            <ColumnDefinition Width="Auto"/>
+                                            <!-- Title -->
+                                            <ColumnDefinition Width="*" MinWidth="1"/>
+                                            <!-- Minimize / Restore / Close -->
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
 
-                                        </ContentPresenter>
-                                    </Border>
+                                        <!-- Icon -->
+                                        <Grid Background="DodgerBlue" Width="30" Height="30" Margin="2"/>
+
+                                        <!-- Title -->
+                                        <TextBlock x:Name="title_bar" Margin="3" Style="{StaticResource Title}" Grid.Column="1" Text="{TemplateBinding Title}"/>
+
+                                        <!-- Minimize | Restore | Close -->
+                                        <StackPanel Orientation="Horizontal" Grid.Column="2" FlowDirection="LeftToRight">
+
+                                            <!-- Minimize button -->
+                                            <Button x:Name="Minimize" Style="{StaticResource default_button}">
+                                                <Viewbox Width="10" Height="10" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+                                                    <Rectangle Width="10" Height="10">
+                                                        <Rectangle.Fill>
+                                                            <DrawingBrush>
+                                                                <DrawingBrush.Drawing>
+                                                                    <DrawingGroup>
+                                                                        <DrawingGroup.Children>
+                                                                            <GeometryDrawing Brush="#00FFFFFF" Geometry="F1M16,16L0,16 0,0 16,0z" />
+                                                                            <GeometryDrawing Brush="#FFF6F6F6" Geometry="F1M15,15L1,15 1,10 15,10z" />
+                                                                            <GeometryDrawing Brush="#FF414141" Geometry="F1M14,11L2,11 2,14 14,14z" />
+                                                                        </DrawingGroup.Children>
+                                                                    </DrawingGroup>
+                                                                </DrawingBrush.Drawing>
+                                                            </DrawingBrush>
+                                                        </Rectangle.Fill>
+                                                    </Rectangle>
+                                                </Viewbox>
+                                            </Button>
+
+                                            <!-- Restore button -->
+                                            <Button x:Name="Restore" Style="{StaticResource default_button}">
+
+                                            </Button>
+
+                                            <!-- Close button -->
+                                            <Button Name="Close" Style="{StaticResource close_button}">
+                                                <Path Fill="{Binding Foreground, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Button}}" Data="M4 5h2l2 2 2-2h2l-3 3 3 3h-2l-2-2-2 2h-2l3-3-3-3z" Margin="0 0 2 8"/>
+                                            </Button>
+                                        </StackPanel>
+                                    </Grid>
+
+                                    <!-- Create new grid for the user area. -->
+                                    <Grid Grid.Row="1" Background="Transparent" Margin="0 -1 0 0" VerticalAlignment="Stretch">
+                                        <!-- Use max width for this grid (9.5 percent of the main grid width). -->
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <!-- Use max height  for this grid (100 percent of the main grid height). -->
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="*"/>
+                                        </Grid.RowDefinitions>
+
+                                        <!-- With this border I create a small space between the window border and the user area. -->
+                                        <Border Name="user_area" Margin="1 0 1 1" Background="White">
+
+                                            <!-- The content presenter allows me to place the default controls into the window and move them to around. -->
+                                            <ContentPresenter>
+
+                                            </ContentPresenter>
+                                        </Border>
+                                    </Grid>
                                 </Grid>
                             </Grid>
-                        </Grid>
+                        </Border>
                     </Border>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
     </Style>
+    <!--#endregion-->
+
+    <!--#region Download list item -->
+
+    <Style TargetType="{x:Type ListBox}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ListBox}">
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="{x:Type local:DownloadListItem}">
+        <Setter Property="Background" Value="DodgerBlue"/>
+        <Setter Property="Height" Value="80"/>
+        <Setter Property="Width" Value="Auto"/>
+        <Setter Property="MinWidth" Value="{Binding Width, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListBox}}"/>
+        <Setter Property="Margin" Value="0 0 0 0"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type local:DownloadListItem}">
+                    <Grid>
+                        <Border x:Name="item_border"
+                            Width="{TemplateBinding Width}"
+                            Height="{TemplateBinding Height}"
+                            Margin="{TemplateBinding Margin}">
+                            <Grid Background="DodgerBlue" Margin="2">
+
+                                <!-- Thumbnail -->
+                                <Grid Background="#80D1D1D1" Margin="10,5,0,5" HorizontalAlignment="Left" Width="150">
+                                    <Image x:Name="Thumbnail"/>
+                                </Grid>
+
+                                <!-- Description -->
+                                <Grid Margin="165,5,10,5">
+                                    <Border Background="#80D1D1D1" CornerRadius="2, 2, 2, 2">
+                                        <Border.Effect>
+                                            <BlurEffect/>
+                                        </Border.Effect>
+                                    </Border>
+
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="2.5*"/>
+                                            <RowDefinition Height="2.5*"/>
+                                            <RowDefinition Height="2.5*"/>
+                                            <RowDefinition Height="2.5*"/>
+                                        </Grid.RowDefinitions>
+
+                                        <TextBlock Grid.Row="0" Margin="2, 1, 0, 0" Text="{TemplateBinding FileName}"/>
+                                        <TextBlock Grid.Row="1" Margin="2, 1, 0, 0" Text="{TemplateBinding DownloadFolder}"/>
+                                        <TextBlock Grid.Row="2" Margin="2, 1, 0, 0" Text="{TemplateBinding DownloadLink}"/>
+                                        <ProgressBar Grid.Row="3" Margin="3, 0, 3, 2" Value="{TemplateBinding DownloadProgress}"/>
+                                    </Grid>
+                                </Grid>
+                            </Grid>
+                        </Border>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <!--#endregion-->
 </ResourceDictionary>
