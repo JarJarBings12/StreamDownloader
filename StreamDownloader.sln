@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StreamDownloader", "StreamD
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StreamDownloaderControls", "StreamDownloaderControls\StreamDownloaderControls.csproj", "{C2AC6DB6-7523-47C1-B25F-131773D54BC2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StreamDownloaderDownload", "StreamDownloaderDownload\StreamDownloaderDownload.csproj", "{61EA14B6-C52A-4337-BB11-AF02ABAD1CC3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{C2AC6DB6-7523-47C1-B25F-131773D54BC2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C2AC6DB6-7523-47C1-B25F-131773D54BC2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C2AC6DB6-7523-47C1-B25F-131773D54BC2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{61EA14B6-C52A-4337-BB11-AF02ABAD1CC3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{61EA14B6-C52A-4337-BB11-AF02ABAD1CC3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{61EA14B6-C52A-4337-BB11-AF02ABAD1CC3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{61EA14B6-C52A-4337-BB11-AF02ABAD1CC3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

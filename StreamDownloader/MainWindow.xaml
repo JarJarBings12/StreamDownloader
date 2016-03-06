@@ -5,10 +5,15 @@
                      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                      xmlns:controls="clr-namespace:StreamDownloaderControls;assembly=StreamDownloaderControls"
                      xmlns:local="clr-namespace:StreamDownloader"
-                     Title="HALLO">
+                     Title="HALLO" MinHeight="400" MinWidth="800">
 
     <Grid>
-        <Button x:Name="button" Content="Nice" Margin="213,108,0,0" HorizontalAlignment="Left" Width="75" Height="20" VerticalAlignment="Top"/>
+        <ComboBox x:Name="SourceHost" Margin="10,72,0,0" HorizontalAlignment="Left" Width="186" Height="33" VerticalAlignment="Top"/>
+        <TextBox x:Name="DownloadLink" Margin="201,72,157,0" TextWrapping="Wrap" TextAlignment="Left" Foreground="#D1D1D1" VerticalContentAlignment="Center" Height="33" VerticalAlignment="Top" Text="Download link" LostFocus="DownloadLink_LostFocus" GotFocus="DownloadLink_GotFocus"/>
+        <Button x:Name="DownloadSubmit" Content="Download" Margin="0,72,10,0" HorizontalAlignment="Right" Width="142" Height="33" VerticalAlignment="Top"/>
+
+        <ListBox x:Name="listBox" Margin="10,110,10,15" HorizontalContentAlignment="Stretch">
+        </ListBox>
 
     </Grid>
 </controls:FlatWindow>

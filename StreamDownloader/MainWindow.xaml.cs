@@ -21,9 +21,47 @@ namespace StreamDownloader
     /// </summary>
     public partial class MainWindow: FlatWindow
     {
+
+        private readonly Brush _PlaceholderGray = new SolidColorBrush(Color.FromRgb(209, 209, 209));
+        private readonly Brush _FontcolorBlack = new SolidColorBrush(Color.FromRgb(0, 0, 0));
+
         public MainWindow()
         {
             InitializeComponent();
+        }
+
+        /// <summary>
+        /// <c> GotFocus </c> event for the download link text box.
+        /// Needed for the placeholder.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void DownloadLink_GotFocus(object sender, RoutedEventArgs e)
+        {
+            TextBox tb = (TextBox)sender;
+
+            if (tb.Text.Equals("Download link"))
+            {
+                tb.Foreground = _FontcolorBlack;
+                tb.Text = string.Empty;
+            }
+        }
+
+        /// <summary>
+        /// <c> LostFoucs </c> event for the download link text box.
+        /// Needed for the placeholder.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void DownloadLink_LostFocus(object sender, RoutedEventArgs e)
+        {
+            TextBox tb = (TextBox)sender;
+            
+            if (string.IsNullOrEmpty(tb.Text))
+            {
+                tb.Foreground = _PlaceholderGray;
+                tb.Text = "Download link";
+            }
         }
     }
 }
