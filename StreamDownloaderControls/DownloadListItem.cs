@@ -1,6 +1,7 @@
 ﻿using System.Windows;
 using System.Drawing;
 using System.Windows.Controls;
+using StreamDownloaderDownload;
 
 namespace StreamDownloaderControls
 {
@@ -84,6 +85,16 @@ namespace StreamDownloaderControls
         public void UpdateThumbnail(System.Windows.Controls.Image Thumbnail)
         {
             ((System.Windows.Controls.Image)GetTemplateChild("Thumbnail")).Source = Thumbnail.Source;
+        }
+
+        public void UpdateDownloadProgress(double progress)
+        {
+            this.DownloadProgress = progress;
+        }
+
+        public void DownloadCompleted(FileDownload download)
+        {
+            MessageBox.Show("DONE");
         }
     }
 }

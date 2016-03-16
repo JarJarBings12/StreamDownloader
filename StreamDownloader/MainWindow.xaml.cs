@@ -13,6 +13,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using StreamDownloaderControls;
+using StreamDownloaderDownload;
+using StreamDownloaderDownload.Hosters.Default;
 
 namespace StreamDownloader
 {
@@ -21,9 +23,9 @@ namespace StreamDownloader
     /// </summary>
     public partial class MainWindow: FlatWindow
     {
-
-        private readonly Brush _PlaceholderGray = new SolidColorBrush(Color.FromRgb(209, 209, 209));
-        private readonly Brush _FontcolorBlack = new SolidColorBrush(Color.FromRgb(0, 0, 0));
+        private DownloadTask _fileDownload;
+        private readonly Brush _placeholderGray = new SolidColorBrush(Color.FromRgb(209, 209, 209));
+        private readonly Brush _fontcolorBlack = new SolidColorBrush(Color.FromRgb(0, 0, 0));
 
         public MainWindow()
         {
@@ -42,7 +44,7 @@ namespace StreamDownloader
 
             if (tb.Text.Equals("Download link"))
             {
-                tb.Foreground = _FontcolorBlack;
+                tb.Foreground = _fontcolorBlack;
                 tb.Text = string.Empty;
             }
         }
@@ -59,9 +61,26 @@ namespace StreamDownloader
             
             if (string.IsNullOrEmpty(tb.Text))
             {
-                tb.Foreground = _PlaceholderGray;
+                tb.Foreground = _placeholderGray;
                 tb.Text = "Download link";
             }
         }
+
+        private async void DownloadSubmit_Click(object sender, RoutedEventArgs e)
+        {
+            DownloadListItem downloadListItem = new DownloadListItem("TEST.mp4", @"C:/TEST.mp4", "http://4.cdn.vivo.sx:8080/get/0043082018?e=1457497518&s=250&m=video/mp4&h=I3r8K02S2XrprhpOiXkblA", 10);
+            DownloadTask.UpdateDownloadProgress a = downloadListItem.UpdateDownloadProgress;
+            DownloadTask.CompleteDownload b = downloadListItem.DownloadCompleted;
+            StreamCloud c = new StreamCloud();
+            Vivo d = new Vivo();
+            string ab = await d.GetSourceLink(@"http://vivo.sx/c79861f047");
+            MessageBox.Show(ab);
+            _fileDownload = new DownloadTask("C:/", "TEST.mp4", ab, a, b);
+            listBox.Items.Add(downloadListItem);
+            _fileDownload.Start();
+
+
+        }
+
     }
 }
