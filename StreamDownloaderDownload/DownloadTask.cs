@@ -28,7 +28,7 @@ namespace StreamDownloaderDownload
             this._source = source;
             this._progressChanged = updateDownloadProgress;
             this._downloadCompleted = downloadComplete;
-            this._fileDownload = new FileDownload(_source, _absolutFilePath, 20480, _progressChanged, _downloadCompleted);
+            this._fileDownload = new FileDownload(source, _absolutFilePath, 32000, _progressChanged, _downloadCompleted);
         }
 
         #region properties

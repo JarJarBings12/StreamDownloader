@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Diagnostics;
 using System.Net;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,10 +13,12 @@ namespace StreamDownloaderDownload
     {
         private Hashtable _activeDownloads;
 
+        /*
         public DownloadTask CreateNewDownload(string downloadFolder, string fileName, string source, DownloadTask.UpdateDownloadProgress updateDownloadProgress, DownloadTask.CompleteDownload completeDownload)
         {
             DownloadTask d = new DownloadTask(downloadFolder, fileName, source, updateDownloadProgress, completeDownload);
             d.Start();
         }
+        */
     }
 }

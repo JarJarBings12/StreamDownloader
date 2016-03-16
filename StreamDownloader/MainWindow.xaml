@@ -10,7 +10,7 @@
     <Grid>
         <ComboBox x:Name="SourceHost" Margin="10,72,0,0" HorizontalAlignment="Left" Width="186" Height="33" VerticalAlignment="Top"/>
         <TextBox x:Name="DownloadLink" Margin="201,72,157,0" TextWrapping="Wrap" TextAlignment="Left" Foreground="#D1D1D1" VerticalContentAlignment="Center" Height="33" VerticalAlignment="Top" Text="Download link" LostFocus="DownloadLink_LostFocus" GotFocus="DownloadLink_GotFocus"/>
-        <Button x:Name="DownloadSubmit" Content="Download" Margin="0,72,10,0" HorizontalAlignment="Right" Width="142" Height="33" VerticalAlignment="Top"/>
+        <Button x:Name="DownloadSubmit" Content="Download" Margin="0,72,10,0" HorizontalAlignment="Right" Width="142" Height="33" VerticalAlignment="Top" Click="DownloadSubmit_Click"/>
 
         <ListBox x:Name="listBox" Margin="10,110,10,15" HorizontalContentAlignment="Stretch">
         </ListBox>
