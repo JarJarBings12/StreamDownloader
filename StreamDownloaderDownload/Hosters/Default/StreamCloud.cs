@@ -35,25 +35,25 @@ namespace StreamDownloaderDownload.Hosters.Default
 
         public sealed override async Task<string> GetSourceLink(string url)
         {
-            SHDocVw.InternetExplorer a = new SHDocVw.InternetExplorer(); //Create new browser (IE)
-            a.Visible = false; //TODO Remove
-            a.Navigate2(url);
+            SHDocVw.InternetExplorer ie = new SHDocVw.InternetExplorer(); //Create new browser (IE)
+            ie.Visible = false; //TODO Remove
+            ie.Navigate2(url);
             
-            while (a.ReadyState != tagREADYSTATE.READYSTATE_COMPLETE)
+            while (ie.ReadyState != tagREADYSTATE.READYSTATE_COMPLETE)
             { }
             
             await Pause(DelayInMilliseconds);
 
-            SHDocVw.WebBrowser ab = ((SHDocVw.WebBrowser)a);
-            HTMLDocument abd = ((HTMLDocument)ab.Document); //Get document
-            IHTMLElement abde = abd.getElementById("btn_download"); //Define HTML button
+            SHDocVw.WebBrowser ab = ((SHDocVw.WebBrowser)ie);
+            HTMLDocument doc = ((HTMLDocument)ab.Document); //Get document
+            IHTMLElement button = doc.getElementById("btn_download"); //Define HTML button
 
-            abde.click();
+            button.click();
             
             string tempFile = $"{System.IO.Path.GetTempPath()}{Guid.NewGuid().ToString()}.lf.html";
 
             await JavaScriptProcessingTime();
-            abd = ((HTMLDocument)ab.Document);
+            doc = ((HTMLDocument)ab.Document);
 
             using (var output = new FileStream(tempFile, FileMode.Append, FileAccess.Write, FileShare.ReadWrite))
             {
@@ -65,7 +65,7 @@ namespace StreamDownloaderDownload.Hosters.Default
             var input = new StreamReader(tempFile);
             Match match = null;
 
-            while ((line = input.ReadLine()) != null)
+            while ((line = input.ReadLine()) != null) //Scan file for link.
             {
                 if (line == "")
                     continue;

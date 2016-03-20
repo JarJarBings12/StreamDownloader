@@ -37,6 +37,7 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Web" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
@@ -47,8 +48,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DownloadTask.cs" />
-    <Compile Include="FileDownload.cs" />
+    <Compile Include="Download\DownloadCompletedEventArgs.cs" />
+    <Compile Include="Download\DownloadStatusChangedEventArgs.cs" />
+    <Compile Include="Download\DownloadProgressChangedEventArgs.cs" />
+    <Compile Include="Download\DownloadStatus.cs" />
+    <Compile Include="Download\DownloadTask.cs" />
+    <Compile Include="Download\FileDownload.cs" />
+    <Compile Include="Download\JSON\StoredDownload.cs" />
     <Compile Include="Hosters\Default\PowerWatch.cs" />
     <Compile Include="Hosters\Default\StreamCloud.cs" />
     <Compile Include="Hosters\Default\Vivo.cs" />

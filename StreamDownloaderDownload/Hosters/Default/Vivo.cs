@@ -2,6 +2,7 @@
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using System.IO;
 using mshtml;
 
@@ -12,7 +13,7 @@ namespace StreamDownloaderDownload.Hosters.Default
         #region variables and properties
         private readonly Regex _BaseUrlPattern = new Regex(@"http://vivo.sx/(.*)");
         private readonly Regex _SourceUrlPattern = new Regex("(.*)<div\\s*class=\"stream-content\"\\s*data-url=\"(.*)\"\\s*data-name=\"(.*)\"\\s*data-title=\"(.*)\"\\s.*data-poster=\"(.*)\"\\s*style=\"(.*)\">");
-        private const int _JavaScriptProcessingTime = 15;
+        private const int _JavaScriptProcessingTime = 30;
 
         /* Properties */
         public sealed override Regex BaseUrlPattern => _BaseUrlPattern;
@@ -35,32 +36,38 @@ namespace StreamDownloaderDownload.Hosters.Default
             HTMLDocument doc = ((HTMLDocument)browser.Document); //Get Document
             IHTMLElement button = doc.getElementById("access"); //Get HTML Button
 
-            await Pause(9); //Wait 8 Seconds.
+            await Pause(9000); //Wait 9 Seconds.
             button.click(); //Click button
-
-            string tempFile = $"{System.IO.Path.GetTempPath()}{Guid.NewGuid().ToString()}.lf.html";
 
             await JavaScriptProcessingTime();
 
-            using (var output = new FileStream(tempFile, FileMode.Append, FileAccess.Write, FileShare.ReadWrite))
-            {
-                byte[] buffer = ASCIIEncoding.UTF8.GetBytes(((HTMLDocument)browser.Document).documentElement.outerHTML);
-                await output.WriteAsync(buffer, 0, buffer.Length);
-            }
-
             UpdateStatus("Scanning Web page after link...");
+            IHTMLElement element = GetStreamContent(((HTMLDocument)browser.Document)); //Get stream-content element from web page.
 
-            IHTMLElement element = GetStreamContent(((HTMLDocument)browser.Document));
+            var sourceUrl = string.Empty;
 
             if (element != null)
             {
-                UpdateStatus("Starting download...");
                 SetLinkFetchResultTo(LinkFetchResult.SUCCESSFULL);
-                return element.getAttribute("data-url");
+                UpdateStatus("Starting download...");
+                sourceUrl = element.getAttribute("data-url"); //Get data-url attribute
             }
-            UpdateStatus("Source link not found");
-            SetLinkFetchResultTo(LinkFetchResult.CANCELED);
-            return element.getAttribute("");
+            else
+            {
+                url = "";
+                SetLinkFetchResultTo(LinkFetchResult.CANCELED);
+                UpdateStatus("Source link not found");
+            }
+            
+            return sourceUrl;
+        }
+
+        public IHTMLElement GetStreamContent(HTMLDocument doc)
+        {
+            foreach (IHTMLElement element in doc.all)
+                if (element.getAttribute("className") == "stream-content")
+                    return ((IHTMLElement)element);
+            return null;
         }
 
         public sealed override async Task Pause(int mills)
@@ -81,14 +88,6 @@ namespace StreamDownloaderDownload.Hosters.Default
                 await Task.Delay(1000);
             }
             return;
-        }
-
-        public IHTMLElement GetStreamContent(HTMLDocument doc)
-        {
-            foreach (IHTMLElement element in doc.all)
-                if (element.getAttribute("className") == "stream-content")
-                    return ((IHTMLElement)element);
-            return null;
         }
     }
 }

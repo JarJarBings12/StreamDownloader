@@ -53,7 +53,7 @@ namespace StreamDownloaderDownload.Hosters.Default
             var input = new StreamReader(tempFile);
             Match match = null;
 
-            while ((line = input.ReadLine()) != null)
+            while ((line = input.ReadLine()) != null) //Scan file for link.
             {
                 if (line == "")
                     continue;
