@@ -5,6 +5,8 @@
 
     
     <!--#region Window Style-->
+    
+    <!--#region title bar-->
     <Style TargetType="{x:Type Button}" x:Key="default_button">
         <!-- Set width to 32 pixels. -->
         <Setter Property="Width" Value="32"/>
@@ -82,6 +84,51 @@
         <Setter Property="VerticalAlignment" Value="Center"/>
     </Style>
 
+    <!--#endregion-->
+    
+    <!--#region Controls -->
+    <Style TargetType="{x:Type Button}" x:Key="default_control_button">
+        <!-- Set width to 32 pixels. -->
+        <Setter Property="Width" Value="32"/>
+        <!-- Set height relative to the grid height. -->
+        <Setter Property="Height" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Grid}}, Path=RowDefinitions[0].ActualHeigh}"/>
+        <!-- Set background transparent -->
+        <Setter Property="Background" Value="Transparent"/>
+        <!-- Set foreground black -->
+        <Setter Property="Foreground" Value="Black"/>
+
+        <!-- Overwrite default template -->
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <!-- Setting the border background color relative to the button background. -->
+                    <Border Name="button_border" Background="{Binding Background, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Button}}">
+                        <Grid>
+                            <!-- Centering button content -->
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" Name="content"/>
+                        </Grid>
+                    </Border>
+
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="#8BA2A2A2"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter Property="Background" Value="#8BA2A2A2"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="{x:Type Rectangle}" x:Key="default_control_placeholder">
+        <!-- Set height relative to the grid height. -->
+        <Setter Property="Height" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Grid}}, Path=RowDefinitions[0].ActualHeigh}"/>
+        <Setter Property="Fill" Value="Chartreuse"/>
+    </Style>
+    <!--#endregion-->
+    
     <Style TargetType="{x:Type local:FlatWindow}">
         <!-- Set background transparent -->
         <Setter Property="Background" Value="Transparent"/>
@@ -144,6 +191,7 @@
                                     <!-- Create rows for the main window. -->
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="35" MinHeight="35"/>
+                                        <RowDefinition Height="80" MinHeight="80"/>
                                         <RowDefinition Height="*"/>
                                     </Grid.RowDefinitions>
 
@@ -195,14 +243,25 @@
                                             </Button>
 
                                             <!-- Close button -->
-                                            <Button Name="Close" Style="{StaticResource close_button}">
+                                            <Button x:Name="Close" Style="{StaticResource close_button}">
                                                 <Path Fill="{Binding Foreground, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Button}}" Data="M4 5h2l2 2 2-2h2l-3 3 3 3h-2l-2-2-2 2h-2l3-3-3-3z" Margin="0 0 2 8"/>
                                             </Button>
                                         </StackPanel>
                                     </Grid>
 
+                                    <Grid Grid.Row="1" Background="Beige" Margin="10 5 10 0">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="80" MinWidth="80"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="80" MinWidth="80"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Button x:Name="DownloadButton" Style="{StaticResource default_control_button}" Width="80" Content="Download" Grid.Column="0"/>
+                                        <Rectangle Style="{StaticResource default_control_placeholder}" Grid.Column="1"/>
+                                        <Button Style="{StaticResource default_control_button}" Width="80" Content="Settings" Grid.Column="2"/>
+                                    </Grid>
+                                    
                                     <!-- Create new grid for the user area. -->
-                                    <Grid Grid.Row="1" Background="Transparent" Margin="0 -1 0 0" VerticalAlignment="Stretch">
+                                    <Grid Grid.Row="2" Background="Transparent" Margin="0 -1 0 0" VerticalAlignment="Stretch">
                                         <!-- Use max width for this grid (9.5 percent of the main grid width). -->
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="*"/>
@@ -233,15 +292,6 @@
     <!--#endregion-->
 
     <!--#region Download list item -->
-
-    <Style TargetType="{x:Type ListBox}">
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="{x:Type ListBox}">
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
 
     <Style TargetType="{x:Type local:DownloadListItem}">
         <Setter Property="Background" Value="DodgerBlue"/>
@@ -283,7 +333,7 @@
                                         <TextBlock Grid.Row="0" Margin="2, 1, 0, 0" Text="{TemplateBinding FileName}"/>
                                         <TextBlock Grid.Row="1" Margin="2, 1, 0, 0" Text="{TemplateBinding DownloadFolder}"/>
                                         <TextBlock Grid.Row="2" Margin="2, 1, 0, 0" Text="{TemplateBinding DownloadLink}"/>
-                                        <ProgressBar Grid.Row="3" Margin="3, 0, 3, 2" Value="{TemplateBinding DownloadProgress}"/>
+                                        <ProgressBar Grid.Row="3" Margin="3, 0, 3, 2" Maximum="{TemplateBinding DownloadMaximum}" Value="{TemplateBinding DownloadProgress}" />
                                     </Grid>
                                 </Grid>
                             </Grid>

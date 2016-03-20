@@ -1,39 +1,10 @@
 ﻿using System.Windows;
 using System.Drawing;
 using System.Windows.Controls;
-using StreamDownloaderDownload;
+using StreamDownloaderDownload.Download;
 
 namespace StreamDownloaderControls
 {
-    /// <summary>
-    /// Follow steps 1a or 1b and then 2 to use this custom control in a XAML file.
-    ///
-    /// Step 1a) Using this custom control in a XAML file that exists in the current project.
-    /// Add this XmlNamespace attribute to the root element of the markup file where it is 
-    /// to be used:
-    ///
-    ///     xmlns:MyNamespace="clr-namespace:StreamDownloaderControls"
-    ///
-    ///
-    /// Step 1b) Using this custom control in a XAML file that exists in a different project.
-    /// Add this XmlNamespace attribute to the root element of the markup file where it is 
-    /// to be used:
-    ///
-    ///     xmlns:MyNamespace="clr-namespace:StreamDownloaderControls;assembly=StreamDownloaderControls"
-    ///
-    /// You will also need to add a project reference from the project where the XAML file lives
-    /// to this project and Rebuild to avoid compilation errors:
-    ///
-    ///     Right click on the target project in the Solution Explorer and
-    ///     "Add Reference"->"Projects"->[Browse to and select this project]
-    ///
-    ///
-    /// Step 2)
-    /// Go ahead and use your control in the XAML file.
-    ///
-    ///     <MyNamespace:DownloadListItem/>
-    ///
-    /// </summary>
     public class DownloadListItem: Control
     {
 
@@ -42,22 +13,25 @@ namespace StreamDownloaderControls
             DefaultStyleKeyProperty.OverrideMetadata(typeof(DownloadListItem), new FrameworkPropertyMetadata(typeof(DownloadListItem)));
         }
 
-        #region properties
+        #region WPF properties
         public static readonly DependencyProperty FileNameProperty = DependencyProperty.RegisterAttached("FileName", typeof(string), typeof(DownloadListItem));
         public static readonly DependencyProperty DownloadFolderProperty = DependencyProperty.RegisterAttached("DownloadFolder", typeof(string), typeof(DownloadListItem));
         public static readonly DependencyProperty DownloadLinkProperty = DependencyProperty.RegisterAttached("DownloadLink", typeof(string), typeof(DownloadListItem));
+        public static readonly DependencyProperty DownloadMaximumProperty = DependencyProperty.RegisterAttached("DownloadMaximum", typeof(double), typeof(DownloadListItem));
         public static readonly DependencyProperty DownloadProgressProperty = DependencyProperty.RegisterAttached("DownloadProgress", typeof(double), typeof(DownloadListItem), new PropertyMetadata(0D));
 
-        public DownloadListItem(string FileName, string DownlaodFolder, string DownloadLink, double DownloadProgress)
+        public DownloadListItem(string FileName, string DownlaodFolder, string DownloadLink, int DownloadMaximum, double DownloadProgress)
         {
             this.FileName = FileName;
             this.DownloadFolder = DownloadFolder;
             this.DownloadLink = DownloadLink;
+            this.DownloadMaximum = DownloadMaximum;
             this.DownloadProgress = DownloadProgress;
         }
 
         #endregion
 
+        #region Properties
         public string FileName
         {
             get { return (string) $"File name: { base.GetValue(FileNameProperty) }"; }
@@ -76,11 +50,19 @@ namespace StreamDownloaderControls
             set { base.SetValue(DownloadLinkProperty, value); }
         }
 
+        public double DownloadMaximum
+        {
+            get { return (double)base.GetValue(DownloadMaximumProperty); }
+            set { base.SetValue(DownloadMaximumProperty, value); }
+        }
+
         public double DownloadProgress
         {
             get { return (double) base.GetValue(DownloadProgressProperty); }
             set { base.SetValue(DownloadProgressProperty, value); }
         }
+        #endregion
+
 
         public void UpdateThumbnail(System.Windows.Controls.Image Thumbnail)
         {
@@ -91,6 +73,14 @@ namespace StreamDownloaderControls
         {
             this.DownloadProgress = progress;
         }
+
+        #region Events    
+        public void DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)
+        {
+            DownloadProgress = e.Progress;
+        }
+
+        #endregion
 
         public void DownloadCompleted(FileDownload download)
         {
