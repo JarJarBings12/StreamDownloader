@@ -24,7 +24,7 @@ namespace StreamDownloaderDownload.Download.JSON
     public class DownloadStatus
     {
         [DataMember(Name = "WrittenChunks")]
-        public uint WrittenChunks { get; set; }
+        public ulong WrittenChunks { get; set; }
         [DataMember(Name = "ChunkSize")]
         public uint ChunkSize { get; set; }
         [DataMember(Name = "ContentLength")]
