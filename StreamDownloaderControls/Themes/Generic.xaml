@@ -333,7 +333,7 @@
                                         <TextBlock Grid.Row="0" Margin="2, 1, 0, 0" Text="{TemplateBinding FileName}"/>
                                         <TextBlock Grid.Row="1" Margin="2, 1, 0, 0" Text="{TemplateBinding DownloadFolder}"/>
                                         <TextBlock Grid.Row="2" Margin="2, 1, 0, 0" Text="{TemplateBinding DownloadLink}"/>
-                                        <ProgressBar Grid.Row="3" Margin="3, 0, 3, 2" Maximum="{TemplateBinding DownloadMaximum}" Value="{TemplateBinding DownloadProgress}" />
+                                        <ProgressBar Grid.Row="3" Margin="3, 0, 3, 2" Value="{TemplateBinding DownloadProgress}" />
                                     </Grid>
                                 </Grid>
                             </Grid>

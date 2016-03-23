@@ -71,7 +71,7 @@ namespace StreamDownloader
 
         private async void DownloadSubmit_Click(object sender, RoutedEventArgs e)
         {
-            DownloadListItem listItem = new DownloadListItem("TEST", "mp4", "http://vivo.sx/c79861f047", 100, 0);
+            DownloadListItem listItem = new DownloadListItem("TEST", "mp4", "http://vivo.sx/c79861f047", 0);
             listBox.Items.Add(listItem);
             Hoster hoster = new Vivo();
             string source = await hoster.GetSourceLink("http://vivo.sx/c79861f047");

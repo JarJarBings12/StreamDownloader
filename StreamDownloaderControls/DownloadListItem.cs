@@ -17,15 +17,13 @@ namespace StreamDownloaderControls
         public static readonly DependencyProperty FileNameProperty = DependencyProperty.RegisterAttached("FileName", typeof(string), typeof(DownloadListItem));
         public static readonly DependencyProperty DownloadFolderProperty = DependencyProperty.RegisterAttached("DownloadFolder", typeof(string), typeof(DownloadListItem));
         public static readonly DependencyProperty DownloadLinkProperty = DependencyProperty.RegisterAttached("DownloadLink", typeof(string), typeof(DownloadListItem));
-        public static readonly DependencyProperty DownloadMaximumProperty = DependencyProperty.RegisterAttached("DownloadMaximum", typeof(double), typeof(DownloadListItem));
         public static readonly DependencyProperty DownloadProgressProperty = DependencyProperty.RegisterAttached("DownloadProgress", typeof(double), typeof(DownloadListItem), new PropertyMetadata(0D));
 
-        public DownloadListItem(string FileName, string DownlaodFolder, string DownloadLink, int DownloadMaximum, double DownloadProgress)
+        public DownloadListItem(string FileName, string DownlaodFolder, string DownloadLink, double DownloadProgress)
         {
             this.FileName = FileName;
             this.DownloadFolder = DownloadFolder;
             this.DownloadLink = DownloadLink;
-            this.DownloadMaximum = DownloadMaximum;
             this.DownloadProgress = DownloadProgress;
         }
 
@@ -50,12 +48,6 @@ namespace StreamDownloaderControls
             set { base.SetValue(DownloadLinkProperty, value); }
         }
 
-        public double DownloadMaximum
-        {
-            get { return (double)base.GetValue(DownloadMaximumProperty); }
-            set { base.SetValue(DownloadMaximumProperty, value); }
-        }
-
         public double DownloadProgress
         {
             get { return (double) base.GetValue(DownloadProgressProperty); }
@@ -77,7 +69,7 @@ namespace StreamDownloaderControls
         #region Events    
         public void DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)
         {
-            DownloadProgress = e.Progress;
+            UpdateDownloadProgress(e.Progress);
         }
 
         #endregion

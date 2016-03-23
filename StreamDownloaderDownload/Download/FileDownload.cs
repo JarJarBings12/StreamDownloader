@@ -28,7 +28,7 @@ namespace StreamDownloaderDownload.Download
         /* Max 32 bit (uint) */
         private Lazy<ulong> _contentLength { get; set; }
         /* Max 16 bit (ushort) */
-        private uint _writtenChunks { get; set; }
+        private ulong _writtenChunks { get; set; }
         #endregion
 
         #region Constructor
@@ -43,7 +43,7 @@ namespace StreamDownloaderDownload.Download
             _task = task;
         }
 
-        public FileDownload(string source, string tempFile, string file, uint chunkSize, uint writtenChunks, ulong contentLength, DownloadTask task)
+        public FileDownload(string source, string tempFile, string file, uint chunkSize, ulong writtenChunks, ulong contentLength, DownloadTask task)
         {
             _source = source;
             _tempFile = tempFile;
@@ -63,7 +63,7 @@ namespace StreamDownloaderDownload.Download
 
         public uint ChunkSize => _chunkSize;
         public Lazy<ulong> ContentLength => _contentLength;
-        public uint WrittenChunks => _writtenChunks;
+        public ulong WrittenChunks => _writtenChunks;
 
         public bool Finished => _writtenChunks == _contentLength.Value;
         public bool IsPaused => _pause;
@@ -85,7 +85,7 @@ namespace StreamDownloaderDownload.Download
             this._continunigLater = true;
         }
 
-        public async Task BeginDownload(uint writtenChunks)
+        public async Task BeginDownload(ulong writtenChunks)
         {
             if (_pause)
                 throw new InvalidOperationException();
@@ -94,7 +94,7 @@ namespace StreamDownloaderDownload.Download
             request.Method = "GET";
             request.UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/42.0.2311.135 Safari/537.36 Edge/12.246";
             request.ContentType = "application/x-www-form-urlencoded";
-            request.AddRange(writtenChunks);
+            request.AddRange((long)_writtenChunks);
 
             if (!File.Exists(_tempFile))
                 using (File.Create(_tempFile)) ;
@@ -122,7 +122,7 @@ namespace StreamDownloaderDownload.Download
                                 await tempFileStream.WriteAsync(buffer, 0, readBytes);
                                 length -= (ulong)readBytes;
                                 _writtenChunks += (uint)readBytes;
-                                double result = (_writtenChunks * 100) /_contentLength.Value;
+                                double result = (_writtenChunks * 100) / _contentLength.Value;
                                 _task.UpdateDownloadProgress(result);
                             }
 

@@ -64,7 +64,7 @@ namespace StreamDownloaderDownload.Download
             _fileDownload = new FileDownload(downloadUrl, $"{tempFolder}{Guid.NewGuid()}.dtemp", $"{downloadFolder}{fileName}.{fileType}", chunkSize, this);
         }
 
-        public DownloadTask(string downloadFolder, string tempFolder, string fileName, string fileType, string downloadUrl, uint chunkSize, uint writtenChunks, ulong contentLength)
+        public DownloadTask(string downloadFolder, string tempFolder, string fileName, string fileType, string downloadUrl, uint chunkSize, ulong writtenChunks, ulong contentLength)
         {
 
             _downloadFolder = downloadFolder;
