@@ -14,6 +14,7 @@ namespace StreamDownloaderDownload.Download
 {
     public delegate void DownloadProgressChangedHandler(object sender, DownloadProgressChangedEventArgs e);
     public delegate void DownloadStatusChangedHandler(object sender, DownloadStatusChangedEventArgs e);
+    public delegate void DownloadStartedHandler(object sender, DownloadStartedEventArgs e);
 
     public class DownloadTask
     {
@@ -31,27 +32,20 @@ namespace StreamDownloaderDownload.Download
         public string FileName => _fileName;
         public string FileType => _fileType;
         public string DownloadUrl => _downloadUrl;
+        public FileDownload Download => _fileDownload;
         public bool IsPaused => _fileDownload.IsPaused;
         #endregion
 
         public event DownloadProgressChangedHandler DownloadProgressChanged;
         public event DownloadStatusChangedHandler DownloadStatusChanged;
+        public event DownloadStartedHandler DownloadBegin;
 
-        #region constructor
-
+        #region constructo
         public DownloadTask(string downloadFolder, string fileName, string fileType, string downloadUrl) : this(downloadFolder, StreamDownloader.DownloadTempFolder, fileName, fileType, downloadUrl)
         { }
 
-        public DownloadTask(string downloadFolder, string tempFolder, string fileName, string fileType, string downloadUrl)
-        {
-            _downloadFolder = downloadFolder;
-            _tempFolder = tempFolder;
-            _fileName = fileName;
-            _fileType = fileType;
-            _downloadUrl = downloadUrl;
-
-            _fileDownload = new FileDownload(downloadUrl, $"{tempFolder}{Guid.NewGuid()}.dtemp", $"{downloadFolder}{fileName}.{fileType}", StreamDownloader.ChunkSize, this);
-        }
+        public DownloadTask(string downloadFolder, string tempFolder, string fileName, string fileType, string downloadUrl) : this(downloadFolder, tempFolder, fileName, fileType, downloadUrl, StreamDownloader.ChunkSize)
+        { }
 
         public DownloadTask(string downloadFolder, string tempFolder, string fileName, string fileType, string downloadUrl, uint chunkSize)
         {
@@ -61,7 +55,7 @@ namespace StreamDownloaderDownload.Download
             _fileType = fileType;
             _downloadUrl = downloadUrl;
 
-            _fileDownload = new FileDownload(downloadUrl, $"{tempFolder}{Guid.NewGuid()}.dtemp", $"{downloadFolder}{fileName}.{fileType}", chunkSize, this);
+            _fileDownload = new FileDownload(downloadUrl, $"{tempFolder}{Guid.NewGuid()}.dtemp", $"{downloadFolder}\\{fileName}{fileType}", chunkSize, this);
         }
 
         public DownloadTask(string downloadFolder, string tempFolder, string fileName, string fileType, string downloadUrl, uint chunkSize, ulong writtenChunks, ulong contentLength)
@@ -73,7 +67,7 @@ namespace StreamDownloaderDownload.Download
             _fileType = fileType;
             _downloadUrl = downloadUrl;
 
-            _fileDownload = new FileDownload(downloadUrl, $"{tempFolder}{Guid.NewGuid()}.dtemp", $"{downloadFolder}{fileName}.{fileType}", StreamDownloader.ChunkSize, writtenChunks, contentLength, this);
+            _fileDownload = new FileDownload(downloadUrl, $"{tempFolder}{Guid.NewGuid()}.dtemp", $"{downloadFolder}\\{fileName}{fileType}", StreamDownloader.ChunkSize, writtenChunks, contentLength, this);
         }
 
         #endregion
@@ -93,18 +87,23 @@ namespace StreamDownloaderDownload.Download
             _fileDownload.ContinuingLater();
         }
 
-        protected internal void UpdateDownloadProgress(double value)
-        {
-            if (DownloadProgressChanged == null)
-                return;
-            DownloadProgressChanged(this, new DownloadProgressChangedEventArgs(value));
-        }
-
-        protected internal void UpdateDownloadStatus(DownloadStatus status)
+        public void UpdateDownloadStatus(string message, DownloadStatus status)
         {
             if (DownloadStatusChanged == null)
                 return;
-            DownloadStatusChanged(this, new DownloadStatusChangedEventArgs(status, _fileDownload));
+            DownloadStatusChanged(this, new DownloadStatusChangedEventArgs(message, status, _fileDownload));
+        }
+
+        protected internal void StartDownload()
+        {
+            DownloadBegin(this, new DownloadStartedEventArgs(DateTime.Now));
+        }
+
+        protected internal void UpdateDownloadProgress(double value, ulong writtenBytes)
+        {
+            if (DownloadProgressChanged == null)
+                return;
+            DownloadProgressChanged(this, new DownloadProgressChangedEventArgs(value, writtenBytes));
         }
 
         public static DownloadTask LoadSavedDownload(string tempFile)

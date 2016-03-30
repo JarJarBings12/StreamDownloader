@@ -9,7 +9,6 @@ namespace StreamDownloaderDownload.Hosters
     public enum LinkFetchResult
     {
         SUCCESSFULL,
-        INTERRUPTED,
-        CANCELED
+        FAILED
     }
 }

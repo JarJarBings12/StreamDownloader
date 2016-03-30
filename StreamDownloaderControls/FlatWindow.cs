@@ -11,6 +11,7 @@ namespace StreamDownloaderControls
 {
     public class FlatWindow: Window
     {
+        #region C# Variables and properties
         private double[] NormalPositon = new double[4];
         protected HwndSource hwndSource;
         protected const int WM_SYSCOMMAND = 0x112;
@@ -18,7 +19,9 @@ namespace StreamDownloaderControls
         /* Import user32.dll. */
         [DllImport("user32.dll", CharSet = CharSet.Auto)]
         private static extern IntPtr SendMessage(IntPtr hWnd, uint Msg, IntPtr wParm, IntPtr lParam);
+        #endregion
 
+        #region Constructors
         static FlatWindow()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(FlatWindow), new FrameworkPropertyMetadata(typeof(FlatWindow)));
@@ -28,30 +31,7 @@ namespace StreamDownloaderControls
         {
             SourceInitialized += Initialize;
         }
-
-        /// <summary>
-        /// Bind events to different WPF components.
-        /// </summary>
-        public override void OnApplyTemplate()
-        {
-            // Registering methods for the click events.
-            ((Button) GetTemplateChild("Minimize")).Click += WindowMinimizeEvent;
-            ((Button) GetTemplateChild("Restore")).Click += WindowRestoreEvent;
-            ((Button) GetTemplateChild("Close")).Click += WindowCloseEvent;
-
-            ((FrameworkElement) GetTemplateChild("title_bar")).MouseLeftButtonDown += new MouseButtonEventHandler(WindowDragEvent);
-            
-            Rectangle x = null;
-            foreach (string direction in BorderDirectionNames)
-            {
-                x = ((Rectangle) GetTemplateChild(direction));
-                x.MouseEnter += new MouseEventHandler(WindowBorderMouseEnterEvent);
-                x.PreviewMouseLeftButtonDown += new MouseButtonEventHandler(WindowBorderMouseLeftDownEvent);
-                x.MouseLeave += new MouseEventHandler(WindowBorderMouseLeaveEvent);
-            }
-
-            base.OnApplyTemplate();
-        }
+        #endregion
 
         /// <summary>
         /// Initializing the hwndSource variable.
@@ -62,7 +42,30 @@ namespace StreamDownloaderControls
         {
             this.hwndSource = PresentationSource.FromVisual((Visual) sender) as HwndSource;
         }
-   
+
+        /// <summary>
+        /// Bind events to different WPF components.
+        /// </summary>
+        public override void OnApplyTemplate()
+        {
+            // Registering methods for the click events.
+            ((Button)GetTemplateChild("Minimize")).Click += WindowMinimizeEvent;
+            ((Button)GetTemplateChild("Restore")).Click += WindowRestoreEvent;
+            ((Button)GetTemplateChild("Close")).Click += WindowCloseEvent;
+            ((FrameworkElement)GetTemplateChild("title_bar")).MouseLeftButtonDown += (sender, e) => DragMove();
+
+            Rectangle x = null;
+            foreach (string direction in BorderDirectionNames)
+            {
+                x = ((Rectangle)GetTemplateChild(direction));
+                x.MouseEnter += (sender, e) => DisplayResizeCursor(sender, e);
+                x.PreviewMouseLeftButtonDown += (sender, e) => Resize(sender, e);
+                x.MouseLeave += (sender, e) => ResetCursor(sender, e);
+            }
+
+            base.OnApplyTemplate();
+        }
+
         // Window minimize handler
         protected void WindowMinimizeEvent(object sender, RoutedEventArgs e)
         {
@@ -89,34 +92,10 @@ namespace StreamDownloaderControls
         protected void WindowCloseEvent(object sender, RoutedEventArgs e)
         {
             Close();
+            Environment.Exit(0);             
         }
 
-        // Mouse enter border event.
-        protected void WindowBorderMouseEnterEvent(object sender, MouseEventArgs e)
-        {
-            DisplayResizeCursor(sender, e);
-        }
-
-        // Left mouse button down event.
-        protected void WindowBorderMouseLeftDownEvent(object sender, MouseButtonEventArgs e)
-        {
-            Resize(sender, e);
-        }
-
-        // Mouse leave border event.
-        protected void WindowBorderMouseLeaveEvent(object sender, MouseEventArgs e)
-        {
-            ResetCursor(sender, e);
-        }
-
-        // Window drag event.
-        protected void WindowDragEvent(object sender, MouseEventArgs e)
-        {
-            DragMove();
-        }
-
-        #region Resize
-
+       #region Resize
         /// <summary>
         /// Send a resize message to windows.
         /// </summary>
@@ -138,7 +117,9 @@ namespace StreamDownloaderControls
         }
 
         /// <summary>
-        /// Select the correct cursor for the window side.
+        /// Select the correct cursor for the window side and enlarged the window into the corresponding direction.
+        /// Occurs when the mouse pointer is over the edge of the window and the left mouse button is pressed.
+        /// <seealso cref="DisplayResizeCursor(object, MouseEventArgs)"/>
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -184,7 +165,9 @@ namespace StreamDownloaderControls
         }
 
         /// <summary>
-        /// 
+        /// Select the correct cursor for the window side.
+        /// Occurs when the mouse pointer is over the edge of the window, but the left mouse button isn't pressed.
+        /// <seealso cref="Resize(object, MouseButtonEventArgs)"/>
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>

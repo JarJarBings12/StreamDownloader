@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace StreamDownloaderDownload.Hosters
 {
     public delegate void FetchStatusChangedHandler(object sender, LinkFetchStatusChangedEventArgs e);
-    public delegate void LinkFetchFinshedHandler(object sender, LinkFetchResult e);
+    public delegate void LinkFetchFinshedHandler(object sender, LinkFetchFinishedEventArgs e);
 
     public abstract class Hoster
     {
@@ -32,7 +32,7 @@ namespace StreamDownloaderDownload.Hosters
         {
             if (LinkFetchFinished == null)
                 return;
-            LinkFetchFinished(this, result);
+            LinkFetchFinished(this, new LinkFetchFinishedEventArgs(result));
         }
 
         public abstract Task<string> GetSourceLink(string url);

@@ -17,7 +17,10 @@ using StreamDownloaderDownload;
 using StreamDownloaderDownload.Download;
 using StreamDownloaderDownload.Hosters;
 using StreamDownloaderDownload.Hosters.Default;
+using StreamDownloaderDownload.FileExtensions.Default;
+using System.Threading;
 using System.IO;
+using System.ComponentModel;
 
 namespace StreamDownloader
 {
@@ -29,56 +32,44 @@ namespace StreamDownloader
         private StreamDownloaderDownload.StreamDownloader _streamDownloader = new StreamDownloaderDownload.StreamDownloader();
         private readonly Brush _placeholderGray = new SolidColorBrush(Color.FromRgb(209, 209, 209));
         private readonly Brush _fontcolorBlack = new SolidColorBrush(Color.FromRgb(0, 0, 0));
+        private HashSet<Task> _ActiveDownloads = new HashSet<Task>();
 
         public MainWindow()
         {
             InitializeComponent();
-        }
-
-        /// <summary>
-        /// <c> GotFocus </c> event for the download link text box.
-        /// Needed for the placeholder.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void DownloadLink_GotFocus(object sender, RoutedEventArgs e)
-        {
-            TextBox tb = (TextBox)sender;
-
-            if (tb.Text.Equals("Download link"))
-            {
-                tb.Foreground = _fontcolorBlack;
-                tb.Text = string.Empty;
-            }
-        }
-
-        /// <summary>
-        /// <c> LostFoucs </c> event for the download link text box.
-        /// Needed for the placeholder.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void DownloadLink_LostFocus(object sender, RoutedEventArgs e)
-        {
-            TextBox tb = (TextBox)sender;
-            
-            if (string.IsNullOrEmpty(tb.Text))
-            {
-                tb.Foreground = _placeholderGray;
-                tb.Text = "Download link";
-            }
+            _streamDownloader.RegisterHost(new Vivo());
+            _streamDownloader.RegisterHost(new StreamCloud());
+            _streamDownloader.RegisterHost(new PowerWatch());
+            _streamDownloader.RegisterFileExtension(new MP4());
         }
 
         private async void DownloadSubmit_Click(object sender, RoutedEventArgs e)
         {
-            DownloadListItem listItem = new DownloadListItem("TEST", "mp4", "http://vivo.sx/c79861f047", 0);
+            var cDownload = await CreateDownload.ShowDialog(((ContentControl)GetTemplateChild("MDI")), _streamDownloader.SupportedHosters.ToList(), _streamDownloader.SupportedFilExtensions.ToList());
+            await ProcessDownloadAsync(cDownload);
+        }
+
+        private async Task ProcessDownloadAsync(CreateDownload cDownload)
+        {
+            var listItem = new DownloadListItem(cDownload.FileName, cDownload.DownloadFolder, cDownload.DownloadLink, 0);
             listBox.Items.Add(listItem);
-            Hoster hoster = new Vivo();
-            string source = await hoster.GetSourceLink("http://vivo.sx/c79861f047");
-            listItem.DownloadLink = source;
-            DownloadTask task = _streamDownloader.CreateDownload("TEST", "mp4", source);
-            task.DownloadProgressChanged += listItem.DownloadProgressChanged;
-            task.Start();
+
+            LinkFetchResult response = LinkFetchResult.FAILED;
+
+            var linkFetch = new LinkFetchTask((Hoster)Activator.CreateInstance(cDownload.SelectedHoster.GetType()), cDownload.DownloadLink);
+            linkFetch.Host.FetchStatusChanged += (_sender, _e) => { listItem.Status = ((LinkFetchStatusChangedEventArgs)_e).Message; };
+            linkFetch.Host.LinkFetchFinished += (_sender, _e) => { response = ((LinkFetchFinishedEventArgs)_e).Result; };
+
+            var downloadLink = await linkFetch.Fetch();
+
+            if (response == LinkFetchResult.FAILED)
+                return;
+
+            var downloadTast = StreamDownloaderDownload.StreamDownloader.CreateDownload(cDownload.DownloadFolder, StreamDownloaderDownload.StreamDownloader.DownloadTempFolder + @"\\", cDownload.FileName, cDownload.SelectedFileExtension.Extension, downloadLink, StreamDownloaderDownload.StreamDownloader.ChunkSize);
+            downloadTast.DownloadProgressChanged += listItem.DownloadProgressChanged;
+            downloadTast.DownloadStatusChanged += listItem.DownloadStatusChanged;
+            downloadTast.DownloadBegin += (_sender, _e) => { listItem.CalculateFullContentLengths(downloadTast.Download.ContentLength.Value); };
+            downloadTast.Start();
         }
 
         public override void OnApplyTemplate()
