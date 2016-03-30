@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace StreamDownloaderDownload.Hosters
 {
-    public class LinkFetchStatusChangedEventArgs
+    public class LinkFetchFinishedEventArgs
     {
-        public LinkFetchStatusChangedEventArgs(string message)
+        public LinkFetchFinishedEventArgs(LinkFetchResult result)
         {
-            this.Message = message;
+            Result = result;
         }
 
-        public string Message { get; }
+        public LinkFetchResult Result { get; }
     }
 }

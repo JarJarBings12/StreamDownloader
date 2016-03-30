@@ -26,7 +26,6 @@ namespace StreamDownloaderDownload.Hosters.Default
         {
             SHDocVw.InternetExplorer ie = new SHDocVw.InternetExplorer();
             ie.Navigate2(url);
-            ie.Visible = true;
 
             while (ie.ReadyState != SHDocVw.tagREADYSTATE.READYSTATE_COMPLETE)
             { }

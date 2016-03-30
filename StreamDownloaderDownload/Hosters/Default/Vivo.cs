@@ -27,7 +27,6 @@ namespace StreamDownloaderDownload.Hosters.Default
         {
             SHDocVw.InternetExplorer ie = new SHDocVw.InternetExplorer();
             ie.Navigate2(url);
-            ie.Visible = true; //TODO Remove
 
             while (ie.ReadyState != SHDocVw.tagREADYSTATE.READYSTATE_COMPLETE)
             { }
@@ -55,7 +54,7 @@ namespace StreamDownloaderDownload.Hosters.Default
             else
             {
                 url = "";
-                SetLinkFetchResultTo(LinkFetchResult.CANCELED);
+                SetLinkFetchResultTo(LinkFetchResult.FAILED);
                 UpdateStatus("Source link not found");
             }
             

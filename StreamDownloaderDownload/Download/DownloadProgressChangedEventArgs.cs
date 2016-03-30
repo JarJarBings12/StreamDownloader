@@ -8,11 +8,14 @@ namespace StreamDownloaderDownload.Download
 {
     public class DownloadProgressChangedEventArgs
     {
-        public DownloadProgressChangedEventArgs(double value)
+        public DownloadProgressChangedEventArgs(double value, ulong writtenBytes)
         {
             Progress = value;
+            WrittenBytes = writtenBytes;
         }
 
         public double Progress { get; }
+
+        public ulong WrittenBytes { get; }
     }
 }

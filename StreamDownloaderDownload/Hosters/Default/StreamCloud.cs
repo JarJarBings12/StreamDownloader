@@ -36,7 +36,6 @@ namespace StreamDownloaderDownload.Hosters.Default
         public sealed override async Task<string> GetSourceLink(string url)
         {
             SHDocVw.InternetExplorer ie = new SHDocVw.InternetExplorer(); //Create new browser (IE)
-            ie.Visible = false; //TODO Remove
             ie.Navigate2(url);
             
             while (ie.ReadyState != tagREADYSTATE.READYSTATE_COMPLETE)
