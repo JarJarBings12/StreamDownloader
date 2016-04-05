@@ -4,22 +4,22 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using StreamDownloaderDownload.Download;
-using StreamDownloaderDownload.Hosters;
+using StreamDownloaderDownload.Hosts;
 
 namespace StreamDownloaderDownload.Download
 {
     public class LinkFetchTask
     {
-        private Hoster _host;
+        private Host _host;
         private string _link;
 
-        public LinkFetchTask(Hoster host, string link)
+        public LinkFetchTask(Host host, string link)
         {
             _host = host;
             _link = link;
         }
 
-        public Hoster Host => _host;
+        public Host Host => _host;
         public string Link => _link;
 
         public async Task<string> Fetch()

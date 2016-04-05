@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using StreamDownloaderDownload.Download.JSON;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Json;
+using System.Timers;
 using System.IO;
 
 namespace StreamDownloaderDownload.Download
@@ -25,6 +26,7 @@ namespace StreamDownloaderDownload.Download
         private readonly string _fileName;
         private readonly string _fileType;
         private readonly string _downloadUrl;
+        private Timer _StatusUpdateTimer;
 
         private readonly FileDownload _fileDownload;
 
@@ -40,7 +42,7 @@ namespace StreamDownloaderDownload.Download
         public event DownloadStatusChangedHandler DownloadStatusChanged;
         public event DownloadStartedHandler DownloadBegin;
 
-        #region constructo
+        #region constructor
         public DownloadTask(string downloadFolder, string fileName, string fileType, string downloadUrl) : this(downloadFolder, StreamDownloader.DownloadTempFolder, fileName, fileType, downloadUrl)
         { }
 
@@ -56,6 +58,7 @@ namespace StreamDownloaderDownload.Download
             _downloadUrl = downloadUrl;
 
             _fileDownload = new FileDownload(downloadUrl, $"{tempFolder}{Guid.NewGuid()}.dtemp", $"{downloadFolder}\\{fileName}{fileType}", chunkSize, this);
+            InitializeUpdateTimer();
         }
 
         public DownloadTask(string downloadFolder, string tempFolder, string fileName, string fileType, string downloadUrl, uint chunkSize, ulong writtenChunks, ulong contentLength)
@@ -68,35 +71,56 @@ namespace StreamDownloaderDownload.Download
             _downloadUrl = downloadUrl;
 
             _fileDownload = new FileDownload(downloadUrl, $"{tempFolder}{Guid.NewGuid()}.dtemp", $"{downloadFolder}\\{fileName}{fileType}", StreamDownloader.ChunkSize, writtenChunks, contentLength, this);
+            InitializeUpdateTimer();
         }
-
         #endregion
 
+        /// <summary>
+        /// Starts the download.
+        /// </summary>
         public void Start()
         {
             _fileDownload.Start();
         }
 
+        /// <summary>
+        /// Pausing the download.
+        /// </summary>
         public void Pause()
         {
             _fileDownload.Pause();
         }
 
+        /// <summary>
+        /// Stops the download and write the current status into a file.
+        /// </summary>
         public void ContinuingLater()
         {
             _fileDownload.ContinuingLater();
         }
 
-        public void UpdateDownloadStatus(string message, DownloadStatus status)
+        public static DownloadTask LoadSavedDownload(string tempFile)
+        {
+            StoredDownload download = DeserializeDownloadState(tempFile);
+            return new DownloadTask(download.DownloadFolder, download.TempFolder, download.FileName, download.FileType, download.Source, download.DownloadStatus.ChunkSize, download.DownloadStatus.WrittenChunks, download.DownloadStatus.ContentLength);
+        }
+
+        /// <summary>
+        /// Sets a timer for the <seealso cref="DownloadProgressChanged"/> event, with a interval of 500 milliseconds.
+        /// This should prevent that the UI thread freeze when to many downloads run at the same time.
+        /// </summary>
+        protected void InitializeUpdateTimer()
+        {
+            _StatusUpdateTimer = new Timer(500);
+            _StatusUpdateTimer.Elapsed += (sender, e) => { UpdateDownloadProgress(((_fileDownload.WrittenBytes * 100) / _fileDownload.ContentLength.Value), _fileDownload.WrittenBytes); };
+            _StatusUpdateTimer.AutoReset = true;
+        }
+
+        protected internal void UpdateDownloadStatus(string message, DownloadStatus status)
         {
             if (DownloadStatusChanged == null)
                 return;
             DownloadStatusChanged(this, new DownloadStatusChangedEventArgs(message, status, _fileDownload));
-        }
-
-        protected internal void StartDownload()
-        {
-            DownloadBegin(this, new DownloadStartedEventArgs(DateTime.Now));
         }
 
         protected internal void UpdateDownloadProgress(double value, ulong writtenBytes)
@@ -106,10 +130,15 @@ namespace StreamDownloaderDownload.Download
             DownloadProgressChanged(this, new DownloadProgressChangedEventArgs(value, writtenBytes));
         }
 
-        public static DownloadTask LoadSavedDownload(string tempFile)
+        protected internal void StartDownload()
         {
-            StoredDownload download = DeserializeDownloadState(tempFile);
-            return new DownloadTask(download.DownloadFolder, download.TempFolder, download.FileName, download.FileType, download.Source, download.DownloadStatus.ChunkSize, download.DownloadStatus.WrittenChunks, download.DownloadStatus.ContentLength);
+            DownloadBegin(this, new DownloadStartedEventArgs(DateTime.Now));
+            _StatusUpdateTimer.Start();
+        }
+
+        protected internal void ShutdownDownload()
+        {
+            _StatusUpdateTimer.Stop();
         }
 
         protected static internal StoredDownload DeserializeDownloadState(string tempFile)

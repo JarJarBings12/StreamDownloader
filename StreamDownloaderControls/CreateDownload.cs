@@ -14,7 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using StreamDownloaderDownload;
 using StreamDownloaderDownload.Download;
-using StreamDownloaderDownload.Hosters;
+using StreamDownloaderDownload.Hosts;
 using StreamDownloaderDownload.FileExtensions;
 using System.Text.RegularExpressions;
 using System.Collections;
@@ -31,45 +31,66 @@ namespace StreamDownloaderControls
         private const string _tb_ph_FileName = "File name";
         private bool _release = false;
 
-        public IEnumerable SupportedHosters
+        /// <summary>
+        /// Contains the supported hosts.
+        /// </summary>
+        public IEnumerable<HostListItem> SupportedHosts
         {
-            get { return (IEnumerable)base.GetValue(SupportedHostersProperty); }
+            get { return (IEnumerable<HostListItem>)base.GetValue(SupportedHostersProperty); }
             set { base.SetValue(SupportedHostersProperty, value); }
         }
 
-        public Hoster SelectedHoster
+        /// <summary>
+        /// Contains the current selected host.
+        /// </summary>
+        public Host SelectedHost
         {
-            get { return (Hoster)base.GetValue(SelectedHosterProperty); }
+            get { return (Host)Activator.CreateInstance((Type)((HostListItem)base.GetValue(SelectedHosterProperty)).Hoster); } //Create new instance of the type.
             set { base.SetValue(SelectedHosterProperty, value); }
         }
 
+        /// <summary>
+        /// Contains the download link.
+        /// </summary>
         public string DownloadLink
         {
             get { return (string)base.GetValue(DownloadLinkProperty); }
             set { base.SetValue(DownloadLinkProperty, value); }
         }
 
+        /// <summary>
+        /// Contains the selected download folder.
+        /// </summary>
         public string DownloadFolder
         {
             get { return (string)base.GetValue(DownloadFolderProperty); }
             set { base.SetValue(DownloadFolderProperty, value); }
         }
 
+        /// <summary>
+        /// Contains the file name.
+        /// </summary>
         public string FileName
         {
             get { return (string)base.GetValue(FileNameProperty); }
             set { base.SetValue(FileNameProperty, value); }
         }
 
-        public IEnumerable FileExtensions
+        /// <summary>
+        /// Contains the supported file extensions
+        /// </summary>
+        public IEnumerable<FileExtensionListItem> FileExtensions
         {
-            get { return (IEnumerable)base.GetValue(FileExtensionsProperty); }
+            get { return (IEnumerable<FileExtensionListItem>)base.GetValue(FileExtensionsProperty); }
             set { base.SetValue(FileExtensionsProperty, value); }
         }
 
+        /// <summary>
+        /// Contains the selected file extension.
+        /// </summary>
         public FileExtension SelectedFileExtension
         {
-            get { return (FileExtension)base.GetValue(SelectedFileExtensionIndexProperty); }
+            get { return ((FileExtensionListItem)base.GetValue(SelectedFileExtensionIndexProperty)).FileExtension; }
             set { base.SetValue(SelectedFileExtensionIndexProperty, value); }
         }
         #endregion
@@ -79,15 +100,18 @@ namespace StreamDownloaderControls
         {
             BindsTwoWayByDefault = true
         });
-        public static readonly DependencyProperty SelectedHosterProperty = DependencyProperty.RegisterAttached("SelectedHoster", typeof(Hoster), typeof(CreateDownload), new FrameworkPropertyMetadata
+
+        public static readonly DependencyProperty SelectedHosterProperty = DependencyProperty.RegisterAttached("SelectedHoster", typeof(HostListItem), typeof(CreateDownload), new FrameworkPropertyMetadata
         {
             BindsTwoWayByDefault = true
         });
+
         public static readonly DependencyProperty DownloadLinkProperty = DependencyProperty.RegisterAttached("DownloadLink", typeof(string), typeof(CreateDownload), new FrameworkPropertyMetadata
         {
             DefaultValue = _tb_ph_DownloadLink,           
             BindsTwoWayByDefault = true
         });
+
         public static readonly DependencyProperty DownloadFolderProperty = DependencyProperty.RegisterAttached("DownloadFolder", typeof(string), typeof(CreateDownload), new FrameworkPropertyMetadata
         {
             DefaultValue = _tb_ph_DownloadFolder,
@@ -99,11 +123,12 @@ namespace StreamDownloaderControls
             DefaultValue = _tb_ph_FileName,
             BindsTwoWayByDefault = true
         });
+
         public static readonly DependencyProperty FileExtensionsProperty = DependencyProperty.RegisterAttached("FileExtensions", typeof(IEnumerable), typeof(CreateDownload), new FrameworkPropertyMetadata
         {
             BindsTwoWayByDefault = true
         });
-        public static readonly DependencyProperty SelectedFileExtensionIndexProperty = DependencyProperty.RegisterAttached("SelectedFileExtension", typeof(FileExtension), typeof(CreateDownload));
+        public static readonly DependencyProperty SelectedFileExtensionIndexProperty = DependencyProperty.RegisterAttached("SelectedFileExtension", typeof(FileExtensionListItem), typeof(CreateDownload));
         #endregion
 
         #region Constructors
@@ -112,14 +137,14 @@ namespace StreamDownloaderControls
             DefaultStyleKeyProperty.OverrideMetadata(typeof(CreateDownload), new FrameworkPropertyMetadata(typeof(CreateDownload)));
         }
 
-        protected CreateDownload(List<Hoster> hosters, List<FileExtension> extensions)
+        protected CreateDownload(List<HostListItem> hosts, List<FileExtensionListItem> extensions)
         {
-            SupportedHosters = hosters;
+            SupportedHosts = hosts;
             FileExtensions = extensions;         
         }
         #endregion
 
-        public static async Task<CreateDownload> ShowDialog(ContentControl MDIControl, List<Hoster> hosters, List<FileExtension> extensions)
+        public static async Task<CreateDownload> ShowDialog(ContentControl MDIControl, List<HostListItem> hosters, List<FileExtensionListItem> extensions)
         {
             MDIControl.Content = new CreateDownload(hosters, extensions);
             var temp = ((CreateDownload)MDIControl.Content);
@@ -129,22 +154,23 @@ namespace StreamDownloaderControls
 
         public bool IsSupported(string link)
         {
-            foreach (Hoster h in SupportedHosters)
-            {
-                if (h.BaseUrlPattern.IsMatch(link))
-                    return true;
-            }
-            return false;
+            return SupportedHosts.ToList().Find(x => ((Host)Activator.CreateInstance(x.Hoster)).BaseUrlPattern.IsMatch(link)) != null; 
         }
 
-        public Hoster GetHoster(string link)
+        public Host GetHost(string link)
         {
-            foreach (Hoster h in SupportedHosters)
+            foreach (HostListItem h in SupportedHosts)
             {
-                if (h.BaseUrlPattern.IsMatch(link))
-                    return h;
+                Host host = ((Host)Activator.CreateInstance(h.Hoster));
+                if (host.BaseUrlPattern.IsMatch(link))
+                    return host;
             }
             return null;
+        }
+
+        public HostListItem GetHostListItem(Host host)
+        {
+            return SupportedHosts.ToList().Find(x => x.Hoster == host.GetType());
         }
 
         public override void OnApplyTemplate()
@@ -188,15 +214,12 @@ namespace StreamDownloaderControls
 
         protected void ValidateDownloadLink(object sender, TextChangedEventArgs e)
         {
-           // DownloadLink = ((TextBox)sender).Text;
-            Hoster hoster = null;
             ComboBox hosters = GetTemplateChild("cb_Hoster") as ComboBox;
             if (string.IsNullOrEmpty(DownloadLink))
                 return;
             if (IsSupported(DownloadLink))
             {
-                hoster = GetHoster(DownloadLink);
-                hosters.SelectedValue = hoster;
+                hosters.SelectedValue = GetHostListItem(GetHost(DownloadLink));
             }
             else
             {

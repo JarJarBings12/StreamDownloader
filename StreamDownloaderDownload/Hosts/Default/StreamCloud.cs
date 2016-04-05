@@ -15,9 +15,9 @@ using System.Web;
 using SHDocVw;
 using mshtml;
 
-namespace StreamDownloaderDownload.Hosters.Default
+namespace StreamDownloaderDownload.Hosts.Default
 {
-    public class StreamCloud: Hoster
+    public class StreamCloud: Host
     {
 
         #region variables and properties 

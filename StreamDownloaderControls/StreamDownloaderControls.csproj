@@ -52,10 +52,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DownloadListItem.cs" />
+    <Compile Include="FileExtensionListItem.cs" />
     <Compile Include="FlatWindow.cs" />
     <Compile Include="CreateDownload.cs" />
+    <Compile Include="HostListItem.cs" />
     <Compile Include="Themes\MODELS\DropDown.xaml.cs">
       <DependentUpon>DropDown.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Themes\MODELS\temp.xaml.cs">
+      <DependentUpon>temp.xaml</DependentUpon>
     </Compile>
     <Compile Include="Themes\MODELS\UserControl1.xaml.cs">
       <DependentUpon>UserControl1.xaml</DependentUpon>
@@ -68,6 +73,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Themes\MODELS\DropDown.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Themes\MODELS\temp.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
