@@ -5,12 +5,12 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace StreamDownloaderDownload.Hosters
+namespace StreamDownloaderDownload.Hosts
 {
     public delegate void FetchStatusChangedHandler(object sender, LinkFetchStatusChangedEventArgs e);
     public delegate void LinkFetchFinshedHandler(object sender, LinkFetchFinishedEventArgs e);
 
-    public abstract class Hoster
+    public abstract class Host
     {
         public abstract Regex BaseUrlPattern { get; }
         public abstract Regex SourceUrlPattern { get; }

@@ -59,14 +59,14 @@
     <Compile Include="Download\LinkFetchTask.cs" />
     <Compile Include="FileExtensions\Default\MP4.cs" />
     <Compile Include="FileExtensions\FileExtension.cs" />
-    <Compile Include="Hosters\Default\Automatic.cs" />
-    <Compile Include="Hosters\Default\PowerWatch.cs" />
-    <Compile Include="Hosters\Default\StreamCloud.cs" />
-    <Compile Include="Hosters\Default\Vivo.cs" />
-    <Compile Include="Hosters\Hoster.cs" />
-    <Compile Include="Hosters\LinkFetchFinishedEventArgs.cs" />
-    <Compile Include="Hosters\LinkFetchResult.cs" />
-    <Compile Include="Hosters\LinkFetchStatusChangedEventArgs.cs" />
+    <Compile Include="Hosts\Default\Automatic.cs" />
+    <Compile Include="Hosts\Default\PowerWatch.cs" />
+    <Compile Include="Hosts\Default\StreamCloud.cs" />
+    <Compile Include="Hosts\Default\Vivo.cs" />
+    <Compile Include="Hosts\Host.cs" />
+    <Compile Include="Hosts\LinkFetchFinishedEventArgs.cs" />
+    <Compile Include="Hosts\LinkFetchResult.cs" />
+    <Compile Include="Hosts\LinkFetchStatusChangedEventArgs.cs" />
     <Compile Include="StreamDownloader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

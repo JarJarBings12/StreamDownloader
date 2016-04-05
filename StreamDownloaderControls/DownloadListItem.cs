@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.Windows.Controls;
 using StreamDownloaderDownload.Download;
+using System.Windows.Threading;
 
 namespace StreamDownloaderControls
 {
@@ -82,11 +83,19 @@ namespace StreamDownloaderControls
             _FullContentLengthInGigabytes = (FullContentLengthInBytes / 1073741824);
         }
 
+        /// <summary>
+        /// Constitutes the miniature view.
+        /// </summary>
+        /// <param name="Thumbnail">Thumbnail image</param>
         public void UpdateThumbnail(System.Windows.Controls.Image Thumbnail)
         {
             ((System.Windows.Controls.Image)GetTemplateChild("Thumbnail")).Source = Thumbnail.Source;
         }
 
+        /// <summary>
+        /// Calculate and display the current downloaded bytes in kilobyte's, megabyte's and gigabyte's.
+        /// </summary>
+        /// <param name="bytes">Downloaded / written bytes.</param>
         public void UpdateDownloaded(ulong bytes)
         {
             if (bytes < 1048576) //1 KB = 1024 Byte's 
@@ -94,22 +103,35 @@ namespace StreamDownloaderControls
             else if (bytes < 1073741824) // 1 MB = 1024 KB = 1048576 Bytes's
                 Downloaded = $"{(bytes / 1048576)} / { _FullContentLengthInMegabytes} MB";
             else if (bytes > 1073741824) // 1 GB = 1024 MB = 1073741824
-                Downloaded = $"{(bytes / 1073741824)} / {_FullContentLengthInGigabytes}GB";
+                Downloaded = $"{(bytes / 1073741824)} / {_FullContentLengthInGigabytes} GB";
             else
-                Downloaded = $"{(bytes)}";
+                Downloaded = $"{(bytes)} B";
         }
 
+        /// <summary>
+        /// Updates the status message on the UI.
+        /// </summary>
+        /// <param name="status">Current status message.</param>
         public void UpdateDownloadStatus(string status)
         {
             this.Status = status;
         }
 
+        /// <summary>
+        /// Updates the download progress on the UI
+        /// </summary>
+        /// <param name="progress">The current progress in percent</param>
         public void UpdateDownloadProgress(double progress)
         {
             this.DownloadProgress = progress;
         }
 
         #region Events    
+        /// <summary>
+        /// Download status event delegate.
+        /// </summary>
+        /// <param name="sender">Trigger</param>
+        /// <param name="e">Event arguments</param>
         public void DownloadStatusChanged(object sender, DownloadStatusChangedEventArgs e)
         {
             UpdateDownloadStatus(e.Message);
@@ -128,10 +150,19 @@ namespace StreamDownloaderControls
             }
         }
 
+        /// <summary>
+        /// Progress changed event delegate.
+        /// </summary>
+        /// <param name="sender">Trigger</param>
+        /// <param name="e">Event arguments</param>
         public void DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)
         {
-            UpdateDownloadProgress(e.Progress);
-            UpdateDownloaded(e.WrittenBytes);
+            //Invoke the asynchronous call, synchronous into the UI thread.
+            Dispatcher.Invoke(() => 
+            {
+                UpdateDownloadProgress(e.Progress);
+                UpdateDownloaded(e.WrittenBytes);
+            });
         }
 
         #endregion

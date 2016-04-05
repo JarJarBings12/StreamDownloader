@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
-using StreamDownloaderDownload.Hosters;
+using StreamDownloaderDownload.Hosts;
 using StreamDownloaderDownload.Download;
 using StreamDownloaderDownload.FileExtensions;
 
@@ -15,11 +15,6 @@ namespace StreamDownloaderDownload
 {
     public class StreamDownloader
     {
-        private Hashtable _activeDownloads;
-
-        public HashSet<Hoster> SupportedHosters = new HashSet<Hoster>();
-
-        public HashSet<FileExtension> SupportedFilExtensions = new HashSet<FileExtension>();
 
         public static string DownloadFolder { get; set; } = Path.Combine(Environment.GetEnvironmentVariable("USERPROFILE"), @"Downloads\");
 
@@ -45,16 +40,6 @@ namespace StreamDownloaderDownload
         public static DownloadTask CreateDownload(string downloadFolder, string tempDownloadFolder, string fileName, string fileType, string url, uint chunkSize, uint writtenChunks, ulong contentLength)
         {
             return new DownloadTask(downloadFolder, tempDownloadFolder, fileName, fileType, url, chunkSize, writtenChunks, contentLength);
-        }
-
-        public void RegisterHost(Hoster host)
-        {
-            this.SupportedHosters.Add(host);
-        }
-
-        public void RegisterFileExtension(FileExtension extension)
-        {
-            this.SupportedFilExtensions.Add(extension);
         }
     }
 }

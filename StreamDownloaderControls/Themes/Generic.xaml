@@ -10,8 +10,6 @@
     <Style TargetType="{x:Type Button}" x:Key="default_button">
         <!-- Set width to 32 pixels. -->
         <Setter Property="Width" Value="32"/>
-        <!-- Set height relative to the title bar height. -->
-        <Setter Property="Height" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Grid}}, Path=RowDefinitions[0].ActualHeigh}"/>
         <!-- Set background transparent -->
         <Setter Property="Background" Value="Transparent"/>
         <!-- Set foreground black -->
@@ -44,8 +42,6 @@
     <Style TargetType="{x:Type Button}" x:Key="close_button">
         <!-- Set width to 32 pixels. -->
         <Setter Property="Width" Value="32"/>
-        <!-- Set height relative to the title bar height. -->
-        <Setter Property="Height" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Grid}}, Path=RowDefinitions[0].ActualHeigh}"/>
         <!-- Set background transparent -->
         <Setter Property="Background" Value="Transparent"/>
         <!-- Set foreground black -->
@@ -79,8 +75,6 @@
     </Style>
 
     <Style TargetType="{x:Type TextBlock}" x:Key="Title">
-        <Setter Property="Width" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Grid}}, Path=RowDefinitions[0].ActialWidth}"/>
-        <Setter Property="Height" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Grid}}, Path=RowDefinitions[0].ActualHeigh}"/>
         <Setter Property="FontSize" Value="15"/>
         <Setter Property="TextAlignment" Value="Left"/>
         <Setter Property="VerticalAlignment" Value="Center"/>
@@ -92,8 +86,6 @@
     <Style TargetType="{x:Type Button}" x:Key="default_control_button">
         <!-- Set width to 32 pixels. -->
         <Setter Property="Width" Value="32"/>
-        <!-- Set height relative to the grid height. -->
-        <Setter Property="Height" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Grid}}, Path=RowDefinitions[0].ActualHeigh}"/>
         <!-- Set background transparent -->
         <Setter Property="Background" Value="Transparent"/>
         <!-- Set foreground black -->
@@ -170,17 +162,17 @@
 
                                 <!--#region Side definitions for resizing (Positions to grab the window).-->
                                 <!-- LEFT -->
-                                <Rectangle x:Name="border_left" Grid.Row="1" Grid.Column="0" VerticalAlignment="Stretch" HorizontalAlignment="Left" Fill="White" Height="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Grid}}, Path=RowDefinitions[0].ActualHeigh}" Width="8"/>
+                                <Rectangle x:Name="border_left" Grid.Row="1" Grid.Column="0" VerticalAlignment="Stretch" HorizontalAlignment="Left" Fill="White" Width="8"/>
                                 <!-- TOP -->
-                                <Rectangle x:Name="border_top" Grid.Row="0" Grid.Column="1" VerticalAlignment="Top" HorizontalAlignment="Stretch" Fill="White" Height="8" Width="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Grid}}, Path=RowDefinitions[0].ActualHeigh}"/>
+                                <Rectangle x:Name="border_top" Grid.Row="0" Grid.Column="1" VerticalAlignment="Top" HorizontalAlignment="Stretch" Fill="White" Height="8"/>
                                 <!-- TOP LEFT -->
                                 <Rectangle x:Name="border_top_left" Grid.Row="0" Grid.Column="0" VerticalAlignment="Top" HorizontalAlignment="Left" Fill="White" Height="8" Width="8"/>
                                 <!-- TOP RIGHT -->
                                 <Rectangle x:Name="border_top_right" Grid.Row="0" Grid.Column="2" VerticalAlignment="Top" HorizontalAlignment="Right" Fill="White" Height="8" Width="8"/>
                                 <!-- RIGHT -->
-                                <Rectangle x:Name="border_right" Grid.Row="1" Grid.Column="2" VerticalAlignment="Stretch" HorizontalAlignment="Right" Fill="White" Height="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Grid}}, Path=RowDefinitions[0].ActualHeigh}" Width="8"/>
+                                <Rectangle x:Name="border_right" Grid.Row="1" Grid.Column="2" VerticalAlignment="Stretch" HorizontalAlignment="Right" Fill="White" Width="8"/>
                                 <!-- BOTTOM -->
-                                <Rectangle x:Name="border_bottom" Grid.Row="2" Grid.Column="1" VerticalAlignment="Bottom" HorizontalAlignment="Stretch" Fill="White" Height="8" Width="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Grid}}, Path=RowDefinitions[0].ActualHeigh}"/>
+                                <Rectangle x:Name="border_bottom" Grid.Row="2" Grid.Column="1" VerticalAlignment="Bottom" HorizontalAlignment="Stretch" Fill="White" Height="8"/>
                                 <!-- BOTTOM LEFT -->
                                 <Rectangle x:Name="border_bottom_left" Grid.Row="2" Grid.Column="0" VerticalAlignment="Bottom" HorizontalAlignment="Left" Fill="White" Height="8" Width="8"/>
                                 <!-- BOTTOM RIGHT -->
@@ -217,10 +209,10 @@
                                         <StackPanel Orientation="Horizontal" Grid.Column="2" FlowDirection="LeftToRight">
 
                                             <!-- Minimize button -->
-                                            <Button x:Name="Minimize" Style="{StaticResource default_button}" FontFamily="segoe MDL2 Assets" FontWeight="Bold" Foreground="{Binding Foreground, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Button}}" Content="&#xE921;"/>
+                                            <Button x:Name="Minimize" Style="{StaticResource default_button}" FontFamily="segoe MDL2 Assets" FontWeight="Bold" Content="&#xE921;"/>
 
                                             <!-- Restore button -->
-                                            <Button x:Name="Restore" Style="{StaticResource default_button}" FontFamily="segoe MDL2 Assets" Foreground="{Binding Foreground, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Button}}" Content="&#xE922;"/>
+                                            <Button x:Name="Restore" Style="{StaticResource default_button}" FontFamily="segoe MDL2 Assets" Content="&#xE922;"/>
                                             
                                             <!-- Close button -->
                                             <Button x:Name="Close" Style="{StaticResource close_button}" FontFamily="segoe MDL2 Assets" FontWeight="Bold" Content="&#xE10A;"/>
@@ -234,7 +226,7 @@
                                             <ColumnDefinition Width="*"/>
                                             <ColumnDefinition Width="80" MinWidth="80"/>
                                         </Grid.ColumnDefinitions>
-                                        <Button x:Name="DownloadButton" Style="{StaticResource default_control_button}" Width="80" Content="Download" Grid.Column="0"/>
+                                        <Button x:Name="DownloadButton" Style="{StaticResource default_control_button}" Width="80" FontFamily="segoe MDL2 Assets" FontSize="30" Content="&#xE896;" Grid.Column="0"/>
                                         <Rectangle Style="{StaticResource default_control_placeholder}" Grid.Column="1"/>
                                         <Button Style="{StaticResource default_control_button}" Width="80" FontFamily="segoe MDL2 Assets" FontSize="30" Content="&#xE90F;" Grid.Column="2"/>
                                     </Grid>
@@ -274,7 +266,6 @@
     <!--#endregion-->
 
     <!--#region Download list item -->
-
     <Style x:Key="DownloadBar" TargetType="{x:Type ProgressBar}">
         <Setter Property="Template">
             <Setter.Value>
@@ -290,7 +281,7 @@
             </Setter.Value>
         </Setter>
     </Style>
-    
+
     <Style TargetType="{x:Type local:DownloadListItem}">
         <Setter Property="Background" Value="DodgerBlue"/>
         <Setter Property="Height" Value="100"/>
@@ -309,8 +300,20 @@
                                 Margin="{TemplateBinding Margin}">
                             
                             <Grid Background="White">
-                                <!-- Dropdown button -->
+
+                                <Menu>
+                                    <MenuItem>
+                                        <ControlTemplate>
+                                            
+                                        </ControlTemplate>
+                                    </MenuItem>
+                                    <MenuItem/>
+                                    <MenuItem/>
+                                </Menu>
+                                
+                                <!-- Dropdown button
                                 <Button Margin="0,1,1,0" BorderBrush="Transparent" Background="Transparent" FontSize="20" FontFamily="Segoe MDL2 Assets" Content="&#xE700;" HorizontalAlignment="Right" Width="25" Height="25" VerticalAlignment="Top"/>
+                                -->
                                 <!-- Thumbnail -->
                                 <Border Background="Gainsboro" Margin="5,8,0,0" HorizontalAlignment="Left" Width="140" Height="81" VerticalAlignment="Top">
                                     <Image/>
@@ -390,7 +393,7 @@
                             <!--#region Content-->
                             <Grid Grid.Row="1">
                                 <!-- Hoster -->
-                                <ComboBox x:Name="cb_Hoster" Margin="10,15,0,0" SelectedItem="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=SelectedHoster, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Width="160" Height="30" VerticalAlignment="Top" ItemsSource="{TemplateBinding SupportedHosters}"/>
+                                <ComboBox x:Name="cb_Hoster" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Margin="10,15,0,0" SelectedItem="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=SelectedHoster, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Width="160" Height="30" VerticalAlignment="Top" ItemsSource="{TemplateBinding SupportedHosters}"/>
                                 <!-- Link -->
                                 <TextBox x:Name="tb_DownloadLink" Text="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=DownloadLink, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" MaxLength="200" Margin="175,15,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Height="30" Width="565" TextWrapping="NoWrap" FontSize="14" VerticalContentAlignment="Center"/>
                                 <!-- Download folder -->
@@ -412,4 +415,36 @@
         </Setter>
     </Style>
     <!--#endregion-->
+
+    <Style TargetType="{x:Type local:HostListItem}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type local:HostListItem}">
+                    <Border Height="20" Width="100" Margin="-5 -2 -5 -2">
+                        <Grid>
+                            <Border>
+                                <TextBlock Margin="0,0,0,0" Text="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=DisplayName, UpdateSourceTrigger=PropertyChanged}" FontSize="15"/>
+                            </Border>
+                        </Grid>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="{x:Type local:FileExtensionListItem}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type local:FileExtensionListItem}">
+                    <Border Height="20" Width="100" Margin="-8 -2 -5 -2">
+                        <Grid>
+                            <Border>
+                                <TextBlock Margin="0,0,0,0" Text="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=DisplayName, UpdateSourceTrigger=PropertyChanged}" FontSize="15" TextAlignment="Center"/>
+                            </Border>
+                        </Grid>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 </ResourceDictionary>

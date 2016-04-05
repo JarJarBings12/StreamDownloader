@@ -6,9 +6,9 @@ using System.Windows.Forms;
 using System.IO;
 using mshtml;
 
-namespace StreamDownloaderDownload.Hosters.Default
+namespace StreamDownloaderDownload.Hosts.Default
 {
-    public class Vivo: Hoster
+    public class Vivo: Host
     {
         #region variables and properties
         private readonly Regex _BaseUrlPattern = new Regex(@"http://vivo.sx/(.*)");

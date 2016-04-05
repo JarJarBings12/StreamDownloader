@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 using System.IO;
 using mshtml;
 
-namespace StreamDownloaderDownload.Hosters.Default
+namespace StreamDownloaderDownload.Hosts.Default
 {
-    public class PowerWatch : Hoster
+    public class PowerWatch : Host
     {
         #region variables and properties
         private Regex _BaseUrlPattern = new Regex(@"http://powerwatch.pw/(.*)");

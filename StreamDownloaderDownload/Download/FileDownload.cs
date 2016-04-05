@@ -63,7 +63,7 @@ namespace StreamDownloaderDownload.Download
 
         public uint ChunkSize => _chunkSize;
         public Lazy<ulong> ContentLength => _contentLength;
-        public ulong WrittenChunks => _writtenBytes;
+        public ulong WrittenBytes => _writtenBytes;
 
         public bool Finished => _writtenBytes == _contentLength.Value;
         public bool IsPaused => _pause;
@@ -98,7 +98,7 @@ namespace StreamDownloaderDownload.Download
             request.AddRange((long)_writtenBytes);
 
             if (!File.Exists(_tempFile))
-                using (File.Create(_tempFile)) ;
+                using (File.Create(_tempFile))
 
             //Wait until the server response
             using (var response = await request.GetResponseAsync())
@@ -108,6 +108,7 @@ namespace StreamDownloaderDownload.Download
                     try
                     {
                         _task.UpdateDownloadStatus("Download...", DownloadStatus.DOWNLOADING);
+                        _task.StartDownload();
                         using (var tempFileStream = new FileStream(_tempFile, FileMode.Append, FileAccess.Write, FileShare.ReadWrite))
                         {
                             byte[] buffer;
@@ -123,8 +124,6 @@ namespace StreamDownloaderDownload.Download
                                 await tempFileStream.WriteAsync(buffer, 0, readBytes);
                                 length -= (ulong)readBytes;
                                 _writtenBytes += (uint)readBytes;
-                                double result = (_writtenBytes * 100) / _contentLength.Value;
-                                _task.UpdateDownloadProgress(result, _writtenBytes);
                             }
 
                             /*  Set buffer size to the size of the remaining bytes. */
@@ -136,13 +135,13 @@ namespace StreamDownloaderDownload.Download
                                 length -= (ulong)readBytes;
                                 await tempFileStream.WriteAsync(buffer, 0, readBytes);
                                 _writtenBytes = (ulong)_contentLength.Value;
-                                _task.UpdateDownloadProgress(100, _writtenBytes);
                             }
 
                             //Flush
                             await tempFileStream.FlushAsync();
                         }
 
+                        _task.ShutdownDownload();
                         if (Finished)
                         {
                             _task.UpdateDownloadStatus("Download complete.", DownloadStatus.COMPLETED);
