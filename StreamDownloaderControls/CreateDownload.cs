@@ -137,16 +137,17 @@ namespace StreamDownloaderControls
             DefaultStyleKeyProperty.OverrideMetadata(typeof(CreateDownload), new FrameworkPropertyMetadata(typeof(CreateDownload)));
         }
 
-        protected CreateDownload(List<HostListItem> hosts, List<FileExtensionListItem> extensions)
+        protected CreateDownload(string downloadFolder, List<HostListItem> hosts, List<FileExtensionListItem> extensions)
         {
+            DownloadFolder = downloadFolder;
             SupportedHosts = hosts;
             FileExtensions = extensions;         
         }
         #endregion
 
-        public static async Task<CreateDownload> ShowDialog(ContentControl MDIControl, List<HostListItem> hosters, List<FileExtensionListItem> extensions)
+        public static async Task<CreateDownload> ShowDialog(string defaultDownloadFolder, ContentControl MDIControl, List<HostListItem> hosters, List<FileExtensionListItem> extensions)
         {
-            MDIControl.Content = new CreateDownload(hosters, extensions);
+            MDIControl.Content = new CreateDownload(defaultDownloadFolder, hosters, extensions);
             var temp = ((CreateDownload)MDIControl.Content);
             await WaitToContinue(temp);
             return temp;
@@ -184,9 +185,6 @@ namespace StreamDownloaderControls
             _tb_DownloadLink.PreviewMouseWheel += HandelMouseWheel;
             //Download folder
             var _tb_DownloadFolder = ((TextBox)GetTemplateChild("tb_DownloadFolder"));
-            _tb_DownloadFolder.Foreground = _placeholderGray;
-            _tb_DownloadFolder.GotFocus += (sender, e) => HandelPlaceholder(sender, _tb_ph_DownloadFolder);
-            _tb_DownloadFolder.LostFocus += (sender, e) => HandelPlaceholder(sender, _tb_ph_DownloadFolder);
             _tb_DownloadFolder.PreviewMouseWheel += HandelMouseWheel;
             _tb_DownloadFolder.PreviewMouseLeftButtonDown += (sender, e) => OpenFolderBrowser();
             //File name

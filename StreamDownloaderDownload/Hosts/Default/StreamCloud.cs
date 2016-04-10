@@ -73,14 +73,23 @@ namespace StreamDownloaderDownload.Hosts.Default
                 if (match.Success)
                     break;
             }
-            return match.Groups[1].Value;
+
+            string sourceUrl = string.Empty;
+            if (match.Success)
+            {
+                sourceUrl = match.Groups[1].Value;
+                SetLinkFetchResultTo(LinkFetchResult.SUCCESSFULL);
+            }
+            else
+                SetLinkFetchResultTo(LinkFetchResult.FAILED);
+            return sourceUrl;
         }
 
         public sealed override async Task Pause(int mills)
         {
             for (int i = (mills / 1000)-1; i > 0; i--)
             {
-                UpdateStatus($"Download link will be made available in { (i/1000) } seconds.");
+                UpdateStatus($"Download link will be made available in { i } seconds.");
                 await Task.Delay(1000);
             }
             await Task.Delay(1000);

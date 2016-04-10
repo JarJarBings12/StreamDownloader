@@ -57,7 +57,7 @@ namespace StreamDownloaderDownload.Download
             _fileType = fileType;
             _downloadUrl = downloadUrl;
 
-            _fileDownload = new FileDownload(downloadUrl, $"{tempFolder}{Guid.NewGuid()}.dtemp", $"{downloadFolder}\\{fileName}{fileType}", chunkSize, this);
+            _fileDownload = new FileDownload(downloadUrl, $"{tempFolder}\\{Guid.NewGuid()}.dtemp", $"{downloadFolder}\\{fileName}{fileType}", chunkSize, this);
             InitializeUpdateTimer();
         }
 
@@ -70,7 +70,7 @@ namespace StreamDownloaderDownload.Download
             _fileType = fileType;
             _downloadUrl = downloadUrl;
 
-            _fileDownload = new FileDownload(downloadUrl, $"{tempFolder}{Guid.NewGuid()}.dtemp", $"{downloadFolder}\\{fileName}{fileType}", StreamDownloader.ChunkSize, writtenChunks, contentLength, this);
+            _fileDownload = new FileDownload(downloadUrl, $"{tempFolder}\\{Guid.NewGuid()}.dtemp", $"{downloadFolder}\\{fileName}{fileType}", StreamDownloader.ChunkSize, writtenChunks, contentLength, this);
             InitializeUpdateTimer();
         }
         #endregion

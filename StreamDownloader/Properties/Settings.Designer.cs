@@ -22,5 +22,104 @@ namespace StreamDownloader.Properties {
                 return defaultInstance;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("N/A")]
+        public string DownloadFolder {
+            get {
+                return ((string)(this["DownloadFolder"]));
+            }
+            set {
+                this["DownloadFolder"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("N/A")]
+        public string TempDownloadFolder {
+            get {
+                return ((string)(this["TempDownloadFolder"]));
+            }
+            set {
+                this["TempDownloadFolder"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("32768")]
+        public uint DownloadBufferSize {
+            get {
+                return ((uint)(this["DownloadBufferSize"]));
+            }
+            set {
+                this["DownloadBufferSize"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool CustomTempDownloadFolder {
+            get {
+                return ((bool)(this["CustomTempDownloadFolder"]));
+            }
+            set {
+                this["CustomTempDownloadFolder"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool CustomDownloadBufferSize {
+            get {
+                return ((bool)(this["CustomDownloadBufferSize"]));
+            }
+            set {
+                this["CustomDownloadBufferSize"] = value;
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("32768")]
+        public uint DEFAULT_DownloadBufferSize {
+            get {
+                return ((uint)(this["DEFAULT_DownloadBufferSize"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool DEFAULT_CustomTempDownloadFolder {
+            get {
+                return ((bool)(this["DEFAULT_CustomTempDownloadFolder"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool DEFAULT_CustomDownloadBufferSize {
+            get {
+                return ((bool)(this["DEFAULT_CustomDownloadBufferSize"]));
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool FIRST_RUN {
+            get {
+                return ((bool)(this["FIRST_RUN"]));
+            }
+            set {
+                this["FIRST_RUN"] = value;
+            }
+        }
     }
 }

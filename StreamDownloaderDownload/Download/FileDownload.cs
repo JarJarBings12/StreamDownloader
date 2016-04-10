@@ -13,7 +13,7 @@ namespace StreamDownloaderDownload.Download
     public class FileDownload
     {
 
-        #region variables
+        #region variables and properties
         private volatile bool _pause = false;
         private volatile bool _continunigLater = false;
 
@@ -21,6 +21,16 @@ namespace StreamDownloaderDownload.Download
         private readonly string _file;
         private readonly string _tempFile;
 
+        public string Source => _source;
+        public string FileDestination => _file;
+        public string TempFile => _tempFile;
+
+        public uint ChunkSize => _chunkSize;
+        public Lazy<ulong> ContentLength => _contentLength;
+        public ulong WrittenBytes => _writtenBytes;
+
+        public bool Finished => _writtenBytes == _contentLength.Value;
+        public bool IsPaused => _pause;
         private readonly DownloadTask _task;
 
         /* Max 32 bit (uint) */
@@ -56,19 +66,6 @@ namespace StreamDownloaderDownload.Download
 
         #endregion
 
-        #region properties
-        public string Source => _source;
-        public string FileDestination => _file;
-        public string TempFile => _tempFile;
-
-        public uint ChunkSize => _chunkSize;
-        public Lazy<ulong> ContentLength => _contentLength;
-        public ulong WrittenBytes => _writtenBytes;
-
-        public bool Finished => _writtenBytes == _contentLength.Value;
-        public bool IsPaused => _pause;
-        #endregion
-
         public Task Start()
         {
             _pause = false;
@@ -98,7 +95,7 @@ namespace StreamDownloaderDownload.Download
             request.AddRange((long)_writtenBytes);
 
             if (!File.Exists(_tempFile))
-                using (File.Create(_tempFile))
+                using (File.Create(_tempFile)) ;
 
             //Wait until the server response
             using (var response = await request.GetResponseAsync())
@@ -127,7 +124,7 @@ namespace StreamDownloaderDownload.Download
                             }
 
                             /*  Set buffer size to the size of the remaining bytes. */
-                            if ((length < _chunkSize) && !_pause && !_continunigLater)
+                            if ((length < _writtenBytes) && !_pause && !_continunigLater)
                             {
                                 buffer = new byte[length];
                                 readBytes = await responseStream.ReadAsync(buffer, 0, buffer.Length);

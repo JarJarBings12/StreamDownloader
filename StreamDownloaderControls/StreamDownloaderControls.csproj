@@ -52,6 +52,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DownloadListItem.cs" />
+    <Compile Include="DropdownItem.cs" />
     <Compile Include="FileExtensionListItem.cs" />
     <Compile Include="FlatWindow.cs" />
     <Compile Include="CreateDownload.cs" />
@@ -79,14 +80,6 @@
     <Page Include="Themes\MODELS\temp.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Themes\SharedResources.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Themes\StaticResources.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
     </Page>
     <Page Include="Themes\MODELS\UserControl1.xaml">
       <SubType>Designer</SubType>
