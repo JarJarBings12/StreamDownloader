@@ -14,6 +14,7 @@ namespace StreamDownloaderDownload.Hosts.Default
         #region variables and properties
         private Regex _BaseUrlPattern = new Regex(@"http://powerwatch.pw/(.*)");
         private Regex _SourceUrlPattern = new Regex("sources:(.*)\\[\\{file:\"(.*)\",");
+        private const int _JavaScriptProcessingTime = 15;
 
         public sealed override Regex BaseUrlPattern => _BaseUrlPattern;
         public sealed override Regex SourceUrlPattern => _SourceUrlPattern;
@@ -34,19 +35,21 @@ namespace StreamDownloaderDownload.Hosts.Default
             HTMLDocument doc = ((HTMLDocument)browser.Document);
             IHTMLElement button = doc.getElementById("btn_download");
 
-            await Pause(8000); //Wait 8 Seconds.
+            await Pause(5000); //Wait 5 Seconds.
 
             button.click(); //Click button
 
             string tempFile = $"{System.IO.Path.GetTempPath()}{Guid.NewGuid().ToString()}.lf.html";
 
-            await Pause(30000); //Wait 30000 Seconds.
+            await JavaScriptProcessingTime(); //Wait 15 seconds.
 
             using (var output = new FileStream(tempFile, FileMode.Append, FileAccess.Write, FileShare.ReadWrite))
             {
                 byte[] buffer = ASCIIEncoding.UTF8.GetBytes(((HTMLDocument)browser.Document).documentElement.outerHTML);
                 await output.WriteAsync(buffer, 0, buffer.Length);
             }
+
+            UpdateStatus("Scanning Web page after link...");
 
             var line = string.Empty;
             var input = new StreamReader(tempFile);
@@ -61,12 +64,37 @@ namespace StreamDownloaderDownload.Hosts.Default
                 if (match.Success)
                     break;
             }
-            return match.Groups[2].Value;
+
+            string sourceUrl = string.Empty;
+
+            if (match.Success)
+            {
+                sourceUrl = match.Groups[2].Value;
+                SetLinkFetchResultTo(LinkFetchResult.SUCCESSFULL);
+            }
+            else
+                SetLinkFetchResultTo(LinkFetchResult.FAILED);
+            return sourceUrl;
         }
 
         public sealed override async Task Pause(int interval)
         {
-            await Task.Delay(interval);
+            for (int i = (interval / 1000); i > 0; i--)
+            {
+                UpdateStatus($"Download link will be made available in { i } seconds.");
+                await Task.Delay(1000);
+            }
+            await Task.Delay(1000);
+        }
+
+        public async Task JavaScriptProcessingTime()
+        {
+            for (int i = _JavaScriptProcessingTime; i > 0; i--)
+            {
+                UpdateStatus($"Download begins in { i }");
+                await Task.Delay(1000);
+            }
+            return;
         }
     }
 }

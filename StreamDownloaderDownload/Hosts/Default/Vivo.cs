@@ -13,7 +13,7 @@ namespace StreamDownloaderDownload.Hosts.Default
         #region variables and properties
         private readonly Regex _BaseUrlPattern = new Regex(@"http://vivo.sx/(.*)");
         private readonly Regex _SourceUrlPattern = new Regex("(.*)<div\\s*class=\"stream-content\"\\s*data-url=\"(.*)\"\\s*data-name=\"(.*)\"\\s*data-title=\"(.*)\"\\s.*data-poster=\"(.*)\"\\s*style=\"(.*)\">");
-        private const int _JavaScriptProcessingTime = 30;
+        private const int _JavaScriptProcessingTime = 15;
 
         /* Properties */
         public sealed override Regex BaseUrlPattern => _BaseUrlPattern;
@@ -73,7 +73,7 @@ namespace StreamDownloaderDownload.Hosts.Default
         {
             for (int i = (mills / 1000) - 1; i > 0; i--)
             {
-                UpdateStatus($"Download link will be made available in { (i / 1000) } seconds.");
+                UpdateStatus($"Download link will be made available in { i } seconds.");
                 await Task.Delay(1000);
             }
             await Task.Delay(1000);

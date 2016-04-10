@@ -1,9 +1,0 @@
-﻿Datum: 22 Feb 19:35
-Commit ID: 784182aae5def706862ee13d39ec4231231d4e44
-Changes:
-	Added:
-	-> New branches
-		* version/1.0/release
-		* version/1.0/preview
-	-> Git ignore
-

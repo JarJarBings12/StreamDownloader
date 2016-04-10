@@ -6,6 +6,10 @@ using System.Windows.Threading;
 
 namespace StreamDownloaderControls
 {
+    public delegate void DownloadPauseHandler(object sender);
+    public delegate void DownloadSaveHandler(object sender);
+    public delegate void DownloadCancelHandler(object sender);
+
     public class DownloadListItem: Control
     {
         #region C# Variables and properties
@@ -59,6 +63,10 @@ namespace StreamDownloaderControls
         public static readonly DependencyProperty DownloadStatusProperty = DependencyProperty.RegisterAttached("Status", typeof(string), typeof(DownloadListItem), new PropertyMetadata("Status: N/A"));
         public static readonly DependencyProperty DownloadProgressProperty = DependencyProperty.RegisterAttached("DownloadProgress", typeof(double), typeof(DownloadListItem), new PropertyMetadata(0D));
         #endregion
+
+        public event DownloadPauseHandler PauseDownload;
+        public event DownloadSaveHandler SaveDownload;
+        public event DownloadCancelHandler CancelDownload;
 
         #region Constructors
         static DownloadListItem()
@@ -126,7 +134,40 @@ namespace StreamDownloaderControls
             this.DownloadProgress = progress;
         }
 
+        /// <summary>
+        /// Save the download.
+        /// </summary>
+        public void Save()
+        {
+            SaveDownload(this);
+        }
+
+        /// <summary>
+        /// Pause the download.
+        /// </summary>
+        public void Pause()
+        {
+            PauseDownload(this);
+        }
+
+        /// <summary>
+        /// Cancel the download.
+        /// </summary>
+        public void Cancel()
+        {
+            CancelDownload(this);
+        }
+
         #region Events    
+        public override void OnApplyTemplate()
+        {
+            var l_dropdown = ((Label)GetTemplateChild("l_Dropdown"));
+            l_dropdown.PreviewMouseLeftButtonDown += (sender, e) => OpenDropdown(sender);
+            var cm_dropdown = ((ContextMenu)GetTemplateChild("cm_Dropdown"));
+            cm_dropdown.MouseLeave += (sender, e) => { cm_dropdown.IsOpen = false; }; 
+            base.OnApplyTemplate();
+        }
+
         /// <summary>
         /// Download status event delegate.
         /// </summary>
@@ -163,6 +204,11 @@ namespace StreamDownloaderControls
                 UpdateDownloadProgress(e.Progress);
                 UpdateDownloaded(e.WrittenBytes);
             });
+        }
+
+        protected void OpenDropdown(object sender)
+        {
+            ((Label)sender).ContextMenu.IsOpen = true;
         }
 
         #endregion

@@ -34,7 +34,7 @@ namespace StreamDownloader
 
         private async void DownloadSubmit_Click(object sender, RoutedEventArgs e)
         {
-            var cDownload = await CreateDownload.ShowDialog(((ContentControl)GetTemplateChild("MDI")), _Hosts, _FileExtensions);
+            var cDownload = await CreateDownload.ShowDialog(Properties.Settings.Default.DownloadFolder, ((ContentControl)GetTemplateChild("MDI")), _Hosts, _FileExtensions);
             await ProcessDownloadAsync(cDownload);
         }
 
@@ -54,21 +54,29 @@ namespace StreamDownloader
             if (response == LinkFetchResult.FAILED)
                 return;
 
-            var downloadTast = StreamDownloaderDownload.StreamDownloader.CreateDownload(cDownload.DownloadFolder, StreamDownloaderDownload.StreamDownloader.DownloadTempFolder + @"\\", cDownload.FileName, cDownload.SelectedFileExtension.Extension, downloadLink, StreamDownloaderDownload.StreamDownloader.ChunkSize);
-            downloadTast.DownloadProgressChanged += listItem.DownloadProgressChanged;
-            downloadTast.DownloadStatusChanged += listItem.DownloadStatusChanged;
-            downloadTast.DownloadBegin += (_sender, _e) => { listItem.CalculateFullContentLengths(downloadTast.Download.ContentLength.Value); };
-            downloadTast.Start();
+            var downloadTask = StreamDownloaderDownload.StreamDownloader.CreateDownload(cDownload.DownloadFolder, Properties.Settings.Default.TempDownloadFolder, cDownload.FileName, cDownload.SelectedFileExtension.Extension, downloadLink, Properties.Settings.Default.DownloadBufferSize);
+            downloadTask.DownloadProgressChanged += listItem.DownloadProgressChanged;
+            downloadTask.DownloadStatusChanged += listItem.DownloadStatusChanged;
+            downloadTask.DownloadBegin += (_sender, _e) => { listItem.CalculateFullContentLengths(downloadTask.Download.ContentLength.Value); };
+            downloadTask.Start();
         }
 
         public override void OnApplyTemplate()
         {
             ((Button)GetTemplateChild("DownloadButton")).Click += DownloadSubmit_Click;
+            ((Button)GetTemplateChild("SettingsButton")).Click += (sender, e) => { new Settings().ShowDialog(); };
             RegisterHost("Vivo", typeof(Vivo));
             RegisterHost("StreamCloud", typeof(StreamCloud));
-            RegisterHost("PowerWatch", typeof(StreamCloud));
+            RegisterHost("PowerWatch", typeof(PowerWatch));
             _FileExtensions.Add(new FileExtensionListItem("mp4", new MP4()));
             base.OnApplyTemplate();
+        }
+
+        public override void EndInit()
+        {
+            if (Properties.Settings.Default.FIRST_RUN)
+                Settings.Initialize();
+            base.EndInit();
         }
 
         protected void RegisterHost(string displayName, Type host)
