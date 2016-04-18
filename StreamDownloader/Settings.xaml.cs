@@ -44,7 +44,7 @@ namespace StreamDownloader
             set { base.SetValue(DownloadBufferSizeProperty, value); }
         }
 
-        private Regex _OnlyNumeric = new Regex("[0-9]+");
+        private Regex _onlyNumeric = new Regex("[0-9]+");
         #endregion
 
         #region WPF properties

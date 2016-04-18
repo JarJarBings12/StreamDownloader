@@ -6,6 +6,7 @@ using System.Windows.Threading;
 
 namespace StreamDownloaderControls
 {
+    public delegate void DownloadStartHandler(object sneder);
     public delegate void DownloadPauseHandler(object sender);
     public delegate void DownloadSaveHandler(object sender);
     public delegate void DownloadCancelHandler(object sender);
@@ -49,10 +50,13 @@ namespace StreamDownloaderControls
             set { base.SetValue(DownloadProgressProperty, value); }
         }
 
-        private ulong _FullContentLengthInBytes; // 1 Byte = 8 Bit's
-        private double _FullContentLengthInKilobytes; // 1 Kilobyte = 1024 Byte's
-        private double _FullContentLengthInMegabytes; // 1 Megabyte = 1024 Kilobyte's = 1048576 Byte's
-        private double _FullContentLengthInGigabytes; // 1 Gigabyte = 1024 Megabyte's = 1073741824 Byte's
+        public DownloadTask DownloadTask => _downloadTask;
+
+        private DownloadTask _downloadTask;
+        private ulong _fullContentLengthInBytes; // 1 Byte = 8 Bit's
+        private double _fullContentLengthInKilobytes; // 1 Kilobyte = 1024 Byte's
+        private double _fullContentLengthInMegabytes; // 1 Megabyte = 1024 Kilobyte's = 1048576 Byte's
+        private double _fullContentLengthInGigabytes; // 1 Gigabyte = 1024 Megabyte's = 1073741824 Byte's
         #endregion
 
         #region WPF properties
@@ -63,10 +67,6 @@ namespace StreamDownloaderControls
         public static readonly DependencyProperty DownloadStatusProperty = DependencyProperty.RegisterAttached("Status", typeof(string), typeof(DownloadListItem), new PropertyMetadata("Status: N/A"));
         public static readonly DependencyProperty DownloadProgressProperty = DependencyProperty.RegisterAttached("DownloadProgress", typeof(double), typeof(DownloadListItem), new PropertyMetadata(0D));
         #endregion
-
-        public event DownloadPauseHandler PauseDownload;
-        public event DownloadSaveHandler SaveDownload;
-        public event DownloadCancelHandler CancelDownload;
 
         #region Constructors
         static DownloadListItem()
@@ -85,10 +85,10 @@ namespace StreamDownloaderControls
 
         public void CalculateFullContentLengths(ulong FullContentLengthInBytes)
         {
-            _FullContentLengthInBytes = FullContentLengthInBytes;
-            _FullContentLengthInKilobytes = (FullContentLengthInBytes / 1024);
-            _FullContentLengthInMegabytes = (FullContentLengthInBytes / 1048576);
-            _FullContentLengthInGigabytes = (FullContentLengthInBytes / 1073741824);
+            _fullContentLengthInBytes = FullContentLengthInBytes;
+            _fullContentLengthInKilobytes = (FullContentLengthInBytes / 1024);
+            _fullContentLengthInMegabytes = (FullContentLengthInBytes / 1048576);
+            _fullContentLengthInGigabytes = (FullContentLengthInBytes / 1073741824);
         }
 
         /// <summary>
@@ -107,11 +107,11 @@ namespace StreamDownloaderControls
         public void UpdateDownloaded(ulong bytes)
         {
             if (bytes < 1048576) //1 KB = 1024 Byte's 
-                Downloaded = $"{(bytes / 1024)} / {_FullContentLengthInKilobytes} KB";
+                Downloaded = $"{(bytes / 1024)} / {_fullContentLengthInKilobytes} KB";
             else if (bytes < 1073741824) // 1 MB = 1024 KB = 1048576 Bytes's
-                Downloaded = $"{(bytes / 1048576)} / { _FullContentLengthInMegabytes} MB";
+                Downloaded = $"{(bytes / 1048576)} / { _fullContentLengthInMegabytes} MB";
             else if (bytes > 1073741824) // 1 GB = 1024 MB = 1073741824
-                Downloaded = $"{(bytes / 1073741824)} / {_FullContentLengthInGigabytes} GB";
+                Downloaded = $"{(bytes / 1073741824)} / {_fullContentLengthInGigabytes} GB";
             else
                 Downloaded = $"{(bytes)} B";
         }
@@ -134,37 +134,12 @@ namespace StreamDownloaderControls
             this.DownloadProgress = progress;
         }
 
-        /// <summary>
-        /// Save the download.
-        /// </summary>
-        public void Save()
-        {
-            SaveDownload(this);
-        }
-
-        /// <summary>
-        /// Pause the download.
-        /// </summary>
-        public void Pause()
-        {
-            PauseDownload(this);
-        }
-
-        /// <summary>
-        /// Cancel the download.
-        /// </summary>
-        public void Cancel()
-        {
-            CancelDownload(this);
-        }
-
         #region Events    
         public override void OnApplyTemplate()
         {
             var l_dropdown = ((Label)GetTemplateChild("l_Dropdown"));
-            l_dropdown.PreviewMouseLeftButtonDown += (sender, e) => OpenDropdown(sender);
-            var cm_dropdown = ((ContextMenu)GetTemplateChild("cm_Dropdown"));
-            cm_dropdown.MouseLeave += (sender, e) => { cm_dropdown.IsOpen = false; }; 
+            l_dropdown.ContextMenu = new DropdownContextMenu(this);
+            l_dropdown.PreviewMouseLeftButtonDown += (sender, e) => { ((Label)sender).ContextMenu.IsOpen = true; };
             base.OnApplyTemplate();
         }
 
@@ -175,9 +150,12 @@ namespace StreamDownloaderControls
         /// <param name="e">Event arguments</param>
         public void DownloadStatusChanged(object sender, DownloadStatusChangedEventArgs e)
         {
-            UpdateDownloadStatus(e.Message);
             switch (e.Status)
             {
+                case DownloadStatus.INITIALIZE:
+                    _downloadTask = (DownloadTask)sender;
+                    CalculateFullContentLengths(_downloadTask.Download.ContentLength.Value);
+                    break;
                 case DownloadStatus.DOWNLOADING:
                     break;
                 case DownloadStatus.COMPLETED:
@@ -189,6 +167,7 @@ namespace StreamDownloaderControls
                 case DownloadStatus.ERROR:
                     break;
             }
+            UpdateDownloadStatus(e.Message);
         }
 
         /// <summary>
@@ -208,7 +187,7 @@ namespace StreamDownloaderControls
 
         protected void OpenDropdown(object sender)
         {
-            ((Label)sender).ContextMenu.IsOpen = true;
+
         }
 
         #endregion

@@ -15,9 +15,11 @@ namespace StreamDownloaderDownload.Hosts.Default
         public override int DelayInMilliseconds => -1;
         public override bool NeedDelay => false;
 
-        public sealed override async Task<string> GetSourceLink(string url)
+#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
+        public sealed override async Task<Tuple<string, LinkFetchResult>> GetSourceLink(string url)
+#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
         {
-            return "N/A";
+            return new Tuple<string, LinkFetchResult>("N/A", LinkFetchResult.SUCCESSFULL);
         }
     }
 }

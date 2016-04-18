@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 namespace StreamDownloaderDownload.Hosts
 {
     public delegate void FetchStatusChangedHandler(object sender, LinkFetchStatusChangedEventArgs e);
-    public delegate void LinkFetchFinshedHandler(object sender, LinkFetchFinishedEventArgs e);
 
     public abstract class Host
     {
@@ -19,7 +18,6 @@ namespace StreamDownloaderDownload.Hosts
         public abstract int DelayInMilliseconds { get; }
 
         public event FetchStatusChangedHandler FetchStatusChanged;
-        public event LinkFetchFinshedHandler LinkFetchFinished;
 
         public void UpdateStatus(string NewStatus)
         {
@@ -28,14 +26,7 @@ namespace StreamDownloaderDownload.Hosts
             FetchStatusChanged(this, new LinkFetchStatusChangedEventArgs(NewStatus));
         }
 
-        public void SetLinkFetchResultTo(LinkFetchResult result)
-        {
-            if (LinkFetchFinished == null)
-                return;
-            LinkFetchFinished(this, new LinkFetchFinishedEventArgs(result));
-        }
-
-        public abstract Task<string> GetSourceLink(string url);
+        public abstract Task<Tuple<string, LinkFetchResult>> GetSourceLink(string url);
 
         /* Asynchronous pause */
         public virtual async Task Pause(int interval)

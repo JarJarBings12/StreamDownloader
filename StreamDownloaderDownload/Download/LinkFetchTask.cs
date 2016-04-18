@@ -22,7 +22,7 @@ namespace StreamDownloaderDownload.Download
         public Host Host => _host;
         public string Link => _link;
 
-        public async Task<string> Fetch()
+        public async Task<Tuple<string, LinkFetchResult>> Fetch()
         {
             return await _host.GetSourceLink(_link);
         }
