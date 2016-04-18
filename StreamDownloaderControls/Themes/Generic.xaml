@@ -280,47 +280,6 @@
         </Setter>
     </Style>
 
-    <Style x:Key="DropdownContextMenu" TargetType="{x:Type ContextMenu}">
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="{x:Type ContextMenu}">
-                    <Border Background="White"
-                            BorderBrush="#FF595959"
-                            BorderThickness="1 1 1 1"
-                            Height="80">
-                        <Grid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="3*"/>
-                                <RowDefinition Height="3*"/>
-                                <RowDefinition Height="3*"/>
-                            </Grid.RowDefinitions>
-
-                            <Button x:Name="tb_Pause" Grid.Row="0" BorderThickness="0 0 0 1" BorderBrush="#FF595959" Background="White">
-                                <Grid Margin="-1 -13 -1 -13">
-                                    <TextBlock FontSize="15" FontFamily="Segoe MDL2 Assets" Text="&#xE103;" HorizontalAlignment="Left" VerticalAlignment="Top" Width="14" Height="16" Margin="3,5,0,0"/>
-                                    <TextBlock FontSize="14" Text="Pause" HorizontalAlignment="Left" VerticalAlignment="Top" Width="43" Height="16" Margin="22,3,0,0"/>
-                                </Grid>
-                            </Button>
-                            <Button x:Name="tb_Save" Grid.Row="1" BorderThickness="0 0 0 1" BorderBrush="#FF595959" Background="White">
-                                <Grid Margin="-1 -13 -1 -13">
-                                    <TextBlock FontSize="15" FontFamily="Segoe MDL2 Assets" Text="&#xE105;" HorizontalAlignment="Left" VerticalAlignment="Top" Width="14" Height="16" Margin="3,5,0,0"/>
-                                    <TextBlock FontSize="14" Text="Save" HorizontalAlignment="Left" VerticalAlignment="Top" Width="43" Height="16" Margin="22,3,0,0"/>
-                                </Grid>
-                            </Button>
-
-                            <Button x:Name="tb_Delete" Grid.Row="2" BorderThickness="0" Background="White">
-                                <Grid Margin="-1 -13 -1 -13">
-                                    <TextBlock FontSize="15" FontFamily="Segoe MDL2 Assets" Text="&#xE107;" HorizontalAlignment="Left" VerticalAlignment="Top" Width="14" Height="16" Margin="3,5,0,0"/>
-                                    <TextBlock FontSize="14" Text="Delete" HorizontalAlignment="Left" VerticalAlignment="Top" Width="43" Height="16" Margin="22,3,0,0"/>
-                                </Grid>
-                            </Button>
-                        </Grid>
-                    </Border>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
-    
     <Style TargetType="{x:Type local:DownloadListItem}">
         <Setter Property="Background" Value="DodgerBlue"/>
         <Setter Property="Height" Value="100"/>
@@ -364,13 +323,12 @@
                                     <TextBlock x:Name="tb_Status" TextWrapping="NoWrap" Text="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Status, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontSize="12" Grid.Row="4" Margin="1,1,1,1"/>
                                 </Grid>
 
-                                <Label x:Name="l_Dropdown" Margin="0,5,5,0"  Background="DodgerBlue" BorderThickness="0" VerticalContentAlignment="Center" Height="20" VerticalAlignment="Top" HorizontalAlignment="Right" Width="20">
-                                    <Label.ContextMenu>
-                                        <ContextMenu x:Name="cm_Dropdown" Style="{StaticResource DropdownContextMenu}">
-                                        </ContextMenu>
-                                    </Label.ContextMenu>
+                                <!--
+                                <Button x:Name="l_Dropdown" Margin="0,5,5,0"  Background="DodgerBlue" BorderThickness="0" VerticalContentAlignment="Center" Height="20" VerticalAlignment="Top" HorizontalAlignment="Right" Width="20" ContextMenuService.Placement="Bottom">
+                                </Button>
+-->
+                                <Label x:Name="l_Dropdown" Margin="0,5,5,0"  Background="DodgerBlue" BorderThickness="0" VerticalContentAlignment="Center" Height="20" VerticalAlignment="Top" HorizontalAlignment="Right" Width="20" ContextMenuService.Placement="Bottom">
                                 </Label>
-                                
                                 <ProgressBar Margin="-1,0,-1,-1" Height="7" VerticalAlignment="Bottom" Style="{StaticResource DownloadBar}" Value="{TemplateBinding DownloadProgress}"/>
                             </Grid>
                         </Border>
@@ -480,16 +438,41 @@
     </Style>
     <!--#endregion-->
 
-    <Style TargetType="{x:Type local:DropdownItem}">
+    <Style TargetType="{x:Type local:DropdownContextMenu}">
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="{x:Type local:DropdownItem}">
+                <ControlTemplate TargetType="{x:Type local:DropdownContextMenu}">
                     <Border Background="White"
                             BorderBrush="#FF595959"
-                            BorderThickness="1 1 1 1">
-                        <Grid Margin="1">
-                            <TextBlock FontSize="15" FontFamily="Segoe MDL2 Assets" Text="TB" HorizontalAlignment="Left" Width="14" Margin="2,4,0,0" Height="17" VerticalAlignment="Top"/>
-                            <TextBlock FontSize="14" Text="TB" HorizontalAlignment="Left" Width="78" Margin="16,2,0,0" Height="19" VerticalAlignment="Top"/>
+                            BorderThickness="1 1 1 1"
+                            Width="85"
+                            Height="100">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="3*"/>
+                                <RowDefinition Height="3*"/>
+                                <RowDefinition Height="3*"/>
+                            </Grid.RowDefinitions>
+
+                            <Button x:Name="tb_Pause" Grid.Row="0" BorderThickness="0 0 0 1" BorderBrush="#FF595959" Background="White">
+                                <Grid Width="80">
+                                    <TextBlock x:Name="tb_Pause_Icon"  FontSize="15" FontFamily="Segoe MDL2 Assets" Text="&#xE103;" HorizontalAlignment="Left" VerticalAlignment="Top" Width="14" Height="16" Margin="3,5,0,0"/>
+                                    <TextBlock FontSize="14" Text="Pause" HorizontalAlignment="Left" VerticalAlignment="Top" Width="43" Height="16" Margin="22,3,0,0"/>
+                                </Grid>
+                            </Button>
+                            <Button x:Name="tb_Save" Grid.Row="1" BorderThickness="0 0 0 1" BorderBrush="#FF595959" Background="White">
+                                <Grid Width="80">
+                                    <TextBlock x:Name="tb_Save_Icon" FontSize="15" FontFamily="Segoe MDL2 Assets" Text="&#xE105;" HorizontalAlignment="Left" VerticalAlignment="Top" Width="14" Height="16" Margin="3,5,0,0"/>
+                                    <TextBlock FontSize="14" Text="Save and stop" HorizontalAlignment="Left" VerticalAlignment="Top" Width="43" Height="16" Margin="22,3,0,0"/>
+                                </Grid>
+                            </Button>
+
+                            <Button x:Name="tb_Delete" Grid.Row="2" BorderThickness="0" Background="White">
+                                <Grid Width="80">
+                                    <TextBlock x:Name="tb_Delete_Icon" FontSize="15" FontFamily="Segoe MDL2 Assets" Text="&#xE107;" HorizontalAlignment="Left" VerticalAlignment="Top" Width="14" Height="16" Margin="3,5,0,0"/>
+                                    <TextBlock FontSize="14" Text="Delete" HorizontalAlignment="Left" VerticalAlignment="Top" Width="43" Height="16" Margin="22,3,0,0"/>
+                                </Grid>
+                            </Button>
                         </Grid>
                     </Border>
                 </ControlTemplate>

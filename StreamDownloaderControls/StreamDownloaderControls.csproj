@@ -46,17 +46,25 @@
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
+    <Reference Include="UIAutomationProvider" />
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DownloadListItem.cs" />
-    <Compile Include="DropdownItem.cs" />
+    <Compile Include="DropdownContextMenu.cs" />
     <Compile Include="FileExtensionListItem.cs" />
     <Compile Include="FlatWindow.cs" />
     <Compile Include="CreateDownload.cs" />
     <Compile Include="HostListItem.cs" />
+    <Compile Include="Themes\MODELS\CD\DownloadSelect.xaml.cs">
+      <DependentUpon>DownloadSelect.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Themes\MODELS\CD\P\LII.xaml.cs">
+      <DependentUpon>LII.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Themes\MODELS\DropDown.xaml.cs">
       <DependentUpon>DropDown.xaml</DependentUpon>
     </Compile>
@@ -72,6 +80,14 @@
     <Page Include="Themes\Generic.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Themes\MODELS\CD\DownloadSelect.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Themes\MODELS\CD\P\LII.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Themes\MODELS\DropDown.xaml">
       <SubType>Designer</SubType>

@@ -6,26 +6,27 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.IO;
 using mshtml;
+using IE = SHDocVw.InternetExplorer;
 
 namespace StreamDownloaderDownload.Hosts.Default
 {
     public class PowerWatch : Host
     {
         #region variables and properties
-        private Regex _BaseUrlPattern = new Regex(@"http://powerwatch.pw/(.*)");
-        private Regex _SourceUrlPattern = new Regex("sources:(.*)\\[\\{file:\"(.*)\",");
-        private const int _JavaScriptProcessingTime = 15;
+        private Regex _baseUrlPattern = new Regex(@"http://powerwatch.pw/(.*)");
+        private Regex _bourceUrlPattern = new Regex("sources:(.*)\\[\\{file:\"(.*)\",");
+        private const int _javaScriptProcessingTime = 15;
 
-        public sealed override Regex BaseUrlPattern => _BaseUrlPattern;
-        public sealed override Regex SourceUrlPattern => _SourceUrlPattern;
+        public sealed override Regex BaseUrlPattern => _baseUrlPattern;
+        public sealed override Regex SourceUrlPattern => _bourceUrlPattern;
 
         public sealed override bool NeedDelay => true;
         public override int DelayInMilliseconds => 6000;
         #endregion
 
-        public sealed override async Task<string> GetSourceLink(string url)
+        public sealed override async Task<Tuple<string, LinkFetchResult>> GetSourceLink(string url)
         {
-            SHDocVw.InternetExplorer ie = new SHDocVw.InternetExplorer();
+            var ie = new IE();
             ie.Navigate2(url);
 
             while (ie.ReadyState != SHDocVw.tagREADYSTATE.READYSTATE_COMPLETE)
@@ -59,22 +60,19 @@ namespace StreamDownloaderDownload.Hosts.Default
             {
                 if (line == "")
                     continue;
-                match = _SourceUrlPattern.Match(line);
+                match = _bourceUrlPattern.Match(line);
 
                 if (match.Success)
                     break;
             }
 
-            string sourceUrl = string.Empty;
-
+            var sourceUrl = string.Empty;
+            var response = LinkFetchResult.SUCCESSFULL;
             if (match.Success)
-            {
                 sourceUrl = match.Groups[2].Value;
-                SetLinkFetchResultTo(LinkFetchResult.SUCCESSFULL);
-            }
             else
-                SetLinkFetchResultTo(LinkFetchResult.FAILED);
-            return sourceUrl;
+                response = LinkFetchResult.FAILED;
+            return new Tuple<string, LinkFetchResult>(sourceUrl, response);
         }
 
         public sealed override async Task Pause(int interval)
@@ -89,7 +87,7 @@ namespace StreamDownloaderDownload.Hosts.Default
 
         public async Task JavaScriptProcessingTime()
         {
-            for (int i = _JavaScriptProcessingTime; i > 0; i--)
+            for (int i = _javaScriptProcessingTime; i > 0; i--)
             {
                 UpdateStatus($"Download begins in { i }");
                 await Task.Delay(1000);

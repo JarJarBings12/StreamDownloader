@@ -12,7 +12,7 @@ namespace StreamDownloaderControls
     public class FlatWindow: Window
     {
         #region C# Variables and properties
-        private double[] NormalPositon = new double[4];
+        private double[] _normalPositon = new double[4];
         protected HwndSource hwndSource;
         protected const int WM_SYSCOMMAND = 0x112;
 
@@ -77,14 +77,14 @@ namespace StreamDownloaderControls
         {
             if (WindowState == WindowState.Normal)
             {
-                this.NormalPositon[0] = this.Height;
+                this._normalPositon[0] = this.Height;
                 this.WindowState = WindowState.Maximized;
                 this.Height = System.Windows.SystemParameters.WorkArea.Height;
             }
             else
             {
                 this.WindowState = WindowState.Normal;
-                this.Height = NormalPositon[0];
+                this.Height = _normalPositon[0];
             }
         }
 

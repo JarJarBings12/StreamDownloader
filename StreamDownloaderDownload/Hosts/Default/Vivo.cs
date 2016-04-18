@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
 using mshtml;
+using IE = SHDocVw.InternetExplorer;
 
 namespace StreamDownloaderDownload.Hosts.Default
 {
@@ -23,9 +24,9 @@ namespace StreamDownloaderDownload.Hosts.Default
         public sealed override int DelayInMilliseconds => 8000;
         #endregion
 
-        public sealed override async Task<string> GetSourceLink(string url)
+        public sealed override async Task<Tuple<string, LinkFetchResult>> GetSourceLink(string url)
         {
-            SHDocVw.InternetExplorer ie = new SHDocVw.InternetExplorer();
+            var ie = new IE();
             ie.Navigate2(url);
 
             while (ie.ReadyState != SHDocVw.tagREADYSTATE.READYSTATE_COMPLETE)
@@ -44,21 +45,19 @@ namespace StreamDownloaderDownload.Hosts.Default
             IHTMLElement element = GetStreamContent(((HTMLDocument)browser.Document)); //Get stream-content element from web page.
 
             var sourceUrl = string.Empty;
-
+            var response = LinkFetchResult.SUCCESSFULL;
             if (element != null)
             {
-                SetLinkFetchResultTo(LinkFetchResult.SUCCESSFULL);
                 UpdateStatus("Starting download...");
                 sourceUrl = element.getAttribute("data-url"); //Get data-url attribute
             }
             else
             {
-                url = "";
-                SetLinkFetchResultTo(LinkFetchResult.FAILED);
+                response = LinkFetchResult.FAILED;
                 UpdateStatus("Source link not found");
             }
             
-            return sourceUrl;
+            return new Tuple<string, LinkFetchResult>(sourceUrl, response);
         }
 
         public IHTMLElement GetStreamContent(HTMLDocument doc)

@@ -8,10 +8,13 @@ namespace StreamDownloaderDownload.Download
 {
     public enum DownloadStatus
     {
-        COMPLETED,
-        DOWNLOADING,
-        PAUSED,
-        CONTINUNING_LATER,
-        ERROR
+        NOT_INITIALIZED = 0,
+        INITIALIZE = 10,
+        DOWNLOADING = 20,
+        PAUSED = 21,
+        CONTINUNING_LATER = 22,
+        COMPLETED = 30,
+        CANCELLED = 31,
+        ERROR = 32
     }
 }
