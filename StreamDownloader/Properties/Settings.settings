@@ -1,0 +1,39 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="StreamDownloader.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="DownloadFolder" Type="System.String" Scope="User">
+      <Value Profile="(Default)">N/A</Value>
+    </Setting>
+    <Setting Name="TempDownloadFolder" Type="System.String" Scope="User">
+      <Value Profile="(Default)">N/A</Value>
+    </Setting>
+    <Setting Name="DownloadBufferSize" Type="System.UInt32" Scope="User">
+      <Value Profile="(Default)">32768</Value>
+    </Setting>
+    <Setting Name="CustomTempDownloadFolder" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="CustomDownloadBufferSize" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="DEFAULT_DownloadBufferSize" Type="System.UInt32" Scope="Application">
+      <Value Profile="(Default)">32768</Value>
+    </Setting>
+    <Setting Name="DEFAULT_CustomTempDownloadFolder" Type="System.Boolean" Scope="Application">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="DEFAULT_CustomDownloadBufferSize" Type="System.Boolean" Scope="Application">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="FIRST_RUN" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="DEFAULT_DownloadFolder" Type="System.String" Scope="User">
+      <Value Profile="(Default)">N/A</Value>
+    </Setting>
+    <Setting Name="DEFAULT_TempDownloadFolder" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+  </Settings>
+</SettingsFile>

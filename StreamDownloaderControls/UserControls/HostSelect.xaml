@@ -1,0 +1,118 @@
+﻿<UserControl x:Class="StreamDownloaderControls.UserControls.HostSelect"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:StreamDownloaderControls.UserControls"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
+             xmlns:a="clr-namespace:StreamDownloaderControls.UserControls"
+             x:Name="LocalHostSelect"
+             mc:Ignorable="d" d:DesignWidth="750">
+
+    <!-- Control resources -->
+    <UserControl.Resources>
+        <!-- Add URL placeholder-->
+        <VisualBrush x:Key="URLPlaceholder" AlignmentX="Left" AlignmentY="Center" Stretch="None">
+            <VisualBrush.Visual>
+                <Label Content="Download URL" Foreground="LightGray" />
+            </VisualBrush.Visual>
+        </VisualBrush>
+    </UserControl.Resources>
+
+    <Grid Height="200" x:Name="effect_slidedown">
+
+        <Grid.Triggers>
+            <EventTrigger RoutedEvent="FrameworkElement.Loaded">
+                <BeginStoryboard>
+                    <Storyboard>
+                        <DoubleAnimation Storyboard.TargetName="effect_slidedown" Storyboard.TargetProperty="(FrameworkElement.Height)" From="0" Duration="0:0:0.2" />
+                    </Storyboard>
+                </BeginStoryboard>
+            </EventTrigger>
+        </Grid.Triggers>
+
+        <Border Background="White"
+                BorderThickness="0 0 0 1"
+                BorderBrush="Black"
+                Margin="-4 0 -4 0">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="35" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="35" />
+                </Grid.RowDefinitions>
+
+                <!-- "{Binding RelativeSource={RelativeSource TemplatedParent}, Path=DownloadUrl, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" -->
+                <TextBox x:Name="tb_downloadUrl" Grid.Row="0" Margin="4,5,5,0" VerticalContentAlignment="Center" Height="25" VerticalAlignment="Top" Text="{Binding ElementName=LocalHostSelect, Path=DownloadURL, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" PreviewMouseWheel="HandelMouseWheel" TextChanged="ValidateDownloadLink" ScrollViewer.HorizontalScrollBarVisibility="Hidden">
+                    <TextBox.Style>
+                        <!-- Modify Text box style (Add placeholder); Add mscorelib for the string class -->
+                        <Style TargetType="TextBox" xmlns:sys="clr-namespace:System;assembly=mscorlib">
+                            <Style.Triggers>
+
+                                <!-- Keyboard focused -->
+                                <Trigger Property="IsKeyboardFocused" Value="True">
+                                    <Setter Property="Background" Value="White" />
+                                </Trigger>
+
+                                <!-- Content empty -->
+                                <Trigger Property="Text" Value="{x:Static sys:String.Empty}">
+                                    <Setter Property="Background" Value="{StaticResource URLPlaceholder}" />
+                                </Trigger>
+
+                                <!-- Content null -->
+                                <Trigger Property="Text" Value="{x:Null}">
+                                    <Setter Property="Background" Value="{StaticResource URLPlaceholder}" />
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBox.Style>
+                </TextBox>
+
+                <Border Grid.Row="1">
+                    <Border>
+                        <Grid>
+                            <ListBox x:Name="lb_HostSelect" BorderThickness="0" Margin="5,5,5,5"
+                                     ItemsSource="{Binding ElementName=LocalHostSelect, Path=SupportedHosts, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                     SelectedItem="{Binding ElementName=LocalHostSelect, Path=SelectedHost, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                                <ListBox.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                        </StackPanel>
+                                    </ItemsPanelTemplate>
+                                </ListBox.ItemsPanel>
+                            </ListBox>
+                        </Grid>
+                    </Border>
+                </Border>
+
+                <Border Grid.Row="2" Background="#FFE3E3E3" Margin="0 0 0 0">
+                    <Border.Effect>
+                        <DropShadowEffect BlurRadius="2" Direction="89" RenderingBias="Quality" ShadowDepth="1" />
+                    </Border.Effect>
+                    <Grid>
+                        <Button x:Name="b_submit" Content="Select" Margin="0,0,91,7" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="74" Click="submit">
+                            <Button.Style>
+                                <Style TargetType="Button" xmlns:sys="clr-namespace:System;assembly=mscorlib">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding ElementName=tb_downloadUrl, Path=Text, UpdateSourceTrigger=PropertyChanged}" Value="{x:Static sys:String.Empty}">
+                                            <Setter Property="IsEnabled" Value="False" />
+                                        </DataTrigger>
+
+                                        <DataTrigger Binding="{Binding ElementName=tb_downloadUrl, Path=Text, UpdateSourceTrigger=PropertyChanged}" Value="{x:Null}">
+                                            <Setter Property="IsEnabled" Value="False" />
+                                        </DataTrigger>
+
+                                        <DataTrigger Binding="{Binding ElementName=lb_HostSelect, Path=SelectedItem, UpdateSourceTrigger=PropertyChanged}" Value="{x:Null}">
+                                            <Setter Property="IsEnabled" Value="False" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
+                        </Button>
+                        <Button x:Name="b_cancel" Content="Cancel" Margin="0,0,10,7" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="76" Click="cancel" />
+                    </Grid>
+                </Border>
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>

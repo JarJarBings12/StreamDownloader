@@ -1,2 +1,6 @@
 StreamDownloader/bin/
 StreamDownloader/obj/
+StreamDownloaderControls/obj/
+StreamDownloaderDownload/bin/
+StreamDownloaderDownload/obj/
+StreamDownloaderControls/bin/

@@ -1,0 +1,284 @@
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="clr-namespace:StreamDownloaderControls"
+    xmlns:InputStyles="clr-namespace:StreamDownloaderControls.Themes">
+
+    <!--#region Window Style-->
+
+    <!--#region title bar-->
+    <Style TargetType="{x:Type Button}" x:Key="default_button">
+        <!-- Set width to 32 pixels. -->
+        <Setter Property="Width" Value="32" />
+        <!-- Set background transparent -->
+        <Setter Property="Background" Value="Transparent" />
+        <!-- Set foreground black -->
+        <Setter Property="Foreground" Value="Black" />
+
+        <!-- Overwrite default template -->
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <!-- Setting the border background color relative to the button background. -->
+                    <Border Name="button_border" Background="{Binding Background, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Button}}">
+                        <Grid>
+                            <!-- Centering button content -->
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" Name="content" />
+                        </Grid>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="#8BA2A2A2" />
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter Property="Background" Value="#8BA2A2A2" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="{x:Type Button}" x:Key="close_button">
+        <!-- Set width to 32 pixels. -->
+        <Setter Property="Width" Value="32" />
+        <!-- Set background transparent -->
+        <Setter Property="Background" Value="Transparent" />
+        <!-- Set foreground black -->
+        <Setter Property="Foreground" Value="Black" />
+
+        <!-- Overwrite default template -->
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <!-- Setting the border background color relative to the button background. -->
+                    <Border Name="button_border" Background="{Binding Background, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Button}}">
+                        <Grid>
+                            <!-- Centering button content -->
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" Name="content" />
+                        </Grid>
+                    </Border>
+
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="#8BA2A2A2" />
+                            <Setter Property="Foreground" Value="#FFB80E0E" />
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter Property="Background" Value="#8BA2A2A2" />
+                            <Setter Property="Foreground" Value="#FFEF1717" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="{x:Type TextBlock}" x:Key="Title">
+        <Setter Property="FontSize" Value="15" />
+        <Setter Property="TextAlignment" Value="Left" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+    </Style>
+
+    <!--#endregion-->
+
+    <!--#region Controls -->
+    <Style TargetType="{x:Type Button}" x:Key="default_control_button">
+        <!-- Set width to 32 pixels. -->
+        <Setter Property="Width" Value="32" />
+        <!-- Set background transparent -->
+        <Setter Property="Background" Value="Transparent" />
+        <!-- Set foreground black -->
+        <Setter Property="Foreground" Value="Black" />
+
+        <!-- Overwrite default template -->
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <!-- Setting the border background color relative to the button background. -->
+                    <Border Name="button_border" Background="{Binding Background, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Button}}">
+                        <Grid>
+                            <!-- Centering button content -->
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" Name="content" />
+                        </Grid>
+                    </Border>
+
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="#8BA2A2A2" />
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter Property="Background" Value="#8BA2A2A2" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="{x:Type Rectangle}" x:Key="default_control_placeholder" />
+    <!--#endregion-->
+
+    <Style TargetType="{x:Type local:FlatWindow}">
+        <!-- Set background transparent -->
+        <Setter Property="Background" Value="Transparent" />
+        <!-- Set window style to "none" -->
+        <Setter Property="WindowStyle" Value="None" />
+        <!-- Remove resize ability -->
+        <Setter Property="ResizeMode" Value="NoResize" />
+
+        <Setter Property="AllowsTransparency" Value="True" />
+
+        <!-- Set border effect -->
+        <Setter Property="Effect">
+            <Setter.Value>
+                <DropShadowEffect ShadowDepth="0" />
+            </Setter.Value>
+        </Setter>
+
+        <!-- Overwrite default template -->
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type local:FlatWindow}">
+                    <Border x:Name="window_shadow_border" Effect="{TemplateBinding Effect}" Margin="5">
+                        <!-- Main window border -->
+                        <Border x:Name="window_border" Background="White">
+                            <!-- Resize grid -->
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="4" />
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="4" />
+                                </Grid.RowDefinitions>
+
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="4" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="4" />
+                                </Grid.ColumnDefinitions>
+
+                                <!--#region Side definitions for resizing (Positions to grab the window).-->
+                                <!-- LEFT -->
+                                <Rectangle x:Name="border_left" Grid.Row="1" Grid.Column="0" VerticalAlignment="Stretch" HorizontalAlignment="Left" Fill="White" Width="8" />
+                                <!-- TOP -->
+                                <Rectangle x:Name="border_top" Grid.Row="0" Grid.Column="1" VerticalAlignment="Top" HorizontalAlignment="Stretch" Fill="White" Height="8" />
+                                <!-- TOP LEFT -->
+                                <Rectangle x:Name="border_top_left" Grid.Row="0" Grid.Column="0" VerticalAlignment="Top" HorizontalAlignment="Left" Fill="White" Height="8" Width="8" />
+                                <!-- TOP RIGHT -->
+                                <Rectangle x:Name="border_top_right" Grid.Row="0" Grid.Column="2" VerticalAlignment="Top" HorizontalAlignment="Right" Fill="White" Height="8" Width="8" />
+                                <!-- RIGHT -->
+                                <Rectangle x:Name="border_right" Grid.Row="1" Grid.Column="2" VerticalAlignment="Stretch" HorizontalAlignment="Right" Fill="White" Width="8" />
+                                <!-- BOTTOM -->
+                                <Rectangle x:Name="border_bottom" Grid.Row="2" Grid.Column="1" VerticalAlignment="Bottom" HorizontalAlignment="Stretch" Fill="White" Height="8" />
+                                <!-- BOTTOM LEFT -->
+                                <Rectangle x:Name="border_bottom_left" Grid.Row="2" Grid.Column="0" VerticalAlignment="Bottom" HorizontalAlignment="Left" Fill="White" Height="8" Width="8" />
+                                <!-- BOTTOM RIGHT -->
+                                <Rectangle x:Name="border_bottom_right" Grid.Row="2" Grid.Column="2" VerticalAlignment="Bottom" HorizontalAlignment="Right" Fill="White" Height="8" Width="8" />
+                                <!--#endregion-->
+
+                                <!-- Main grid -->
+                                <Grid x:Name="main_grid" Grid.Row="1" Grid.Column="1">
+                                    <!-- Create rows for the main window. -->
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="35" MinHeight="35" />
+                                        <RowDefinition Height="80" MinHeight="80" />
+                                        <RowDefinition Height="*" />
+                                    </Grid.RowDefinitions>
+
+                                    <!-- Create new grid for the title bar. -->
+                                    <Grid Margin="0, 0, 2, 0" Grid.Row="0" Background="Transparent" VerticalAlignment="Stretch">
+                                        <Grid.ColumnDefinitions>
+                                            <!-- Icon -->
+                                            <ColumnDefinition Width="Auto" />
+                                            <!-- Title -->
+                                            <ColumnDefinition Width="*" MinWidth="1" />
+                                            <!-- Minimize / Restore / Close -->
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+
+                                        <!-- Icon -->
+                                        <Grid Width="30" Height="30" Margin="2">
+                                            <Image Source="{TemplateBinding Icon}"/>
+                                        </Grid>
+
+                                        <!-- Title -->
+                                        <TextBlock x:Name="title_bar" Margin="3" Style="{StaticResource Title}" Grid.Column="1" Text="{TemplateBinding Title}" />
+
+                                        <!-- Minimize | Restore | Close -->
+                                        <StackPanel Orientation="Horizontal" Grid.Column="2" FlowDirection="LeftToRight">
+
+                                            <!-- Minimize button -->
+                                            <Button x:Name="Minimize" Style="{StaticResource default_button}" FontFamily="segoe MDL2 Assets" FontWeight="Bold" Content="&#xE921;" />
+
+                                            <!-- Restore button -->
+                                            <Button x:Name="Restore" Style="{StaticResource default_button}" FontFamily="segoe MDL2 Assets" Content="&#xE922;" />
+
+                                            <!-- Close button -->
+                                            <Button x:Name="Close" Style="{StaticResource close_button}" FontFamily="segoe MDL2 Assets" FontWeight="Bold" Content="&#xE10A;" />
+                                        </StackPanel>
+                                    </Grid>
+
+                                    <Grid Grid.Row="1" Margin="10 5 10 0">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="80" MinWidth="80" />
+                                            <ColumnDefinition Width="80" MinWidth="80" />
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="80" MinWidth="80" />
+                                        </Grid.ColumnDefinitions>
+                                        <Button x:Name="DownloadButton" Style="{StaticResource default_control_button}" Width="80" FontFamily="segoe MDL2 Assets" FontSize="30" Content="&#xE118;" Grid.Column="0" />
+                                        <Button x:Name="ReloadDownload" Style="{StaticResource default_control_button}" Width="80" FontFamily="segoe MDL2 Assets" FontSize="30" Content="&#xE1CD;" Grid.Column="1" />
+                                        <Rectangle Style="{StaticResource default_control_placeholder}" Grid.Column="2" />
+                                        <Button x:Name="SettingsButton" Style="{StaticResource default_control_button}" Width="80" FontFamily="segoe MDL2 Assets" FontSize="30" Content="&#xE90F;" Grid.Column="3" />
+                                    </Grid>
+
+                                    <!-- Create new grid for the user area. -->
+                                    <Grid Grid.Row="2" Background="Transparent" Margin="0 -1 0 0" VerticalAlignment="Stretch">
+                                        <!-- Use max width for this grid (9.5 percent of the main grid width). -->
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
+
+                                        <!-- Use max height  for this grid (100 percent of the main grid height). -->
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="*" />
+                                        </Grid.RowDefinitions>
+
+                                        <!-- With this border I create a small space between the window border and the user area. -->
+                                        <Border Name="user_area" Margin="1 0 1 1" Background="White">
+
+                                            <Grid>
+                                                <!-- The content presenter allows me to place the default controls into the window and move them to around. -->
+                                                <ContentPresenter>
+                                                </ContentPresenter>
+                                                <ContentControl x:Name="MDI" />
+                                            </Grid>
+                                        </Border>
+                                    </Grid>
+                                </Grid>
+                            </Grid>
+                        </Border>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <!--#endregion-->
+
+    <Style TargetType="{x:Type local:FileExtensionListItem}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type local:FileExtensionListItem}">
+                    <Border Height="20" Width="100" Margin="-8 -2 -5 -2">
+                        <Grid>
+                            <Border>
+                                <TextBlock Margin="0,0,0,0" Text="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=DisplayName, UpdateSourceTrigger=PropertyChanged}" FontSize="15" TextAlignment="Center" />
+                            </Border>
+                        </Grid>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <!--#endregion-->
+
+</ResourceDictionary>
