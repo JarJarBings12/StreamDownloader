@@ -1,22 +1,19 @@
 ﻿using System;
 using System.IO;
 using System.Net;
-using System.Text;
-using System.Windows.Forms;
 using System.Threading.Tasks;
-using System.Runtime.Serialization;
-using System.Runtime.Serialization.Json;
-using StreamDownloaderDownload.Download.JSON;
+using System.Windows.Forms;
 
 namespace StreamDownloaderDownload.Download
 {
     public class FileDownload
     {
-
         #region variables and properties
+
         //Public
-        public string Source => _status;
-        public string FileDestination => _File;
+        public string Source => _source;
+
+        public string FileDestination => _file;
         public string TempFile => _tmpFile;
 
         public uint ChunkSize => _bufferSize;
@@ -28,25 +25,28 @@ namespace StreamDownloaderDownload.Download
 
         // Private
         private volatile bool _pause = false;
+
         private volatile bool _continunigLater = false;
         private volatile bool _cancel = false;
 
-        private readonly string _status;
-        private readonly string _File;
+        private readonly string _source;
+        private readonly string _file;
         private readonly string _tmpFile;
         private readonly DownloadTask _task;
 
         private uint _bufferSize;
         private Lazy<ulong> _contentLength;
         private ulong _writtenBytes;
-        #endregion
+
+        #endregion variables and properties
 
         #region Constructor
+
         public FileDownload(string source, string tempFile, string file, uint bufferSize, DownloadTask task)
         {
-            _status = source;
+            _source = source;
+            _file = file;
             _tmpFile = tempFile;
-            _File = file;
             _bufferSize = bufferSize;
             _writtenBytes = 0;
             _contentLength = new Lazy<ulong>(() => Convert.ToUInt64(GetContentLength()));
@@ -55,21 +55,20 @@ namespace StreamDownloaderDownload.Download
 
         public FileDownload(string source, string tempFile, string file, uint bufferSize, ulong writtenBytes, ulong contentLength, DownloadTask task)
         {
-            _status = source;
+            _source = source;
+            _file = file;
             _tmpFile = tempFile;
-            _File = file;
             _bufferSize = bufferSize;
             _writtenBytes = writtenBytes;
             _contentLength = new Lazy<ulong>(() => Convert.ToUInt64(GetContentLength()));
             _task = task;
         }
 
-        #endregion
+        #endregion Constructor
 
         public Task Start()
         {
             _pause = false;
-            _task.StartDownload();
             return this.BeginDownload(_writtenBytes);
         }
 
@@ -92,15 +91,20 @@ namespace StreamDownloaderDownload.Download
         {
             if (_pause)
                 throw new InvalidOperationException();
+            if (_continunigLater)
+                throw new InvalidOperationException();
+            if (_cancel)
+                throw new InvalidOperationException();
 
-            var request = (HttpWebRequest)WebRequest.Create(_status);
+            var request = (HttpWebRequest)WebRequest.Create(_source);
             request.Method = "GET";
             request.UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/42.0.2311.135 Safari/537.36 Edge/12.246";
             request.ContentType = "application/x-www-form-urlencoded";
             request.AddRange((long)_writtenBytes);
 
             if (!File.Exists(_tmpFile))
-                using (File.Create(_tmpFile)) ;
+                using (File.Create(_tmpFile))
+                { }
 
             //Wait until the server response
             using (var response = await request.GetResponseAsync())
@@ -109,12 +113,11 @@ namespace StreamDownloaderDownload.Download
                 {
                     try
                     {
-                        _task.StartDownload();
                         _task.UpdateDownloadStatus("Download...", DownloadStatus.DOWNLOADING);
                         using (var tempFileStream = new FileStream(_tmpFile, FileMode.Append, FileAccess.Write, FileShare.ReadWrite))
                         {
                             byte[] buffer;
-                            ulong length = _contentLength.Value;
+                            ulong length = (_contentLength.Value - _writtenBytes);
                             int readBytes = 0;
 
                             /* Use buffer size X until the remaining bytes (length) are smaller than X. */
@@ -129,7 +132,7 @@ namespace StreamDownloaderDownload.Download
                             }
 
                             /*  Set buffer size to the size of the remaining bytes. */
-                            if ((length < _writtenBytes) && !_pause && !_continunigLater && !_cancel)
+                            if ((length < _bufferSize) && !_pause && !_continunigLater && !_cancel)
                             {
                                 buffer = new byte[length];
                                 readBytes = await responseStream.ReadAsync(buffer, 0, buffer.Length);
@@ -143,12 +146,13 @@ namespace StreamDownloaderDownload.Download
                             await tempFileStream.FlushAsync();
                         }
 
-                        _task.ShutdownDownload();
+                        _task.ShutdownUpdateTimer();
                         if (Finished)
                         {
+                            _task.UpdateDownloadProgress(100, _contentLength.Value);
                             _task.UpdateDownloadStatus("Download complete.", DownloadStatus.COMPLETED);
-                            if (!File.Exists(_File))
-                                File.Move(_tmpFile, _File);
+                            if (!File.Exists(_file))
+                                File.Move(_tmpFile, _file);
 
                             if (File.Exists(_tmpFile))
                                 File.Delete(_tmpFile);
@@ -167,22 +171,16 @@ namespace StreamDownloaderDownload.Download
                             _task.UpdateDownloadStatus("Download cancelled!", DownloadStatus.CANCELLED);
                             if (File.Exists(_tmpFile))
                                 File.Delete(_tmpFile);
-                            if (File.Exists(_File))
-                                File.Delete(_File);                        
+                            if (File.Exists(_file))
+                                File.Delete(_file);
                             return;
                         }
 
                         /* Write current download status to file to continue later. */
                         if (_continunigLater)
                         {
-                            var empty = (_pause == true) ? new Action(() => _task.UpdateDownloadStatus("Paused...", DownloadStatus.PAUSED)) : new Action(() => _task.UpdateDownloadStatus("Continuing later.", DownloadStatus.CONTINUNING_LATER));
-
-                            using (var downloadRestoreFileStream = new FileStream($"{_tmpFile}.pdi", FileMode.Append, FileAccess.Write, FileShare.ReadWrite))
-                            {
-                                DataContractJsonSerializer jsonSerializer = new DataContractJsonSerializer(typeof(StoredDownload));
-                                jsonSerializer.WriteObject(downloadRestoreFileStream, SerializeDownloadStatus());
-                            }
                             _task.UpdateDownloadStatus("Download saved...", DownloadStatus.CONTINUNING_LATER);
+                            _task.SerializeDownloadState(Directory.GetParent(TempFile).FullName);
                             return;
                         }
                     }
@@ -195,34 +193,17 @@ namespace StreamDownloaderDownload.Download
             }
         }
 
+        /// <summary>
+        /// Get content length
+        /// </summary>
+        /// <returns></returns>
         private long GetContentLength()
         {
-            var request = (HttpWebRequest)WebRequest.Create(new Uri(_status));
+            var request = (HttpWebRequest)WebRequest.Create(new Uri(_source));
             request.Method = "HEAD";
 
             using (var response = request.GetResponse())
                 return response.ContentLength;
-        }
-
-        public StoredDownload SerializeDownloadStatus()
-        {
-            StoredDownload storedDownload = new StoredDownload()
-            {
-                TempFolder = StreamDownloader.DownloadTempFolder,
-                FileName = _task.FileName,
-                FileType = _task.FileType,
-                DownloadFolder = _task.DownloadFolder,
-                RawUrl = _task.RawDownloadUrl,
-                SourceUrl = _status,
-
-                DownloadStatus = new StreamDownloaderDownload.Download.JSON.DownloadStatus()
-                {
-                    WrittenChunks = _writtenBytes,
-                    ChunkSize = _bufferSize,
-                    ContentLength = _contentLength.Value
-                }
-            };
-            return storedDownload;
         }
     }
 }

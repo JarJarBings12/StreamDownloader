@@ -4,24 +4,29 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:StreamDownloader"
+        x:Name="AppSettings"
         mc:Ignorable="d"
         Title="Settings" Height="249.5" Width="342.667" WindowStyle="ToolWindow" WindowStartupLocation="CenterOwner">
 
     <Grid>
-        <Label x:Name="l_DefaultDownloadFolder" Content="Default download folder" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="26" Width="139"/>
-        <TextBox x:Name="tb_DefaultDownloadFolder" HorizontalAlignment="Left" Height="22" Margin="10,36,0,0" TextWrapping="NoWrap" VerticalAlignment="Top" Width="272" Text="{Binding DownloadFolder, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:Settings}}}" PreviewMouseLeftButtonDown="DownloadFolderFocus" MouseWheel="HandelMouseWheel"/>
-        <Button x:Name="b_ResetDownloadFolder" Content="&#xE777;" HorizontalAlignment="Left" Margin="287,36,0,0" VerticalAlignment="Top" Width="20" Height="22" FontFamily="Segoe MDL2 Assets" FontWeight="Bold"/>
+        <!-- Download folder -->
+        <Label x:Name="l_DefaultDownloadFolder" Content="Default download folder" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="26" Width="139" />
+        <TextBox x:Name="tb_DefaultDownloadFolder" HorizontalAlignment="Left" Height="22" Margin="10,36,0,0" TextWrapping="NoWrap" VerticalAlignment="Top" Width="272" Text="{Binding ElementName=AppSettings, Path=DownloadFolder, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" PreviewMouseLeftButtonDown="DownloadFolderFocus" MouseWheel="HandelMouseWheel" />
+        <Button x:Name="b_ResetDownloadFolder" Content="&#xE777;" HorizontalAlignment="Left" Margin="287,36,0,0" VerticalAlignment="Top" Width="20" Height="22" FontFamily="Segoe MDL2 Assets" FontWeight="Bold" />
 
-        <CheckBox x:Name="cb_EnableCustomTempFolder" Content="Custom temporary download folder" HorizontalAlignment="Left" Margin="10,70,0,0" VerticalAlignment="Top" IsChecked="{Binding CustomTempDownloadFolder, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:Settings}}}" Height="15" Width="210"/>
-        <TextBox x:Name="tb_CustomTempFolder" HorizontalAlignment="Left" Height="22" Margin="10,90,0,0" TextWrapping="NoWrap" VerticalAlignment="Top" Width="272" Text="{Binding TempDownloadFolder, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:Settings}}}" IsEnabled="{Binding CustomTempDownloadFolder, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:Settings}}}" PreviewMouseLeftButtonDown="TempDownloadFolderFocus" MouseWheel="HandelMouseWheel"/>
-        <Button x:Name="b_ResetCustomTempFolder" Content="&#xE777;" HorizontalAlignment="Left" Margin="287,90,0,0" VerticalAlignment="Top" Width="20" Height="22" FontFamily="Segoe MDL2 Assets" FontWeight="Bold" IsEnabled="{Binding CustomTempDownloadFolder, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:Settings}}}"/>
+        <!-- Temp folder -->
+        <CheckBox x:Name="cb_EnableCustomTempFolder" Content="Custom temporary download folder" HorizontalAlignment="Left" Margin="10,70,0,0" VerticalAlignment="Top" IsChecked="{Binding ElementName=AppSettings, Path=CustomTempDownloadFolder, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Height="15" Width="210" />
+        <TextBox x:Name="tb_CustomTempFolder" HorizontalAlignment="Left" Height="22" Margin="10,90,0,0" TextWrapping="NoWrap" VerticalAlignment="Top" Width="272" IsReadOnly="True" Text="{Binding ElementName=AppSettings, Path=TempDownloadFolder, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding ElementName=cb_EnableCustomTempFolder, Path=IsChecked, Mode=Default, UpdateSourceTrigger=PropertyChanged}" PreviewMouseLeftButtonDown="TempDownloadFolderFocus" MouseWheel="HandelMouseWheel" />
+        <Button x:Name="b_ResetCustomTempFolder" Content="&#xE777;" HorizontalAlignment="Left" Margin="287,90,0,0" VerticalAlignment="Top" Width="20" Height="22" FontFamily="Segoe MDL2 Assets" FontWeight="Bold" IsEnabled="{Binding ElementName=cb_EnableCustomTempFolder, Path=IsChecked, Mode=Default, UpdateSourceTrigger=PropertyChanged}" />
 
-        <CheckBox x:Name="cb_EnableCustomBuffer" Content="Use a custom download buffer size" HorizontalAlignment="Left" Margin="10,130,0,0" VerticalAlignment="Top" Width="272" IsChecked="{Binding CustomDownloadBufferSize, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:Settings}}}" Height="15"/>
-        <TextBox x:Name="tb_CustomBufferSize" HorizontalAlignment="Left" Height="22" Margin="10,150,0,0" TextWrapping="NoWrap" VerticalAlignment="Top" Width="90" Text="{Binding DownloadBufferSize, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:Settings}}, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding CustomDownloadBufferSize, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:Settings}}, UpdateSourceTrigger=PropertyChanged}" TextChanged="BufferSizeTextChanged" MaxLength="2"/>
-        <Label x:Name="l_KB_Info" Content="KB" HorizontalAlignment="Left" Margin="100,148,0,0" VerticalAlignment="Top" Height="25" RenderTransformOrigin="0.465,0.952" Width="27"/>
-        <Button x:Name="b_ResetCustomBufferSize" Content="&#xE777;" HorizontalAlignment="Left" Margin="287,150,0,0" VerticalAlignment="Top" Width="20" Height="22" FontFamily="Segoe MDL2 Assets" FontWeight="Bold" IsEnabled="{Binding CustomDownloadBufferSize, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:Settings}}}"/>
+        <!-- Buffer size -->
+        <CheckBox x:Name="cb_EnableCustomBuffer" Content="Use a custom download buffer size" HorizontalAlignment="Left" Margin="10,130,0,0" VerticalAlignment="Top" Width="272" IsChecked="{Binding ElementName=AppSettings, Path=CustomDownloadBufferSize, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Height="15" />
+        <TextBox x:Name="tb_CustomBufferSize" HorizontalAlignment="Left" Height="22" Margin="10,150,0,0" TextWrapping="NoWrap" VerticalAlignment="Top" Width="90" IsReadOnly="True" Text="{Binding ElementName=AppSettings, Path=DownloadBufferSize, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding ElementName=cb_EnableCustomBuffer, Path=IsChecked, Mode=Default, UpdateSourceTrigger=PropertyChanged}" TextChanged="BufferSizeTextChanged" MaxLength="2" />
+        <Label x:Name="l_KB_Info" Content="KB" HorizontalAlignment="Left" Margin="100,148,0,0" VerticalAlignment="Top" Height="25" RenderTransformOrigin="0.465,0.952" Width="27" />
+        <Button x:Name="b_ResetCustomBufferSize" Content="&#xE777;" HorizontalAlignment="Left" Margin="287,150,0,0" VerticalAlignment="Top" Width="20" Height="22" FontFamily="Segoe MDL2 Assets" FontWeight="Bold" IsEnabled="{Binding ElementName=cb_EnableCustomBuffer, Path=IsChecked, Mode=Default, UpdateSourceTrigger=PropertyChanged}" />
 
-        <Button x:Name="b_apply" Content="Apply" HorizontalAlignment="Left" Margin="127,180,0,0" VerticalAlignment="Top" Width="75" Click="ApplySettings" Height="20"/>
-        <Button x:Name="b_cancel" Content="Cancel" HorizontalAlignment="Left" Margin="207,180,0,0" VerticalAlignment="Top" Width="75" Height="20" Click="Close"/>
+        <!-- Apply and cancel -->
+        <Button x:Name="b_apply" Content="Apply" HorizontalAlignment="Left" Margin="127,180,0,0" VerticalAlignment="Top" Width="75" Click="ApplySettings" Height="20" />
+        <Button x:Name="b_cancel" Content="Cancel" HorizontalAlignment="Left" Margin="207,180,0,0" VerticalAlignment="Top" Width="75" Height="20" Click="Close" />
     </Grid>
 </Window>

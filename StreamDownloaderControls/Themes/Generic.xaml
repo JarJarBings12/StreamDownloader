@@ -4,17 +4,16 @@
     xmlns:local="clr-namespace:StreamDownloaderControls"
     xmlns:InputStyles="clr-namespace:StreamDownloaderControls.Themes">
 
-    
     <!--#region Window Style-->
-    
+
     <!--#region title bar-->
     <Style TargetType="{x:Type Button}" x:Key="default_button">
         <!-- Set width to 32 pixels. -->
-        <Setter Property="Width" Value="32"/>
+        <Setter Property="Width" Value="32" />
         <!-- Set background transparent -->
-        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Background" Value="Transparent" />
         <!-- Set foreground black -->
-        <Setter Property="Foreground" Value="Black"/>
+        <Setter Property="Foreground" Value="Black" />
 
         <!-- Overwrite default template -->
         <Setter Property="Template">
@@ -24,15 +23,15 @@
                     <Border Name="button_border" Background="{Binding Background, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Button}}">
                         <Grid>
                             <!-- Centering button content -->
-                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" Name="content"/>
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" Name="content" />
                         </Grid>
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Background" Value="#8BA2A2A2"/>
+                            <Setter Property="Background" Value="#8BA2A2A2" />
                         </Trigger>
                         <Trigger Property="IsPressed" Value="True">
-                            <Setter Property="Background" Value="#8BA2A2A2"/>
+                            <Setter Property="Background" Value="#8BA2A2A2" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -42,12 +41,12 @@
 
     <Style TargetType="{x:Type Button}" x:Key="close_button">
         <!-- Set width to 32 pixels. -->
-        <Setter Property="Width" Value="32"/>
+        <Setter Property="Width" Value="32" />
         <!-- Set background transparent -->
-        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Background" Value="Transparent" />
         <!-- Set foreground black -->
-        <Setter Property="Foreground" Value="Black"/>
-        
+        <Setter Property="Foreground" Value="Black" />
+
         <!-- Overwrite default template -->
         <Setter Property="Template">
             <Setter.Value>
@@ -56,18 +55,18 @@
                     <Border Name="button_border" Background="{Binding Background, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Button}}">
                         <Grid>
                             <!-- Centering button content -->
-                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" Name="content"/>
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" Name="content" />
                         </Grid>
                     </Border>
 
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Background" Value="#8BA2A2A2"/>
-                            <Setter Property="Foreground" Value="#FFB80E0E"/>
+                            <Setter Property="Background" Value="#8BA2A2A2" />
+                            <Setter Property="Foreground" Value="#FFB80E0E" />
                         </Trigger>
                         <Trigger Property="IsPressed" Value="True">
-                            <Setter Property="Background" Value="#8BA2A2A2"/>
-                            <Setter Property="Foreground" Value="#FFEF1717"/>
+                            <Setter Property="Background" Value="#8BA2A2A2" />
+                            <Setter Property="Foreground" Value="#FFEF1717" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -76,21 +75,21 @@
     </Style>
 
     <Style TargetType="{x:Type TextBlock}" x:Key="Title">
-        <Setter Property="FontSize" Value="15"/>
-        <Setter Property="TextAlignment" Value="Left"/>
-        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="FontSize" Value="15" />
+        <Setter Property="TextAlignment" Value="Left" />
+        <Setter Property="VerticalAlignment" Value="Center" />
     </Style>
 
     <!--#endregion-->
-    
+
     <!--#region Controls -->
     <Style TargetType="{x:Type Button}" x:Key="default_control_button">
         <!-- Set width to 32 pixels. -->
-        <Setter Property="Width" Value="32"/>
+        <Setter Property="Width" Value="32" />
         <!-- Set background transparent -->
-        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Background" Value="Transparent" />
         <!-- Set foreground black -->
-        <Setter Property="Foreground" Value="Black"/>
+        <Setter Property="Foreground" Value="Black" />
 
         <!-- Overwrite default template -->
         <Setter Property="Template">
@@ -100,16 +99,16 @@
                     <Border Name="button_border" Background="{Binding Background, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Button}}">
                         <Grid>
                             <!-- Centering button content -->
-                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" Name="content"/>
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" Name="content" />
                         </Grid>
                     </Border>
 
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Background" Value="#8BA2A2A2"/>
+                            <Setter Property="Background" Value="#8BA2A2A2" />
                         </Trigger>
                         <Trigger Property="IsPressed" Value="True">
-                            <Setter Property="Background" Value="#8BA2A2A2"/>
+                            <Setter Property="Background" Value="#8BA2A2A2" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -117,26 +116,26 @@
         </Setter>
     </Style>
 
-    <Style TargetType="{x:Type Rectangle}" x:Key="default_control_placeholder"/>
+    <Style TargetType="{x:Type Rectangle}" x:Key="default_control_placeholder" />
     <!--#endregion-->
-    
+
     <Style TargetType="{x:Type local:FlatWindow}">
         <!-- Set background transparent -->
-        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Background" Value="Transparent" />
         <!-- Set window style to "none" -->
-        <Setter Property="WindowStyle" Value="None"/>
+        <Setter Property="WindowStyle" Value="None" />
         <!-- Remove resize ability -->
-        <Setter Property="ResizeMode" Value="NoResize"/>
+        <Setter Property="ResizeMode" Value="NoResize" />
 
-        <Setter Property="AllowsTransparency" Value="True"/>
+        <Setter Property="AllowsTransparency" Value="True" />
 
         <!-- Set border effect -->
         <Setter Property="Effect">
             <Setter.Value>
-                <DropShadowEffect ShadowDepth="0"/>
+                <DropShadowEffect ShadowDepth="0" />
             </Setter.Value>
         </Setter>
-        
+
         <!-- Overwrite default template -->
         <Setter Property="Template">
             <Setter.Value>
@@ -147,98 +146,101 @@
                             <!-- Resize grid -->
                             <Grid>
                                 <Grid.RowDefinitions>
-                                    <RowDefinition Height="4"/>
-                                    <RowDefinition Height="*"/>
-                                    <RowDefinition Height="4"/>
+                                    <RowDefinition Height="4" />
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="4" />
                                 </Grid.RowDefinitions>
 
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="4"/>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="4"/>
+                                    <ColumnDefinition Width="4" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="4" />
                                 </Grid.ColumnDefinitions>
 
                                 <!--#region Side definitions for resizing (Positions to grab the window).-->
                                 <!-- LEFT -->
-                                <Rectangle x:Name="border_left" Grid.Row="1" Grid.Column="0" VerticalAlignment="Stretch" HorizontalAlignment="Left" Fill="White" Width="8"/>
+                                <Rectangle x:Name="border_left" Grid.Row="1" Grid.Column="0" VerticalAlignment="Stretch" HorizontalAlignment="Left" Fill="White" Width="8" />
                                 <!-- TOP -->
-                                <Rectangle x:Name="border_top" Grid.Row="0" Grid.Column="1" VerticalAlignment="Top" HorizontalAlignment="Stretch" Fill="White" Height="8"/>
+                                <Rectangle x:Name="border_top" Grid.Row="0" Grid.Column="1" VerticalAlignment="Top" HorizontalAlignment="Stretch" Fill="White" Height="8" />
                                 <!-- TOP LEFT -->
-                                <Rectangle x:Name="border_top_left" Grid.Row="0" Grid.Column="0" VerticalAlignment="Top" HorizontalAlignment="Left" Fill="White" Height="8" Width="8"/>
+                                <Rectangle x:Name="border_top_left" Grid.Row="0" Grid.Column="0" VerticalAlignment="Top" HorizontalAlignment="Left" Fill="White" Height="8" Width="8" />
                                 <!-- TOP RIGHT -->
-                                <Rectangle x:Name="border_top_right" Grid.Row="0" Grid.Column="2" VerticalAlignment="Top" HorizontalAlignment="Right" Fill="White" Height="8" Width="8"/>
+                                <Rectangle x:Name="border_top_right" Grid.Row="0" Grid.Column="2" VerticalAlignment="Top" HorizontalAlignment="Right" Fill="White" Height="8" Width="8" />
                                 <!-- RIGHT -->
-                                <Rectangle x:Name="border_right" Grid.Row="1" Grid.Column="2" VerticalAlignment="Stretch" HorizontalAlignment="Right" Fill="White" Width="8"/>
+                                <Rectangle x:Name="border_right" Grid.Row="1" Grid.Column="2" VerticalAlignment="Stretch" HorizontalAlignment="Right" Fill="White" Width="8" />
                                 <!-- BOTTOM -->
-                                <Rectangle x:Name="border_bottom" Grid.Row="2" Grid.Column="1" VerticalAlignment="Bottom" HorizontalAlignment="Stretch" Fill="White" Height="8"/>
+                                <Rectangle x:Name="border_bottom" Grid.Row="2" Grid.Column="1" VerticalAlignment="Bottom" HorizontalAlignment="Stretch" Fill="White" Height="8" />
                                 <!-- BOTTOM LEFT -->
-                                <Rectangle x:Name="border_bottom_left" Grid.Row="2" Grid.Column="0" VerticalAlignment="Bottom" HorizontalAlignment="Left" Fill="White" Height="8" Width="8"/>
+                                <Rectangle x:Name="border_bottom_left" Grid.Row="2" Grid.Column="0" VerticalAlignment="Bottom" HorizontalAlignment="Left" Fill="White" Height="8" Width="8" />
                                 <!-- BOTTOM RIGHT -->
-                                <Rectangle x:Name="border_bottom_right" Grid.Row="2" Grid.Column="2" VerticalAlignment="Bottom" HorizontalAlignment="Right" Fill="White" Height="8" Width="8"/>
+                                <Rectangle x:Name="border_bottom_right" Grid.Row="2" Grid.Column="2" VerticalAlignment="Bottom" HorizontalAlignment="Right" Fill="White" Height="8" Width="8" />
                                 <!--#endregion-->
 
                                 <!-- Main grid -->
                                 <Grid x:Name="main_grid" Grid.Row="1" Grid.Column="1">
                                     <!-- Create rows for the main window. -->
                                     <Grid.RowDefinitions>
-                                        <RowDefinition Height="35" MinHeight="35"/>
-                                        <RowDefinition Height="80" MinHeight="80"/>
-                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="35" MinHeight="35" />
+                                        <RowDefinition Height="80" MinHeight="80" />
+                                        <RowDefinition Height="*" />
                                     </Grid.RowDefinitions>
 
                                     <!-- Create new grid for the title bar. -->
                                     <Grid Margin="0, 0, 2, 0" Grid.Row="0" Background="Transparent" VerticalAlignment="Stretch">
                                         <Grid.ColumnDefinitions>
                                             <!-- Icon -->
-                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="Auto" />
                                             <!-- Title -->
-                                            <ColumnDefinition Width="*" MinWidth="1"/>
+                                            <ColumnDefinition Width="*" MinWidth="1" />
                                             <!-- Minimize / Restore / Close -->
-                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="Auto" />
                                         </Grid.ColumnDefinitions>
 
                                         <!-- Icon -->
-                                        <Grid Background="DodgerBlue" Width="30" Height="30" Margin="2"/>
+                                        <Grid Width="30" Height="30" Margin="2">
+                                            <Image Source="{TemplateBinding Icon}"/>
+                                        </Grid>
 
                                         <!-- Title -->
-                                        <TextBlock x:Name="title_bar" Margin="3" Style="{StaticResource Title}" Grid.Column="1" Text="{TemplateBinding Title}"/>
+                                        <TextBlock x:Name="title_bar" Margin="3" Style="{StaticResource Title}" Grid.Column="1" Text="{TemplateBinding Title}" />
 
                                         <!-- Minimize | Restore | Close -->
                                         <StackPanel Orientation="Horizontal" Grid.Column="2" FlowDirection="LeftToRight">
 
                                             <!-- Minimize button -->
-                                            <Button x:Name="Minimize" Style="{StaticResource default_button}" FontFamily="segoe MDL2 Assets" FontWeight="Bold" Content="&#xE921;"/>
+                                            <Button x:Name="Minimize" Style="{StaticResource default_button}" FontFamily="segoe MDL2 Assets" FontWeight="Bold" Content="&#xE921;" />
 
                                             <!-- Restore button -->
-                                            <Button x:Name="Restore" Style="{StaticResource default_button}" FontFamily="segoe MDL2 Assets" Content="&#xE922;"/>
-                                            
+                                            <Button x:Name="Restore" Style="{StaticResource default_button}" FontFamily="segoe MDL2 Assets" Content="&#xE922;" />
+
                                             <!-- Close button -->
-                                            <Button x:Name="Close" Style="{StaticResource close_button}" FontFamily="segoe MDL2 Assets" FontWeight="Bold" Content="&#xE10A;"/>
-                                            
+                                            <Button x:Name="Close" Style="{StaticResource close_button}" FontFamily="segoe MDL2 Assets" FontWeight="Bold" Content="&#xE10A;" />
                                         </StackPanel>
                                     </Grid>
 
                                     <Grid Grid.Row="1" Margin="10 5 10 0">
                                         <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="80" MinWidth="80"/>
-                                            <ColumnDefinition Width="*"/>
-                                            <ColumnDefinition Width="80" MinWidth="80"/>
+                                            <ColumnDefinition Width="80" MinWidth="80" />
+                                            <ColumnDefinition Width="80" MinWidth="80" />
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="80" MinWidth="80" />
                                         </Grid.ColumnDefinitions>
-                                        <Button x:Name="DownloadButton" Style="{StaticResource default_control_button}" Width="80" FontFamily="segoe MDL2 Assets" FontSize="30" Content="&#xE896;" Grid.Column="0"/>
-                                        <Rectangle Style="{StaticResource default_control_placeholder}" Grid.Column="1"/>
-                                        <Button x:Name="SettingsButton" Style="{StaticResource default_control_button}" Width="80" FontFamily="segoe MDL2 Assets" FontSize="30" Content="&#xE90F;" Grid.Column="2"/>
+                                        <Button x:Name="DownloadButton" Style="{StaticResource default_control_button}" Width="80" FontFamily="segoe MDL2 Assets" FontSize="30" Content="&#xE118;" Grid.Column="0" />
+                                        <Button x:Name="ReloadDownload" Style="{StaticResource default_control_button}" Width="80" FontFamily="segoe MDL2 Assets" FontSize="30" Content="&#xE1CD;" Grid.Column="1" />
+                                        <Rectangle Style="{StaticResource default_control_placeholder}" Grid.Column="2" />
+                                        <Button x:Name="SettingsButton" Style="{StaticResource default_control_button}" Width="80" FontFamily="segoe MDL2 Assets" FontSize="30" Content="&#xE90F;" Grid.Column="3" />
                                     </Grid>
 
                                     <!-- Create new grid for the user area. -->
                                     <Grid Grid.Row="2" Background="Transparent" Margin="0 -1 0 0" VerticalAlignment="Stretch">
                                         <!-- Use max width for this grid (9.5 percent of the main grid width). -->
                                         <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*" />
                                         </Grid.ColumnDefinitions>
 
                                         <!-- Use max height  for this grid (100 percent of the main grid height). -->
                                         <Grid.RowDefinitions>
-                                            <RowDefinition Height="*"/>
+                                            <RowDefinition Height="*" />
                                         </Grid.RowDefinitions>
 
                                         <!-- With this border I create a small space between the window border and the user area. -->
@@ -247,9 +249,8 @@
                                             <Grid>
                                                 <!-- The content presenter allows me to place the default controls into the window and move them to around. -->
                                                 <ContentPresenter>
-
                                                 </ContentPresenter>
-                                                <ContentControl x:Name="MDI"/>
+                                                <ContentControl x:Name="MDI" />
                                             </Grid>
                                         </Border>
                                     </Grid>
@@ -263,164 +264,6 @@
     </Style>
     <!--#endregion-->
 
-    <!--#region Download list item -->
-    <Style x:Key="DownloadBar" TargetType="{x:Type ProgressBar}">
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="{x:Type ProgressBar}">
-                    <Border BorderBrush="#86595959" BorderThickness="1">
-                        <Grid x:Name="PART_Track">
-                            <Border x:Name="PART_Indicator" HorizontalAlignment="Left" Background="Green">
-
-                            </Border>
-                        </Grid>
-                    </Border>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
-
-    <Style TargetType="{x:Type local:DownloadListItem}">
-        <Setter Property="Background" Value="DodgerBlue"/>
-        <Setter Property="Height" Value="100"/>
-        <Setter Property="Width" Value="Auto"/>
-        <Setter Property="Margin" Value="0 0 0 0"/>
-
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="{x:Type local:DownloadListItem}">
-                    <Grid Margin="-4, -1, -4, -1">
-                        <Border BorderBrush="#86595959"
-                                BorderThickness="0 0 0 1"
-                                Width="{TemplateBinding Width}"
-                                Height="{TemplateBinding Height}"
-                                Margin="{TemplateBinding Margin}">
-
-                            <Grid Background="White">
-                                <!-- Thumbnail -->
-                                <Border Background="Gainsboro" Margin="5,8,0,0" HorizontalAlignment="Left" Width="140" Height="81" VerticalAlignment="Top">
-                                    <Image/>
-                                </Border>
-                            
-                                <!-- Description -->
-                                <Grid Margin="150,5,26,8">
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="2*"/>
-                                        <RowDefinition Height="2*"/>
-                                        <RowDefinition Height="2*"/>
-                                        <RowDefinition Height="2*"/>
-                                        <RowDefinition Height="2*"/>
-                                    </Grid.RowDefinitions>
-                                    <!-- File name -->
-                                    <TextBlock x:Name="tb_FileName" TextWrapping="NoWrap" Text="{TemplateBinding FileName}" FontSize="12" Grid.Row="0" Margin="1,1,1,1"/>
-                                    <!-- Download link -->
-                                    <TextBlock x:Name="tb_DownloadLink" TextWrapping="NoWrap" Text="{TemplateBinding DownloadFolder}" FontSize="12" Grid.Row="1" Margin="1,1,1,1"/>
-                                    <!-- Download folder -->
-                                    <TextBlock x:Name="tb_DownloadFolder" TextWrapping="NoWrap" Text="{TemplateBinding DownloadLink}" FontSize="12" Grid.Row="2" Margin="1,1,1,1"/>
-                                    <!-- Downloaded -->
-                                    <TextBlock x:Name="tb_Downloaded" TextWrapping="NoWrap" Text="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Downloaded, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontSize="12" Grid.Row="3" Margin="1,1,1,1"/>
-                                    <!-- Status info -->
-                                    <TextBlock x:Name="tb_Status" TextWrapping="NoWrap" Text="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Status, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontSize="12" Grid.Row="4" Margin="1,1,1,1"/>
-                                </Grid>
-
-                                <!--
-                                <Button x:Name="l_Dropdown" Margin="0,5,5,0"  Background="DodgerBlue" BorderThickness="0" VerticalContentAlignment="Center" Height="20" VerticalAlignment="Top" HorizontalAlignment="Right" Width="20" ContextMenuService.Placement="Bottom">
-                                </Button>
--->
-                                <Label x:Name="l_Dropdown" Margin="0,5,5,0"  Background="DodgerBlue" BorderThickness="0" VerticalContentAlignment="Center" Height="20" VerticalAlignment="Top" HorizontalAlignment="Right" Width="20" ContextMenuService.Placement="Bottom">
-                                </Label>
-                                <ProgressBar Margin="-1,0,-1,-1" Height="7" VerticalAlignment="Bottom" Style="{StaticResource DownloadBar}" Value="{TemplateBinding DownloadProgress}"/>
-                            </Grid>
-                        </Border>
-                    </Grid>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
-
-    <!--#endregion-->
-
-    <!--#region Create Download-->
-    <Style TargetType="{x:Type local:CreateDownload}" x:Name="CreateDownload">
-        <Setter Property="Background" Value="White"/>
-        <Setter Property="BorderBrush" Value="Black"/>
-        <Setter Property="BorderThickness" Value=" 1"/>
-        <Setter Property="Margin" Value="0 0 0 -9"/>
-        <Setter Property="Height" Value="160"/>
-        <Setter Property="Width" Value="750"/>
-
-
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="{x:Type local:CreateDownload}">
-                    <Border Background="White">
-                        <Border.Effect>
-                            <DropShadowEffect ShadowDepth="0" Color="#FF747474" RenderingBias="Quality" Opacity="1" BlurRadius="10"/>
-                        </Border.Effect>
-
-                        <Grid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="35"/>
-                                <RowDefinition Height="*"/>
-                            </Grid.RowDefinitions>
-
-                            <!--#region Header-->
-                            <Grid>
-                                <!-- Window header -->
-                                <Border Background="#FFCBCBCB"
-                                        BorderBrush="#86595959"
-                                        BorderThickness=" 0 0 0 1">
-                                    <Border.Effect>
-                                        <!-- Shadow effect -->
-                                        <DropShadowEffect ShadowDepth="2" Color="#FF747474" Direction="-90" BlurRadius="0" RenderingBias="Quality" Opacity="0.5"/>
-                                    </Border.Effect>
-                                    <!-- Header text -->
-                                    <TextBlock Text="Download" TextAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" FontSize="15"/>
-                                </Border>
-                            </Grid>
-                            <!--#endregion-->
-
-                            <!--#region Content-->
-                            <Grid Grid.Row="1">
-                                <!-- Hoster -->
-                                <ComboBox x:Name="cb_Hoster" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Margin="10,15,0,0" SelectedItem="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=SelectedHoster, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Width="160" Height="30" VerticalAlignment="Top" ItemsSource="{TemplateBinding SupportedHosters}"/>
-                                <!-- Link -->
-                                <TextBox x:Name="tb_DownloadLink" Text="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=DownloadLink, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" MaxLength="200" Margin="175,15,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Height="30" Width="565" TextWrapping="NoWrap" FontSize="14" VerticalContentAlignment="Center"/>
-                                <!-- Download folder -->
-                                <TextBox x:Name="tb_DownloadFolder" Text="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=DownloadFolder, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="10,50,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Height="30" Width="315" TextWrapping="NoWrap" FontSize="14" VerticalContentAlignment="Center"/>
-                                <!-- File name -->
-                                <TextBox x:Name="tb_FileName" Text="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=FileName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" MaxLength="100" Margin="330,50,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Height="30" Width="315" TextWrapping="NoWrap" FontSize="14" VerticalContentAlignment="Center"/>
-                                <!-- File extension -->
-                                <ComboBox x:Name="cb_FileExtension" ItemsSource="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=FileExtensions, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=SelectedFileExtension, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="650,50,0,0" HorizontalAlignment="Left" Width="90" Height="30 " VerticalAlignment="Top"/>
-                                <!-- Start download -->
-                                <Button x:Name="b_submit" Content="Download" Margin="545,85,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Height="30" Width="110" FontSize="14"/>
-                                <!-- Cancel -->
-                                <Button x:Name="b_cancel" Content="Cancel" Margin="660,85,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Height="30" Width="80" FontSize="14"/>
-                            </Grid>
-                            <!--#endregion-->
-                        </Grid>
-                    </Border>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
-
-    <Style TargetType="{x:Type local:HostListItem}">
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="{x:Type local:HostListItem}">
-                    <Border Height="20" Width="100" Margin="-5 -2 -5 -2">
-                        <Grid>
-                            <Border>
-                                <TextBlock Margin="0,0,0,0" Text="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=DisplayName, UpdateSourceTrigger=PropertyChanged}" FontSize="15"/>
-                            </Border>
-                        </Grid>
-                    </Border>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
-
     <Style TargetType="{x:Type local:FileExtensionListItem}">
         <Setter Property="Template">
             <Setter.Value>
@@ -428,7 +271,7 @@
                     <Border Height="20" Width="100" Margin="-8 -2 -5 -2">
                         <Grid>
                             <Border>
-                                <TextBlock Margin="0,0,0,0" Text="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=DisplayName, UpdateSourceTrigger=PropertyChanged}" FontSize="15" TextAlignment="Center"/>
+                                <TextBlock Margin="0,0,0,0" Text="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=DisplayName, UpdateSourceTrigger=PropertyChanged}" FontSize="15" TextAlignment="Center" />
                             </Border>
                         </Grid>
                     </Border>
@@ -438,45 +281,4 @@
     </Style>
     <!--#endregion-->
 
-    <Style TargetType="{x:Type local:DropdownContextMenu}">
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="{x:Type local:DropdownContextMenu}">
-                    <Border Background="White"
-                            BorderBrush="#FF595959"
-                            BorderThickness="1 1 1 1"
-                            Width="85"
-                            Height="100">
-                        <Grid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="3*"/>
-                                <RowDefinition Height="3*"/>
-                                <RowDefinition Height="3*"/>
-                            </Grid.RowDefinitions>
-
-                            <Button x:Name="tb_Pause" Grid.Row="0" BorderThickness="0 0 0 1" BorderBrush="#FF595959" Background="White">
-                                <Grid Width="80">
-                                    <TextBlock x:Name="tb_Pause_Icon"  FontSize="15" FontFamily="Segoe MDL2 Assets" Text="&#xE103;" HorizontalAlignment="Left" VerticalAlignment="Top" Width="14" Height="16" Margin="3,5,0,0"/>
-                                    <TextBlock FontSize="14" Text="Pause" HorizontalAlignment="Left" VerticalAlignment="Top" Width="43" Height="16" Margin="22,3,0,0"/>
-                                </Grid>
-                            </Button>
-                            <Button x:Name="tb_Save" Grid.Row="1" BorderThickness="0 0 0 1" BorderBrush="#FF595959" Background="White">
-                                <Grid Width="80">
-                                    <TextBlock x:Name="tb_Save_Icon" FontSize="15" FontFamily="Segoe MDL2 Assets" Text="&#xE105;" HorizontalAlignment="Left" VerticalAlignment="Top" Width="14" Height="16" Margin="3,5,0,0"/>
-                                    <TextBlock FontSize="14" Text="Save and stop" HorizontalAlignment="Left" VerticalAlignment="Top" Width="43" Height="16" Margin="22,3,0,0"/>
-                                </Grid>
-                            </Button>
-
-                            <Button x:Name="tb_Delete" Grid.Row="2" BorderThickness="0" Background="White">
-                                <Grid Width="80">
-                                    <TextBlock x:Name="tb_Delete_Icon" FontSize="15" FontFamily="Segoe MDL2 Assets" Text="&#xE107;" HorizontalAlignment="Left" VerticalAlignment="Top" Width="14" Height="16" Margin="3,5,0,0"/>
-                                    <TextBlock FontSize="14" Text="Delete" HorizontalAlignment="Left" VerticalAlignment="Top" Width="43" Height="16" Margin="22,3,0,0"/>
-                                </Grid>
-                            </Button>
-                        </Grid>
-                    </Border>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
 </ResourceDictionary>

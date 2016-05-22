@@ -1,17 +1,15 @@
-﻿using System;
-using System.IO;
+﻿using StreamDownloaderControls;
+using StreamDownloaderControls.UserControls;
+using StreamDownloaderDownload.Download.JSON;
+using StreamDownloaderDownload.FileExtensions.Default;
+using StreamDownloaderDownload.Hosts;
+using StreamDownloaderDownload.Hosts.Default;
+using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using StreamDownloaderControls;
-using StreamDownloaderDownload.FileExtensions;
-using StreamDownloaderDownload.FileExtensions.Default;
-using StreamDownloaderDownload.Hosts;
-using StreamDownloaderDownload.Hosts.Default;
-using StreamDownloaderDownload.Download;
 
 namespace StreamDownloader
 {
@@ -20,7 +18,6 @@ namespace StreamDownloader
     /// </summary>
     public partial class MainWindow: FlatWindow
     {
-        private StreamDownloaderDownload.StreamDownloader _streamDownloader = new StreamDownloaderDownload.StreamDownloader();
         private List<HostListItem> _Hosts = new List<HostListItem>();
         private List<FileExtensionListItem> _FileExtensions = new List<FileExtensionListItem>();
         private readonly Brush _placeholderGray = new SolidColorBrush(Color.FromRgb(209, 209, 209));
@@ -32,23 +29,95 @@ namespace StreamDownloader
             InitializeComponent();
         }
 
+        /// <summary>
+        /// Download button click event.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private async void DownloadSubmit_Click(object sender, RoutedEventArgs e)
         {
-            //Show Create download Dialog
-            var cDownload = await CreateDownload.ShowDialog(Properties.Settings.Default.DownloadFolder, ((ContentControl)GetTemplateChild("MDI")), _Hosts, _FileExtensions);
+            var button = (Button)sender; //Cast sender to button
+            button.IsEnabled = false; //Disable download button
 
-            var listItem = new DownloadListItem($"{cDownload.FileName}{cDownload.SelectedFileExtension.Extension}", cDownload.DownloadFolder, cDownload.DownloadLink, 0);
+            //Initialize download
+
+            /** Host select **/
+            var response = await HostSelect.OpenSelect(listBox, _Hosts); //Show list select item and store result in "response"
+            button.IsEnabled = true; //Enable download button again.
+            listBox.Items.RemoveAt(0); //Removing list item from list.
+
+            //Return if cancelled
+            if ((bool)response.TempHostSettings["cancel"])
+                return;
+
+            /** Download settings **/
+            response.DownloadDestination = Properties.Settings.Default.DownloadFolder; //Set default download folder
+            response = await DownlaodSettings.OpenDialog(this, response); //Open download settings
+
+            //Return if cancelled
+            if ((bool)response.TempHostSettings["cancel"])
+                return;
+
+            //Set temp folder
+            response.TempFileDestination = (Properties.Settings.Default.CustomTempDownloadFolder) ? Properties.Settings.Default.TempDownloadFolder : Properties.Settings.Default.DEFAULT_TempDownloadFolder;
+
+            /** Prepare download **/
+
+            var listItem = new StreamDownloaderControls.UserControls.DownloadListItem()
+            {
+                Filename = response.FileName,
+                DownloadFolder = response.DownloadDestination,
+                DownloadURL = response.RawURL
+            };
+
             listBox.Items.Add(listItem);
 
-            var downloadContainer = new DownloadContainer(listItem, cDownload.SelectedHost, cDownload.DownloadLink, cDownload.DownloadFolder, cDownload.FileName, cDownload.SelectedFileExtension.Extension);
+            var downloadContainer = new DownloadContainer(listItem, response);
 
             await downloadContainer.Initialize();
             downloadContainer.Start();
         }
 
+        private async void ReloadDownload_Click(object sender, RoutedEventArgs e)
+        {
+            using (var FolderDialog = new System.Windows.Forms.OpenFileDialog())
+            {
+                FolderDialog.InitialDirectory = (Properties.Settings.Default.CustomTempDownloadFolder) ? Properties.Settings.Default.DownloadFolder : Properties.Settings.Default.DEFAULT_TempDownloadFolder;
+                FolderDialog.Filter = "Pdi files (*.dtemp.pdi;*.pdi)|*.dtemp.pdi;*.pdi";
+                FolderDialog.Multiselect = true;
+
+                var result = FolderDialog.ShowDialog();
+
+                if (result != System.Windows.Forms.DialogResult.OK)
+                    return;
+
+                foreach (String file in FolderDialog.FileNames)
+                {
+                    var temp = DownloadData.DeserializeDownloadData(file);
+                    /** Prepare download **/
+                    var listItem = new StreamDownloaderControls.UserControls.DownloadListItem()
+                    {
+                        Filename = temp.FileName,
+                        DownloadFolder = temp.DownloadDestination,
+                        DownloadURL = temp.RawURL
+                    };
+
+                    listBox.Items.Add(listItem);
+
+                    var downloadContainer = new DownloadContainer(listItem, temp);
+
+                    /** Start **/
+                    await downloadContainer.Initialize();
+                    downloadContainer.Start();
+                }
+            }
+        }
+
         public override void OnApplyTemplate()
         {
+            Icon = BitmapToBitmapImage(Properties.Resources.icon);
             ((Button)GetTemplateChild("DownloadButton")).Click += DownloadSubmit_Click;
+            ((Button)GetTemplateChild("ReloadDownload")).Click += ReloadDownload_Click;
             ((Button)GetTemplateChild("SettingsButton")).Click += (sender, e) => { new Settings().ShowDialog(); };
             RegisterHost("Vivo", typeof(Vivo));
             RegisterHost("StreamCloud", typeof(StreamCloud));
@@ -64,9 +133,49 @@ namespace StreamDownloader
             base.EndInit();
         }
 
+        public Host GetHost(string link)
+        {
+            foreach (StreamDownloaderControls.UserControls.HostListItem h in _Hosts)
+            {
+                Host host = ((Host)Activator.CreateInstance(h.FileHost));
+                if (host.BaseUrlPattern.IsMatch(link))
+                    return host;
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// Register a new host for the <seealso cref="HostSelect"/> dialog. />
+        /// </summary>
+        /// <param name="displayName"></param>
+        /// <param name="host"></param>
         protected void RegisterHost(string displayName, Type host)
         {
-            _Hosts.Add(new HostListItem(displayName, host));
+            var temp = (Host)Activator.CreateInstance(host);
+            _Hosts.Add(new StreamDownloaderControls.UserControls.HostListItem()
+            {
+                DisplayName = displayName,
+                HostIcon = temp.HostIcon,
+                FileHost = host
+            });
+        }
+
+        public static System.Windows.Media.Imaging.BitmapImage BitmapToBitmapImage(System.Drawing.Bitmap bitmap)
+        {
+            using (var ms = new System.IO.MemoryStream())
+            {
+                //Save bitmap into the memory stream and set stream offset to 0
+                bitmap.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
+                ms.Position = 0;
+
+                //Create new bitmap image set the memory stream as source and return the bitmap.
+                System.Windows.Media.Imaging.BitmapImage bitmapImage = new System.Windows.Media.Imaging.BitmapImage();
+                bitmapImage.BeginInit();
+                bitmapImage.StreamSource = ms;
+                bitmapImage.CacheOption = System.Windows.Media.Imaging.BitmapCacheOption.OnLoad;
+                bitmapImage.EndInit();
+                return bitmapImage;
+            }
         }
     }
 }

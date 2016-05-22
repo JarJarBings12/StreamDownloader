@@ -1,27 +1,31 @@
 ﻿using System;
+using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Shapes;
-using System.Windows.Interop;
-using System.Runtime.InteropServices;
 
 namespace StreamDownloaderControls
 {
     public class FlatWindow: Window
     {
         #region C# Variables and properties
+
         private double[] _normalPositon = new double[4];
         protected HwndSource hwndSource;
         protected const int WM_SYSCOMMAND = 0x112;
 
         /* Import user32.dll. */
+
         [DllImport("user32.dll", CharSet = CharSet.Auto)]
         private static extern IntPtr SendMessage(IntPtr hWnd, uint Msg, IntPtr wParm, IntPtr lParam);
-        #endregion
+
+        #endregion C# Variables and properties
 
         #region Constructors
+
         static FlatWindow()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(FlatWindow), new FrameworkPropertyMetadata(typeof(FlatWindow)));
@@ -31,7 +35,8 @@ namespace StreamDownloaderControls
         {
             SourceInitialized += Initialize;
         }
-        #endregion
+
+        #endregion Constructors
 
         /// <summary>
         /// Initializing the hwndSource variable.
@@ -40,7 +45,7 @@ namespace StreamDownloaderControls
         /// <param name="e"></param>
         public void Initialize(object sender, EventArgs e)
         {
-            this.hwndSource = PresentationSource.FromVisual((Visual) sender) as HwndSource;
+            this.hwndSource = PresentationSource.FromVisual((Visual)sender) as HwndSource;
         }
 
         /// <summary>
@@ -92,17 +97,18 @@ namespace StreamDownloaderControls
         protected void WindowCloseEvent(object sender, RoutedEventArgs e)
         {
             Close();
-            Environment.Exit(0);             
+            Environment.Exit(0);
         }
 
-       #region Resize
+        #region Resize
+
         /// <summary>
         /// Send a resize message to windows.
         /// </summary>
         /// <param name="direction"></param>
-        private void ResizeWindow (ResizeDirection direction)
+        private void ResizeWindow(ResizeDirection direction)
         {
-            SendMessage(hwndSource.Handle, WM_SYSCOMMAND, (IntPtr) direction, IntPtr.Zero);
+            SendMessage(hwndSource.Handle, WM_SYSCOMMAND, (IntPtr)direction, IntPtr.Zero);
         }
 
         /// <summary>
@@ -110,7 +116,7 @@ namespace StreamDownloaderControls
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void ResetCursor (object sender, MouseEventArgs e)
+        private void ResetCursor(object sender, MouseEventArgs e)
         {
             if (Mouse.LeftButton == MouseButtonState.Released)
                 this.Cursor = Cursors.Arrow;
@@ -124,41 +130,49 @@ namespace StreamDownloaderControls
         /// <param name="sender"></param>
         /// <param name="e"></param>
         public void Resize(object sender, MouseButtonEventArgs e)
-        {            
+        {
             switch (((sender as Shape).Name))
             {
                 case "border_left":
                     this.Cursor = Cursors.SizeWE;
                     ResizeWindow(ResizeDirection.Left);
                     break;
+
                 case "border_top":
                     this.Cursor = Cursors.SizeNS;
                     ResizeWindow(ResizeDirection.Top);
                     break;
+
                 case "border_right":
                     this.Cursor = Cursors.SizeWE;
                     ResizeWindow(ResizeDirection.Right);
                     break;
+
                 case "border_bottom":
                     this.Cursor = Cursors.SizeNS;
                     ResizeWindow(ResizeDirection.Bottom);
                     break;
+
                 case "border_top_left":
                     this.Cursor = Cursors.SizeNWSE;
                     ResizeWindow(ResizeDirection.TopLeft);
                     break;
+
                 case "border_top_right":
                     this.Cursor = Cursors.SizeNESW;
                     ResizeWindow(ResizeDirection.TopRight);
                     break;
+
                 case "border_bottom_right":
                     this.Cursor = Cursors.SizeNWSE;
                     ResizeWindow(ResizeDirection.BottomRight);
                     break;
+
                 case "border_bottom_left":
                     this.Cursor = Cursors.SizeNESW;
                     ResizeWindow(ResizeDirection.BottomLeft);
                     break;
+
                 default:
                     break;
             }
@@ -179,18 +193,22 @@ namespace StreamDownloaderControls
                 case "border_bottom":
                     this.Cursor = Cursors.SizeNS;
                     break;
+
                 case "border_left":
                 case "border_right":
                     this.Cursor = Cursors.SizeWE;
                     break;
+
                 case "border_top_left":
                 case "border_bottom_right":
                     this.Cursor = Cursors.SizeNWSE;
                     break;
+
                 case "border_bottom_left":
                 case "border_top_right":
                     this.Cursor = Cursors.SizeNESW;
                     break;
+
                 default:
                     break;
             }
@@ -200,11 +218,11 @@ namespace StreamDownloaderControls
         {
             Left = 61441,
             Right = 61442,
-            Top = 61443, 
-            TopLeft = 61444, 
-            TopRight = 61445, 
-            Bottom = 61446, 
-            BottomLeft = 61447, 
+            Top = 61443,
+            TopLeft = 61444,
+            TopRight = 61445,
+            Bottom = 61446,
+            BottomLeft = 61447,
             BottomRight = 61448,
         }
 
@@ -222,6 +240,7 @@ namespace StreamDownloaderControls
             "border_bottom_left",
             "border_bottom_right"
         };
-        #endregion
+
+        #endregion Resize
     }
 }
