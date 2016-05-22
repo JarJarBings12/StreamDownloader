@@ -1,0 +1,210 @@
+﻿<Window x:Class="StreamDownloaderControls.UserControls.DownlaodSettings"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        x:Name="DownloadSettings"
+        WindowStartupLocation="CenterOwner"
+        Title="NewDownlaodSettings" Height="{Binding ElementName=DownloadSettings, Path=Height}" Width="560"
+        AllowsTransparency="True" ResizeMode="NoResize" Background="Transparent" WindowStyle="None">
+
+    <!-- Resources -->
+    <Window.Resources>
+        <!-- URL placeholder-->
+        <VisualBrush x:Key="tb_placeholder_downloadurl" AlignmentX="Left" AlignmentY="Center" Stretch="None">
+            <VisualBrush.Visual>
+                <Label Content="Download URL" Foreground="LightGray" />
+            </VisualBrush.Visual>
+        </VisualBrush>
+
+        <!-- Download folder placeholder -->
+        <VisualBrush x:Key="tb_placeholder_downloadfolder" AlignmentX="Left" AlignmentY="Center" Stretch="None">
+            <VisualBrush.Visual>
+                <Label Content="Download folder" Foreground="LightGray" />
+            </VisualBrush.Visual>
+        </VisualBrush>
+
+        <!-- Filename placeholder -->
+        <VisualBrush x:Key="tb_placeholder_filename" AlignmentX="Left" AlignmentY="Center" Stretch="None">
+            <VisualBrush.Visual>
+                <Label Content="Filename" Foreground="LightGray" />
+            </VisualBrush.Visual>
+        </VisualBrush>
+    </Window.Resources>
+
+    <Grid>
+        <Border x:Name="window_shadow_border"
+                BorderThickness="1"
+                BorderBrush="Black">
+            <Border.Effect>
+                <DropShadowEffect ShadowDepth="0" />
+            </Border.Effect>
+            <Border x:Name="window_border" Background="White">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="70" />
+                        <RowDefinition />
+                        <RowDefinition Height="35" />
+                    </Grid.RowDefinitions>
+
+                    <!-- Header -->
+                    <Border Grid.Row="0">
+                        <Grid>
+                            <!-- Host icon -->
+                            <Image x:Name="tb_HostIcon" HorizontalAlignment="Left" Height="25" Margin="10,10,0,0" VerticalAlignment="Top" Width="25" Source="{Binding ElementName=DownloadSettings, Path=HostIcon, Mode=Default, UpdateSourceTrigger=PropertyChanged}" />
+
+                            <!-- Host name -->
+                            <TextBlock x:Name="tb_HostName" HorizontalAlignment="Left" Margin="40,10,0,0" TextWrapping="NoWrap" Text="{Binding ElementName=DownloadSettings, Path=HostName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" FontSize="16" Height="23" Width="120" />
+
+                            <!-- Download URL -->
+                            <TextBox x:Name="tb_downloadURL" HorizontalAlignment="Left" Height="23" Margin="165,10,0,0" IsReadOnly="True" TextWrapping="NoWrap" VerticalContentAlignment="Center" PreviewMouseWheel="HandelMouseWheel" Text="{Binding ElementName=DownloadSettings, Path=DownloadURL, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Width="385">
+                                <TextBox.Style>
+
+                                    <!-- Modify Text box style; Add mscorelib for the string class -->
+                                    <Style TargetType="TextBox" xmlns:sys="clr-namespace:System;assembly=mscorlib">
+                                        <Setter Property="BorderThickness" Value="1 1 1 1" />
+                                        <Style.Triggers>
+
+                                            <!-- Keyboard focused -->
+                                            <Trigger Property="IsKeyboardFocused" Value="True">
+                                                <Setter Property="Background" Value="White" />
+                                            </Trigger>
+
+                                            <!-- Content empty -->
+                                            <Trigger Property="Text" Value="{x:Static sys:String.Empty}">
+                                                <Setter Property="Background" Value="{StaticResource tb_placeholder_downloadurl}" />
+                                            </Trigger>
+
+                                            <!-- Content null -->
+                                            <Trigger Property="Text" Value="{x:Null}">
+                                                <Setter Property="Background" Value="{StaticResource tb_placeholder_downloadurl}" />
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBox.Style>
+                            </TextBox>
+
+                            <!-- Download folder -->
+                            <TextBox x:Name="tb_downloadFolder" HorizontalAlignment="Left" Height="23" Margin="10,38,0,0" TextWrapping="NoWrap" VerticalContentAlignment="Center" Text="{Binding ElementName=DownloadSettings, Path=DownloadFolder, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Width="270" PreviewMouseLeftButtonDown="OpenFolderBrowser" PreviewMouseWheel="HandelMouseWheel">
+                                <TextBox.Style>
+                                    <!-- Modify Text box style; Add mscorelib for the string class -->
+                                    <Style TargetType="TextBox" xmlns:sys="clr-namespace:System;assembly=mscorlib">
+                                        <Style.Triggers>
+
+                                            <!-- Keyboard focused -->
+                                            <Trigger Property="IsKeyboardFocused" Value="True">
+                                                <Setter Property="Background" Value="White" />
+                                            </Trigger>
+
+                                            <!-- Content empty -->
+                                            <Trigger Property="Text" Value="{x:Static sys:String.Empty}">
+                                                <Setter Property="Background" Value="{StaticResource tb_placeholder_downloadfolder}" />
+                                            </Trigger>
+
+                                            <!-- Content null -->
+                                            <Trigger Property="Text" Value="{x:Null}">
+                                                <Setter Property="Background" Value="{StaticResource tb_placeholder_downloadfolder}" />
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBox.Style>
+                            </TextBox>
+
+                            <!-- Filename -->
+                            <TextBox x:Name="tb_filename" HorizontalAlignment="Left" Height="23" Margin="285,38,0,0" TextWrapping="NoWrap" MaxLength="100" VerticalContentAlignment="Center" Text="{Binding ElementName=DownloadSettings, Path=Filename, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Width="140" PreviewMouseWheel="HandelMouseWheel">
+                                <TextBox.Style>
+                                    <!-- Modify Text box style; Add mscorelib for the string class -->
+                                    <Style TargetType="TextBox" xmlns:sys="clr-namespace:System;assembly=mscorlib">
+                                        <Style.Triggers>
+
+                                            <!-- Keyboard focused -->
+                                            <Trigger Property="IsKeyboardFocused" Value="True">
+                                                <Setter Property="Background" Value="White" />
+                                            </Trigger>
+
+                                            <!-- Content empty -->
+                                            <Trigger Property="Text" Value="{x:Static sys:String.Empty}">
+                                                <Setter Property="Background" Value="{StaticResource tb_placeholder_filename}" />
+                                            </Trigger>
+
+                                            <!-- Content null -->
+                                            <Trigger Property="Text" Value="{x:Null}">
+                                                <Setter Property="Background" Value="{StaticResource tb_placeholder_filename}" />
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBox.Style>
+                            </TextBox>
+
+                            <!-- File extension -->
+                            <ComboBox x:Name="cb_fileExtensions" ItemsSource="{Binding ElementName=DownloadSettings, Path=FileExtensions, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding ElementName=DownloadSettings, Path=SelectedFileExtension, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="430,38,0,0" VerticalAlignment="Top" Width="120" Height="23" />
+                        </Grid>
+                    </Border>
+
+                    <!-- Content -->
+                    <Border Margin="1 1 1 2" Grid.Row="1">
+                        <Grid>
+                            <ContentPresenter Content="{Binding ElementName=DownloadSettings, Path=AdditionalSettings, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        </Grid>
+                    </Border>
+
+                    <!-- Footer -->
+                    <Border Grid.Row="2" Background="LightGray">
+                        <Grid>
+
+                            <!-- Submit -->
+                            <Button x:Name="b_submit" Content="Submit" Margin="0,0,90,8" Height="20" VerticalAlignment="Bottom" RenderTransformOrigin="0.733,0.25" HorizontalAlignment="Right" Width="75" Click="submit">
+                                <Button.Style>
+                                    <Style TargetType="Button" xmlns:sys="clr-namespace:System;assembly=mscorlib">
+                                        <Style.Triggers>
+
+                                            <!--#region Download URL-->
+                                            <DataTrigger Binding="{Binding ElementName=tb_downloadURL, Path=Text, UpdateSourceTrigger=PropertyChanged}" Value="{x:Static sys:String.Empty}">
+                                                <Setter Property="IsEnabled" Value="False" />
+                                            </DataTrigger>
+
+                                            <DataTrigger Binding="{Binding ElementName=tb_downloadURL, Path=Text, UpdateSourceTrigger=PropertyChanged}" Value="{x:Null}">
+                                                <Setter Property="IsEnabled" Value="False" />
+                                            </DataTrigger>
+                                            <!--#endregion Download URL-->
+
+                                            <!--#region Download folder-->
+                                            <DataTrigger Binding="{Binding ElementName=tb_downloadFolder, Path=Text, UpdateSourceTrigger=PropertyChanged}" Value="{x:Static sys:String.Empty}">
+                                                <Setter Property="IsEnabled" Value="False" />
+                                            </DataTrigger>
+
+                                            <DataTrigger Binding="{Binding ElementName=tb_downloadFolder, Path=Text, UpdateSourceTrigger=PropertyChanged}" Value="{x:Null}">
+                                                <Setter Property="IsEnabled" Value="False" />
+                                            </DataTrigger>
+                                            <!--#endregion Downolad folder-->
+
+                                            <!--#region filename-->
+                                            <DataTrigger Binding="{Binding ElementName=tb_filename, Path=Text, UpdateSourceTrigger=PropertyChanged}" Value="{x:Static sys:String.Empty}">
+                                                <Setter Property="IsEnabled" Value="False" />
+                                            </DataTrigger>
+
+                                            <DataTrigger Binding="{Binding ElementName=tb_filename, Path=Text, UpdateSourceTrigger=PropertyChanged}" Value="{x:Null}">
+                                                <Setter Property="IsEnabled" Value="False" />
+                                            </DataTrigger>
+                                            <!--#endregion filename-->
+
+                                            <!--#region File extensions-->
+                                            <DataTrigger Binding="{Binding ElementName=cb_fileExtensions, Path=SelectedItem, UpdateSourceTrigger=PropertyChanged}" Value="{x:Null}">
+                                                <Setter Property="IsEnabled" Value="False" />
+                                            </DataTrigger>
+                                            <!--#endregion File extensions-->
+                                        </Style.Triggers>
+                                    </Style>
+                                </Button.Style>
+                            </Button>
+
+                            <!-- Cancel -->
+                            <Button x:Name="b_cancel" Content="Cancel" Margin="0,0,10,8" Height="20" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="75" Click="cancel" />
+                        </Grid>
+                    </Border>
+                </Grid>
+            </Border>
+        </Border>
+    </Grid>
+</Window>

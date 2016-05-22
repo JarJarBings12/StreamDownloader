@@ -1,10 +1,10 @@
 ﻿using System;
+using System.IO;
+using System.Runtime.InteropServices;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Runtime.InteropServices;
-using System.Text.RegularExpressions;
-using System.IO;
 
 namespace StreamDownloader
 {
@@ -14,6 +14,7 @@ namespace StreamDownloader
     public partial class Settings: Window
     {
         #region Variables and properties
+
         public string DownloadFolder
         {
             get { return (string)base.GetValue(DownloadFolderProperty); }
@@ -45,9 +46,11 @@ namespace StreamDownloader
         }
 
         private Regex _onlyNumeric = new Regex("[0-9]+");
-        #endregion
+
+        #endregion Variables and properties
 
         #region WPF properties
+
         public static readonly DependencyProperty DownloadFolderProperty = DependencyProperty.RegisterAttached("DownloadFolder", typeof(string), typeof(Settings), new FrameworkPropertyMetadata
         {
             BindsTwoWayByDefault = true
@@ -70,12 +73,12 @@ namespace StreamDownloader
             BindsTwoWayByDefault = true
         });
 
-
         public static readonly DependencyProperty DownloadBufferSizeProperty = DependencyProperty.RegisterAttached("DownloadBufferSize", typeof(uint), typeof(Settings), new FrameworkPropertyMetadata
         {
             BindsTwoWayByDefault = true
         });
-        #endregion
+
+        #endregion WPF properties
 
         public Settings()
         {
@@ -86,18 +89,10 @@ namespace StreamDownloader
         {
             /* Configure download folder */
             if (Properties.Settings.Default.DownloadFolder.Equals("N/A"))
-            {
-                var path = string.Empty;
-                GetDownlaodFolder(out path);
-                Properties.Settings.Default.DownloadFolder = path;
-            }
+                Properties.Settings.Default.DownloadFolder = Properties.Settings.Default.DEFAULT_DownloadFolder;
 
             if (Properties.Settings.Default.TempDownloadFolder.Equals("N/A"))
-            {
-                var path = string.Empty;
-                GetDownlaodFolder(out path);
-                Properties.Settings.Default.TempDownloadFolder = path;
-            }
+                Properties.Settings.Default.TempDownloadFolder = Properties.Settings.Default.DEFAULT_TempDownloadFolder;
 
             /* Load settings */
             DownloadFolder = Properties.Settings.Default.DownloadFolder;
@@ -107,14 +102,16 @@ namespace StreamDownloader
             DownloadBufferSize = (Properties.Settings.Default.DownloadBufferSize / 1024);
 
             /* Apply click events to the reset buttons */
-            b_ResetDownloadFolder.Click += (sender, e) => { var path = string.Empty; GetDownlaodFolder(out path); DownloadFolder = path; };
-            b_ResetCustomTempFolder.Click += (sender, e) => { CustomTempDownloadFolder = Properties.Settings.Default.DEFAULT_CustomTempDownloadFolder; TempDownloadFolder = AppDomain.CurrentDomain.BaseDirectory; };
+            b_ResetDownloadFolder.Click += (sender, e) => { DownloadFolder = Properties.Settings.Default.DEFAULT_DownloadFolder; };
+            b_ResetCustomTempFolder.Click += (sender, e) => { CustomTempDownloadFolder = Properties.Settings.Default.DEFAULT_CustomTempDownloadFolder; TempDownloadFolder = Properties.Settings.Default.DEFAULT_TempDownloadFolder; };
             b_ResetCustomBufferSize.Click += (sender, e) => { CustomDownloadBufferSize = Properties.Settings.Default.DEFAULT_CustomDownloadBufferSize; DownloadBufferSize = (Properties.Settings.Default.DEFAULT_DownloadBufferSize / 1024); };
 
             base.OnApplyTemplate();
         }
 
-        protected void OpenFolderBrowser(out string path)
+        #region Private functions
+
+        private void OpenFolderBrowser(out string path)
         {
             using (var FolderDialog = new System.Windows.Forms.FolderBrowserDialog())
             {
@@ -128,39 +125,51 @@ namespace StreamDownloader
             return;
         }
 
-        #region Events
-        protected void ApplySettings(object sender, RoutedEventArgs e)
-        {
-            /* Apply settings to configuration */
-            Properties.Settings.Default.DownloadFolder = DownloadFolder;
-            Properties.Settings.Default.CustomTempDownloadFolder = CustomTempDownloadFolder;
-            Properties.Settings.Default.TempDownloadFolder = TempDownloadFolder;
-            Properties.Settings.Default.CustomDownloadBufferSize = CustomDownloadBufferSize;
-            Properties.Settings.Default.DownloadBufferSize = (DownloadBufferSize * 1024);
-            Properties.Settings.Default.Save();
-            this.Close();
-        }
+        #region GUI interaction logic
 
-        protected void Close(object sender, RoutedEventArgs e)
+        private void Close(object sender, RoutedEventArgs e)
         {
             this.Close();
         }
 
-        protected void DownloadFolderFocus(object sender, RoutedEventArgs e)
+        /// <summary>
+        /// Open download folder dialog
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void DownloadFolderFocus(object sender, RoutedEventArgs e)
         {
             var path = string.Empty;
             OpenFolderBrowser(out path);
             DownloadFolder = path;
         }
 
-        protected void TempDownloadFolderFocus(object sender, RoutedEventArgs e)
+        /// <summary>
+        /// Open temp download folder dialog.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void TempDownloadFolderFocus(object sender, RoutedEventArgs e)
         {
             var path = string.Empty;
             OpenFolderBrowser(out path);
             TempDownloadFolder = path;
         }
 
-        protected void BufferSizeTextChanged(object sender, TextChangedEventArgs e)
+        /// <summary>
+        /// Handel the mouse wheel.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void HandelMouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            TextBox textBox = ((TextBox)sender);
+            double offset = textBox.HorizontalOffset + (e.Delta / 12);
+            offset = (offset < 0) ? 0 : offset;
+            textBox.ScrollToHorizontalOffset(offset);
+        }
+
+        private void BufferSizeTextChanged(object sender, TextChangedEventArgs e)
         {
             var textBox = ((TextBox)sender);
 
@@ -176,32 +185,43 @@ namespace StreamDownloader
                 return;
         }
 
-        /// <summary>
-        /// Handel the mouse wheel 
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        protected void HandelMouseWheel(object sender, MouseWheelEventArgs e)
-        {
-            TextBox textBox = ((TextBox)sender);
-            double offset = textBox.HorizontalOffset + (e.Delta / 12);
-            offset = (offset < 0) ? 0 : offset;
-            textBox.ScrollToHorizontalOffset(offset);
-        }
-        #endregion
+        #endregion GUI interaction logic
+
+        #endregion Private functions
+
+        #region Protected functions
 
         protected internal static void Initialize()
         {
             var path = string.Empty;
             GetDownlaodFolder(out path);
             Properties.Settings.Default.DownloadFolder = path;
-            Properties.Settings.Default.TempDownloadFolder = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "TEMP");
+            Properties.Settings.Default.DEFAULT_DownloadFolder = path;
+
+            path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Temp");
+            Properties.Settings.Default.DEFAULT_TempDownloadFolder = path;
+            Properties.Settings.Default.TempDownloadFolder = path;
+            Properties.Settings.Default.FIRST_RUN = false;
             Properties.Settings.Default.Save();
 
             Directory.CreateDirectory(Properties.Settings.Default.TempDownloadFolder);
+            Directory.CreateDirectory($"{Properties.Settings.Default.TempDownloadFolder}\\SAVE");
         }
 
-        #region C Interop
+        protected void ApplySettings(object sender, RoutedEventArgs e)
+        {
+            /* Apply settings to configuration */
+            Properties.Settings.Default.DownloadFolder = DownloadFolder;
+            Properties.Settings.Default.CustomTempDownloadFolder = CustomTempDownloadFolder;
+            Properties.Settings.Default.TempDownloadFolder = TempDownloadFolder;
+            Properties.Settings.Default.CustomDownloadBufferSize = CustomDownloadBufferSize;
+            Properties.Settings.Default.DownloadBufferSize = (DownloadBufferSize * 1024);
+            Properties.Settings.Default.Save();
+            this.Close();
+        }
+
+        #region C Interops
+
         [DllImport("Shell32.dll")]
         protected static extern int SHGetKnownFolderPath([MarshalAs(UnmanagedType.LPStruct)]Guid rfid, uint dwFlags, IntPtr hToken, out IntPtr ppszPath);
 
@@ -211,6 +231,9 @@ namespace StreamDownloader
             SHGetKnownFolderPath(new Guid("{374DE290-123F-4565-9164-39C4925E467B}"), (uint)0x00004000, new IntPtr(0), out outPath);
             path = Marshal.PtrToStringUni(outPath);
         }
-        #endregion
+
+        #endregion C Interops
+
+        #endregion Protected functions
     }
 }

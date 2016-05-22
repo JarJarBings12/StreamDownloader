@@ -121,5 +121,29 @@ namespace StreamDownloader.Properties {
                 this["FIRST_RUN"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("N/A")]
+        public string DEFAULT_DownloadFolder {
+            get {
+                return ((string)(this["DEFAULT_DownloadFolder"]));
+            }
+            set {
+                this["DEFAULT_DownloadFolder"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string DEFAULT_TempDownloadFolder {
+            get {
+                return ((string)(this["DEFAULT_TempDownloadFolder"]));
+            }
+            set {
+                this["DEFAULT_TempDownloadFolder"] = value;
+            }
+        }
     }
 }

@@ -1,28 +1,35 @@
-﻿using System;
+﻿using mshtml;
+using StreamDownloaderDownload.FileExtensions;
+using StreamDownloaderDownload.FileExtensions.Default;
+using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using System.IO;
-using mshtml;
+using System.Windows.Media.Imaging;
 using IE = SHDocVw.InternetExplorer;
 
 namespace StreamDownloaderDownload.Hosts.Default
 {
-    public class PowerWatch : Host
+    public class PowerWatch: Host
     {
         #region variables and properties
-        private Regex _baseUrlPattern = new Regex(@"http://powerwatch.pw/(.*)");
-        private Regex _bourceUrlPattern = new Regex("sources:(.*)\\[\\{file:\"(.*)\",");
-        private const int _javaScriptProcessingTime = 15;
+
+        public sealed override string HostName => "PowerWatch";
+        public sealed override List<FileExtension> SupportedFileExtensions => new List<FileExtension>() { new MP4() };
+        public override BitmapImage HostIcon => Host.BitmapToBitmapImage(Properties.Resources.PowerWatch);
 
         public sealed override Regex BaseUrlPattern => _baseUrlPattern;
         public sealed override Regex SourceUrlPattern => _bourceUrlPattern;
 
-        public sealed override bool NeedDelay => true;
-        public override int DelayInMilliseconds => 6000;
-        #endregion
+        public sealed override int DelayInMilliseconds => 6000;
+
+        private readonly Regex _baseUrlPattern = new Regex(@"http://powerwatch.pw/(.*)");
+        private readonly Regex _bourceUrlPattern = new Regex("sources:(.*)\\[\\{file:\"(.*)\",");
+        private const int _javaScriptProcessingTime = 15;
+
+        #endregion variables and properties
 
         public sealed override async Task<Tuple<string, LinkFetchResult>> GetSourceLink(string url)
         {

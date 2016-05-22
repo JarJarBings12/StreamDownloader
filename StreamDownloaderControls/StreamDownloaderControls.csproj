@@ -53,77 +53,62 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DownloadListItem.cs" />
-    <Compile Include="DropdownContextMenu.cs" />
     <Compile Include="FileExtensionListItem.cs" />
     <Compile Include="FlatWindow.cs" />
-    <Compile Include="CreateDownload.cs" />
-    <Compile Include="HostListItem.cs" />
-    <Compile Include="Themes\MODELS\CD\DownloadSelect.xaml.cs">
-      <DependentUpon>DownloadSelect.xaml</DependentUpon>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Themes\MODELS\CD\P\LII.xaml.cs">
-      <DependentUpon>LII.xaml</DependentUpon>
+    <Compile Include="UserControls\DefaultSettings.xaml.cs">
+      <DependentUpon>DefaultSettings.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Themes\MODELS\DropDown.xaml.cs">
-      <DependentUpon>DropDown.xaml</DependentUpon>
+    <Compile Include="UserControls\HostSelect.xaml.cs">
+      <DependentUpon>HostSelect.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Themes\MODELS\temp.xaml.cs">
-      <DependentUpon>temp.xaml</DependentUpon>
+    <Compile Include="UserControls\HostListItem.xaml.cs">
+      <DependentUpon>HostListItem.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Themes\MODELS\UserControl1.xaml.cs">
-      <DependentUpon>UserControl1.xaml</DependentUpon>
+    <Compile Include="UserControls\DownloadListItem.xaml.cs">
+      <DependentUpon>DownloadListItem.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Themes\MODELS\UserControl2.xaml.cs">
-      <DependentUpon>UserControl2.xaml</DependentUpon>
+    <Compile Include="UserControls\DownloadSettings.xaml.cs">
+      <DependentUpon>DownloadSettings.xaml</DependentUpon>
     </Compile>
     <Page Include="Themes\Generic.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Themes\MODELS\CD\DownloadSelect.xaml">
+    <Page Include="UserControls\DefaultSettings.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Themes\MODELS\CD\P\LII.xaml">
+    <Page Include="UserControls\HostSelect.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Themes\MODELS\DropDown.xaml">
+    <Page Include="UserControls\HostListItem.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Themes\MODELS\temp.xaml">
-      <SubType>Designer</SubType>
+    <Page Include="UserControls\DownloadListItem.xaml">
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
-    <Page Include="Themes\MODELS\UserControl1.xaml">
-      <SubType>Designer</SubType>
+    <Page Include="UserControls\DownloadSettings.xaml">
       <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Themes\MODELS\UserControl2.xaml">
       <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -135,6 +120,13 @@
       <Project>{61ea14b6-c52a-4337-bb11-af02abad1cc3}</Project>
       <Name>StreamDownloaderDownload</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
