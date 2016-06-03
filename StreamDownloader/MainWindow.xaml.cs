@@ -18,8 +18,8 @@ namespace StreamDownloader
     /// </summary>
     public partial class MainWindow: FlatWindow
     {
-        private List<HostListItem> _Hosts = new List<HostListItem>();
-        private List<FileExtensionListItem> _FileExtensions = new List<FileExtensionListItem>();
+        private List<HostListItem> _hosts = new List<HostListItem>();
+        private List<FileExtensionListItem> _fileExtensions = new List<FileExtensionListItem>();
         private readonly Brush _placeholderGray = new SolidColorBrush(Color.FromRgb(209, 209, 209));
         private readonly Brush _fontcolorBlack = new SolidColorBrush(Color.FromRgb(0, 0, 0));
         private HashSet<Task> _activeDownloads = new HashSet<Task>();
@@ -42,7 +42,7 @@ namespace StreamDownloader
             //Initialize download
 
             /** Host select **/
-            var response = await HostSelect.OpenSelect(listBox, _Hosts); //Show list select item and store result in "response"
+            var response = await HostSelect.OpenSelect(listBox, _hosts); //Show list select item and store result in "response"
             button.IsEnabled = true; //Enable download button again.
             listBox.Items.RemoveAt(0); //Removing list item from list.
 
@@ -122,7 +122,7 @@ namespace StreamDownloader
             RegisterHost("Vivo", typeof(Vivo));
             RegisterHost("StreamCloud", typeof(StreamCloud));
             RegisterHost("PowerWatch", typeof(PowerWatch));
-            _FileExtensions.Add(new FileExtensionListItem("mp4", new MP4()));
+            _fileExtensions.Add(new FileExtensionListItem("mp4", new MP4()));
             base.OnApplyTemplate();
         }
 
@@ -135,7 +135,7 @@ namespace StreamDownloader
 
         public Host GetHost(string link)
         {
-            foreach (StreamDownloaderControls.UserControls.HostListItem h in _Hosts)
+            foreach (HostListItem h in _hosts)
             {
                 Host host = ((Host)Activator.CreateInstance(h.FileHost));
                 if (host.BaseUrlPattern.IsMatch(link))
@@ -152,7 +152,7 @@ namespace StreamDownloader
         protected void RegisterHost(string displayName, Type host)
         {
             var temp = (Host)Activator.CreateInstance(host);
-            _Hosts.Add(new StreamDownloaderControls.UserControls.HostListItem()
+            _hosts.Add(new HostListItem()
             {
                 DisplayName = displayName,
                 HostIcon = temp.HostIcon,
