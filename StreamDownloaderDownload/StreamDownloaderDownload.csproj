@@ -71,8 +71,6 @@
     <Compile Include="Hosts\LinkFetchFinishedEventArgs.cs" />
     <Compile Include="Hosts\LinkFetchResult.cs" />
     <Compile Include="Hosts\LinkFetchStatusChangedEventArgs.cs" />
-    <Compile Include="Hosts\YT\Youtube.cs" />
-    <Compile Include="Hosts\YT\YTPlayerConfig.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

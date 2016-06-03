@@ -120,16 +120,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\StreamDownloaderControls\StreamDownloaderControls.csproj">
-      <Project>{c2ac6db6-7523-47c1-b25f-131773d54bc2}</Project>
-      <Name>StreamDownloaderControls</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\StreamDownloaderDownload\StreamDownloaderDownload.csproj">
-      <Project>{61ea14b6-c52a-4337-bb11-af02abad1cc3}</Project>
-      <Name>StreamDownloaderDownload</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
       <Visible>False</Visible>
       <ProductName>.NET Framework 3.5 SP1</ProductName>
@@ -144,6 +134,16 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\StreamDownloaderControls\StreamDownloaderControls.csproj">
+      <Project>{c2ac6db6-7523-47c1-b25f-131773d54bc2}</Project>
+      <Name>StreamDownloaderControls</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\StreamDownloaderDownload\StreamDownloaderDownload.csproj">
+      <Project>{61ea14b6-c52a-4337-bb11-af02abad1cc3}</Project>
+      <Name>StreamDownloaderDownload</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

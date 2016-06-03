@@ -6,6 +6,7 @@ using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Shapes;
+using FormsScreen = System.Windows.Forms.Screen;
 
 namespace StreamDownloaderControls
 {
@@ -13,7 +14,7 @@ namespace StreamDownloaderControls
     {
         #region C# Variables and properties
 
-        private double[] _normalPositon = new double[4];
+        private int[] _windowState = new int[7];
         protected HwndSource hwndSource;
         protected const int WM_SYSCOMMAND = 0x112;
 
@@ -21,6 +22,9 @@ namespace StreamDownloaderControls
 
         [DllImport("user32.dll", CharSet = CharSet.Auto)]
         private static extern IntPtr SendMessage(IntPtr hWnd, uint Msg, IntPtr wParm, IntPtr lParam);
+
+        [DllImport("user32.dll", CharSet = CharSet.Auto)]
+        private static extern IntPtr SetWindowPos(IntPtr hWnd, IntPtr hwndInsertAfter, int X, int Y, int width, int heigth, uint flags);
 
         #endregion C# Variables and properties
 
@@ -46,6 +50,8 @@ namespace StreamDownloaderControls
         public void Initialize(object sender, EventArgs e)
         {
             this.hwndSource = PresentationSource.FromVisual((Visual)sender) as HwndSource;
+            _windowState[3] = FormsScreen.PrimaryScreen.WorkingArea.Height + 10;
+            _windowState[4] = FormsScreen.PrimaryScreen.WorkingArea.Width + 10;
         }
 
         /// <summary>
@@ -80,16 +86,19 @@ namespace StreamDownloaderControls
         // Window restore handler
         protected void WindowRestoreEvent(object sender, RoutedEventArgs e)
         {
-            if (WindowState == WindowState.Normal)
+            if (_windowState[0] == 0)
             {
-                this._normalPositon[0] = this.Height;
-                this.WindowState = WindowState.Maximized;
-                this.Height = System.Windows.SystemParameters.WorkArea.Height;
+                _windowState[1] = (int)this.Height;
+                _windowState[2] = (int)this.Width;
+                SetWindowPos(hwndSource.Handle, IntPtr.Zero, -5, -5, _windowState[4], _windowState[3], 0x0040);
+                _windowState[5] = Convert.ToInt32((SystemParameters.PrimaryScreenWidth / 2) - (_windowState[2] / 2));
+                _windowState[6] = Convert.ToInt32((SystemParameters.PrimaryScreenHeight / 2) - (_windowState[1] / 2));
+                _windowState[0] = 1;
             }
             else
             {
-                this.WindowState = WindowState.Normal;
-                this.Height = _normalPositon[0];
+                SetWindowPos(hwndSource.Handle, IntPtr.Zero, _windowState[5], _windowState[6], _windowState[2], _windowState[1], 0x0040);
+                _windowState[0] = 0;
             }
         }
 
