@@ -6,7 +6,7 @@
                      xmlns:controls="clr-namespace:StreamDownloaderControls;assembly=StreamDownloaderControls"
                      xmlns:usercontrols="clr-namespace:StreamDownloaderControls.UserControls;assembly=StreamDownloaderControls"
                      xmlns:local="clr-namespace:StreamDownloader"
-                     Title="Stolo" MinHeight="400" MinWidth="800" Height="430" Width="784" MaxHeight="1500" MaxWidth="1500">
+                     Title="Stolo" MinHeight="400" MinWidth="800" Height="430" Width="784">
 
     <Grid>
         <ListBox x:Name="listBox" HorizontalContentAlignment="Stretch" Padding="-2" Margin="10" ScrollViewer.HorizontalScrollBarVisibility="Disabled" VerticalContentAlignment="Stretch">
